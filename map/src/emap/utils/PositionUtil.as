@@ -14,15 +14,33 @@ package emap.utils
 		
 		/**
 		 * 
-		 * 通过code判断是否需要显示标签
+		 * 通过code判断是否需要显示标签和图标
 		 * 
 		 * @param $code:String 编码。
 		 * 
+		 * @return Boolean 是否显示标签和图标，true为显示，false为不显示。
+		 * 
 		 */
 		
-		public static function displayLabel($code:String):Boolean
+		public static function displayAssets($code:String):Boolean
 		{
-			return $code == PositionCodeConsts.ENTITY || $code == PositionCodeConsts.TERRAIN;
+			return $code != PositionCodeConsts.HOLLOW;
+		}
+		
+		/**
+		 * 
+		 * 通过code和position的图标悬浮属性判断是否需要显示图标
+		 * 
+		 * @param $code:String 编码。
+		 * @param $suspend:Boolean 是否悬浮，传入position的iconSuspend属性。
+		 * 
+		 * @return Boolean 是否悬浮，true为悬浮，false为不悬浮。
+		 * 
+		 */
+		
+		public static function suspendIcon($code:String, $suspend:Boolean):Boolean
+		{
+			return $code == PositionCodeConsts.UNSEEN || ($code == PositionCodeConsts.TERRAIN && $suspend);
 		}
 		
 		
@@ -52,7 +70,6 @@ package emap.utils
 				iw *= s;
 				ih *= s;
 			}
-			
 			return new Transform(0, 0, iw, ih, s);
 		}
 		

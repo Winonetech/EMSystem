@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s ="library://ns.adobe.com/flex/spark"
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   creationComplete="init()"
+					   backgroundAlpha="0" showStatusBar="false" width="960" height="540">
+	<fx:Declarations>
+		<s:RadioButtonGroup id="modeRadio" change="modeRadio_changeHandler(event)"/>
+		<s:RadioButtonGroup id="floorRadio" change="floorRadio_changeHandler(event)"/>
+	</fx:Declarations>
+	<s:HGroup gap="30">
+		<s:HGroup>
+			<s:RadioButton label="平移" value="move" group="{modeRadio}" color="0xFFFFFF" selected="true"/>
+			<s:RadioButton label="旋转" value="rotate" group="{modeRadio}" color="0xFFFFFF"/>
+		</s:HGroup>
+		<s:HGroup id="floorsMenu"/>
+	</s:HGroup>
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import cn.vision.collections.Map;
+			import cn.vision.utils.MathUtil;
+			
+			import com.winonetech.core.Store;
+			
+			import emap.map3d.EMap;
+			import emap.tools.SourceManager;
+			import emap.vos.VOFloor;
+			import emap.vos.VOPosition;
+			import emap.vos.VOPositionType;
+			
+			import mx.core.UIComponent;
+			/* 
+			[Embed(source="fonts/MSYH.TTC",fontName="msyh", embedAsCFF="false")]
+			public var fontMSYH:Class;
+			 */
+			private function init():void
+			{
+				var container:UIComponent = new UIComponent;
+				addElementAt(container, 0);
+				
+				map = new EMap;
+				container.addChild(map);
+				map.width = width;
+				map.height = height;
+				initializeData(map);
+			}
+			
+			private function initializeData(map:EMap):void
+			{
+				var list:XMLList = TestData.FLOORS.children();
+				var floorsMap:Map = new Map;
+				for each (var item:XML in list)
+				{
+					var floor:VOFloor = store.registData(item, VOFloor);
+					floorsMap[floor.id] = floor;
+					var radio:RadioButton = new RadioButton;
+					radio.label = floor.label;
+					radio.value = floor.id;
+					radio.setStyle("color", 0xFFFFFF);
+					radio.group = floorRadio;
+					floorsMenu.addElement(radio);
+				}
+				list = TestData.POSITION_TYPES.children();
+				var positionTypesMap:Map = new Map;
+				for each (item in list)
+				{
+					var positionType:VOPositionType =store.registData(item, VOPositionType);
+					positionTypesMap[positionType.id] = positionType;
+				}
+				list = TestData.POSITIONS.children();
+				var positionsArr:Array = [];
+				for each (item in list)
+				{
+					var position:VOPosition = store.registData(item, VOPosition);
+					positionsArr[positionsArr.length] = position;
+				}
+				
+				map.initializePosition = "1";
+				map.floors = floorsMap;
+				map.positionTypes = positionTypesMap;
+				map.positions = positionsArr;
+			}
+			
+			private var map:EMap;
+			
+			protected function modeRadio_changeHandler(event:Event):void
+			{
+				map.mode = modeRadio.selectedValue as String;
+			}
+			
+			protected function floorRadio_changeHandler(event:Event):void
+			{
+				map.viewFloor(floorRadio.selectedValue);
+			}
+			
+			private var store:Store = Store.instance;
+			
+		]]>
+	</fx:Script>
+</s:WindowedApplication>

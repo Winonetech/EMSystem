@@ -27,7 +27,7 @@ package emap.core
 		 * 
 		 */
 		
-		public var iconWidth:Number = 128;
+		public var iconWidth:Number = 256;
 		
 		
 		/**
@@ -36,7 +36,7 @@ package emap.core
 		 * 
 		 */
 		
-		public var iconHeight:Number = 128;
+		public var iconHeight:Number = 256;
 		
 		
 		/**

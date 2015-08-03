@@ -208,7 +208,6 @@ package emap.map3d
 			StageUtil.init(this, handlerAddedToStage);
 		}
 		
-		
 		/**
 		 * @private
 		 */

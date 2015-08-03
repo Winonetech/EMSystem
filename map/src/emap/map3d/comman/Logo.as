@@ -9,8 +9,6 @@ package emap.map3d.comman
 	
 	
 	import alternativa.engine3d.core.Object3D;
-	import alternativa.engine3d.materials.FillMaterial;
-	import alternativa.engine3d.primitives.Plane;
 	import alternativa.engine3d.resources.BitmapTextureResource;
 	
 	import emap.core.em;
@@ -20,14 +18,12 @@ package emap.map3d.comman
 	import emap.utils.PositionUtil;
 	
 	import flash.display.BitmapData;
-	import flash.display.DisplayObject;
 	import flash.display.IBitmapDrawable;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.geom.Matrix;
-	import flash.geom.Rectangle;
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	

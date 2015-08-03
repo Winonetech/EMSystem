@@ -80,18 +80,6 @@ package emap.vos
 		
 		/**
 		 * 
-		 * 图标是贴紧在顶面，还是悬浮在顶面。
-		 * 
-		 */
-		
-		public function get iconClose():Boolean
-		{
-			return getProperty("iconClose", Boolean)
-		}
-		
-		
-		/**
-		 * 
 		 * 图标偏移X
 		 * 
 		 */
@@ -135,6 +123,18 @@ package emap.vos
 		public function get iconScale():Number
 		{
 			return getProperty("iconScale", Number);
+		}
+		
+		
+		/**
+		 * 
+		 * 图标和文字是否悬浮在顶面。
+		 * 
+		 */
+		
+		public function get iconSuspend():Boolean
+		{
+			return getProperty("iconSuspend", Boolean)
 		}
 		
 		
@@ -291,6 +291,18 @@ package emap.vos
 		public function get nodeID():String
 		{
 			return getProperty("node_id");
+		}
+		
+		
+		/**
+		 * 
+		 * 位置编码，参见PositionType.code
+		 * 
+		 */
+		
+		public function get positionCode():String
+		{
+			return em::positionType ? em::positionType.code : null;
 		}
 		
 		

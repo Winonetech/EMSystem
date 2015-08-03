@@ -202,10 +202,11 @@ package emap.map3d
 		private function updateIcon():void
 		{
 			Map3DUtil.destroyObject3D(iconLayer);
-			if (iconVisible && !StringUtil.isEmpty(icon))
+			if (iconVisible && !StringUtil.isEmpty(icon) &&
+				PositionUtil.displayAssets(code))
 			{
-				iconLayer = iconClose
-					? new LogoPlane(config.iconWidth, config.iconHeight) 
+				iconLayer =!PositionUtil.suspendIcon(code, iconSuspend)
+					? new LogoPlane (config.iconWidth, config.iconHeight) 
 					: new LogoSprite(config.iconWidth, config.iconHeight, color);
 				addChild(iconLayer).z = thick + 2;
 				iconLayer.source = icon;
@@ -220,7 +221,7 @@ package emap.map3d
 			if (iconLayer)
 			{
 				iconLayer.x = cenX + iconOffsetX;
-				iconLayer.y = cenY + iconOffsetY;
+				iconLayer.y = cenY - iconOffsetY;
 				iconLayer.rotationZ = iconRotation;
 				iconLayer.scaleX = iconLayer.scaleY = iconScale;
 			}
@@ -232,9 +233,8 @@ package emap.map3d
 		private function updateLabel():void
 		{
 			textLayer = Map3DUtil.destroyObject3D(textLayer);
-			if (labelVisible &&
-				!StringUtil.isEmpty(label) &&
-				PositionUtil.displayLabel(code))
+			if (labelVisible && !StringUtil.isEmpty(label) &&
+				PositionUtil.displayAssets(code))
 			{
 				addChild(textLayer = Map3DUtil.getPlaneByText(label, 
 					config.font, labelColor)).z = thick + 1;
@@ -345,7 +345,7 @@ package emap.map3d
 		
 		internal function get code():String
 		{
-			return data && data.em::positionType ? data.em::positionType.code : null;
+			return data ? data.positionCode : null;
 		}
 		
 		
@@ -379,9 +379,9 @@ package emap.map3d
 		 * 
 		 */
 		
-		internal function get iconClose():Boolean
+		internal function get iconSuspend():Boolean
 		{
-			return data ? data.iconClose : true;
+			return data ? data.iconSuspend : true;
 		}
 		
 		
