@@ -26,6 +26,7 @@
 			
 			import emap.map3d.EMap3D;
 			import emap.tools.SourceManager;
+			import emap.utils.NodeUtil;
 			import emap.vos.VOFloor;
 			import emap.vos.VOPosition;
 			import emap.vos.VOPositionType;
@@ -37,6 +38,7 @@
 			 */
 			private function init():void
 			{
+				trace(NodeUtil.generateSerial());
 				var container:UIComponent = new UIComponent;
 				addElementAt(container, 0);
 				
