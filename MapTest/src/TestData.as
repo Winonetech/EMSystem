@@ -31,6 +31,7 @@ package
 					<iconOffsetY></iconOffsetY>
 					<iconRotation></iconRotation>
 					<iconScale></iconScale>
+					<iconSuspend></iconSuspend>
 					<iconVisible>true</iconVisible>
 					<label>位置1</label>
 					<labelColor>0xFFFFFF</labelColor>
@@ -53,6 +54,7 @@ package
 					<iconOffsetY></iconOffsetY>
 					<iconRotation></iconRotation>
 					<iconScale></iconScale>
+					<iconSuspend></iconSuspend>
 					<iconVisible></iconVisible>
 					<label>位置2</label>
 					<labelColor>0xFFFFFF</labelColor>
@@ -75,6 +77,7 @@ package
 					<iconOffsetY></iconOffsetY>
 					<iconRotation></iconRotation>
 					<iconScale></iconScale>
+					<iconSuspend></iconSuspend>
 					<iconVisible></iconVisible>
 					<label>位置3</label>
 					<labelColor>0xFFFFFF</labelColor>
@@ -97,6 +100,7 @@ package
 					<iconOffsetY></iconOffsetY>
 					<iconRotation></iconRotation>
 					<iconScale></iconScale>
+					<iconSuspend></iconSuspend>
 					<iconVisible></iconVisible>
 					<label>位置4</label>
 					<labelColor>0xFFFFFF</labelColor>

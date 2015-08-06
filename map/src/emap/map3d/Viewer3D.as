@@ -54,18 +54,6 @@ package emap.map3d
 		
 		/**
 		 * 
-		 * 摄像机看向某点。
-		 * 
-		 */
-		
-		public function lookAt($point:Vector3D):void
-		{
-			camera.lookAt($point.x, $point.y, $point.z);
-		}
-		
-		
-		/**
-		 * 
 		 * 地图某点平移到摄像机中心视野位置。
 		 * 
 		 */
@@ -74,18 +62,6 @@ package emap.map3d
 		{
 			cameraMoveX = $x;
 			cameraMoveY = $y;
-		}
-		
-		
-		/**
-		 * 
-		 * 渲染更新。
-		 * 
-		 */
-		
-		public function render():void
-		{
-			if (scene) camera.render(scene);
 		}
 		
 		
@@ -178,7 +154,7 @@ package emap.map3d
 			
 			reset();
 			
-			lookAt(new Vector3D);
+			camera.lookAt(0, 0, 0);
 			
 			addEventListener(MouseEvent.MOUSE_DOWN, handlerMouseDown);
 			addEventListener(MouseEvent.MOUSE_WHEEL, handlerMouseWheel);
@@ -188,7 +164,6 @@ package emap.map3d
 				scene.removeEventListener(Event.CONTEXT3D_CREATE, handlerContext3DCreate);
 				
 				contextCreated = true;
-				
 				uploadAllSource();
 				
 				timer = new Timer(33);
@@ -285,7 +260,7 @@ package emap.map3d
 		 */
 		private function handlerTimer($e:TimerEvent):void
 		{
-			render();
+			camera.render(scene);
 		}
 		
 		

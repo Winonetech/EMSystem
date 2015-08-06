@@ -24,7 +24,7 @@ package emap.map3d
 	import flash.events.Event;
 	
 	
-	public final class EMap extends Viewer3D implements IEMap
+	public final class EMap3D extends Viewer3D implements IEMap
 	{
 		
 		/**
@@ -33,7 +33,7 @@ package emap.map3d
 		 * 
 		 */
 		
-		public function EMap()
+		public function EMap3D()
 		{
 			super();
 			

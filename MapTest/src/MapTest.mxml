@@ -24,7 +24,7 @@
 			
 			import com.winonetech.core.Store;
 			
-			import emap.map3d.EMap;
+			import emap.map3d.EMap3D;
 			import emap.tools.SourceManager;
 			import emap.vos.VOFloor;
 			import emap.vos.VOPosition;
@@ -40,14 +40,14 @@
 				var container:UIComponent = new UIComponent;
 				addElementAt(container, 0);
 				
-				map = new EMap;
+				map = new EMap3D;
 				container.addChild(map);
 				map.width = width;
 				map.height = height;
 				initializeData(map);
 			}
 			
-			private function initializeData(map:EMap):void
+			private function initializeData(map:EMap3D):void
 			{
 				var list:XMLList = TestData.FLOORS.children();
 				var floorsMap:Map = new Map;
@@ -83,7 +83,7 @@
 				map.positions = positionsArr;
 			}
 			
-			private var map:EMap;
+			private var map:EMap3D;
 			
 			protected function modeRadio_changeHandler(event:Event):void
 			{

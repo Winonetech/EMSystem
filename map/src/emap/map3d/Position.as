@@ -10,11 +10,7 @@ package emap.map3d
 	
 	import alternativa.engine3d.core.Object3D;
 	import alternativa.engine3d.core.VertexAttributes;
-	import alternativa.engine3d.materials.FillMaterial;
 	import alternativa.engine3d.objects.Mesh;
-	import alternativa.engine3d.objects.Sprite3D;
-	import alternativa.engine3d.primitives.Box;
-	import alternativa.engine3d.primitives.Plane;
 	import alternativa.engine3d.resources.Geometry;
 	
 	import cn.vision.utils.ArrayUtil;
@@ -27,7 +23,6 @@ package emap.map3d
 	import emap.data.Layout;
 	import emap.data.Step;
 	import emap.interfaces.IPosition;
-	import emap.map3d.comman.ColorStandardMaterial;
 	import emap.map3d.comman.Logo;
 	import emap.map3d.comman.LogoPlane;
 	import emap.map3d.comman.LogoSprite;
@@ -37,14 +32,10 @@ package emap.map3d
 	import emap.utils.StepUtil;
 	import emap.vos.VOPosition;
 	
-	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
-	import flash.text.AntiAliasType;
-	import flash.text.TextField;
-	import flash.text.TextFieldAutoSize;
 	import flash.utils.Timer;
 	
 	
