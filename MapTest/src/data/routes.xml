@@ -1,0 +1,10 @@
+<routes>
+	<route>
+		<id>1</id>
+		<type>line</type>
+		<ctrlX></ctrlX>
+		<ctrlY></ctrlY>
+		<serial1>192168001016-20150802142503-4A3C0DRW</serial1>
+		<serial2>192168001016-20150802142503-AS3R5TY6</serial2>
+	</route>
+</routes>

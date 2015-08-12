@@ -1,0 +1,16 @@
+<emporium>
+	<!-- ID由数据库自动生成 -->
+	<id>1</id>
+	<!-- 是否启用馆 -->
+	<hallEnabled></hallEnabled>
+	<!-- 图标 -->
+	<icon></icon>
+	<!-- 图标宽度 -->
+	<iconWidth>256</iconWidth>
+	<!-- 图标高度 -->
+	<iconHeight>256</iconHeight>
+	<!-- 默认实体位置高度 -->
+	<thickEntity>64</thickEntity>
+	<!-- 默认镂空位置高度 -->
+	<thickHollow>32</thickHollow>
+</emporium>

@@ -27,31 +27,29 @@ package emap.utils
 		
 		public static function generateSerial():String
 		{
-			var ni:NetworkInterface = NetUtil.getNetworkInterface();
 			var result:String = "";
-			if (ni)
-			{
-				var ip:String = ni.addresses[0].address;
-				var mc:String = ni.hardwareAddress;
-				var a1:Array  = ip.split(".");
-				var a2:Array  = a1.map(function($item:String, $index:uint, $array:Array):String
-				{
-					while ($item.length < 3) $item = "0" + $item;
-					return $item;
-				});
-				result += a2.join("") + "-";
-			}
+			
+			result += getRandom(12) + "-";
 			
 			result += DateUtil.getDateFormat(new Date, true, 2, "", "", "") + "-";
 			
+			result += getRandom();
+			return result;
+		}
+		
+		
+		/**
+		 * @private
+		 */
+		private static function getRandom($length:uint = 8):String
+		{
 			var tm:Array = CHARS.concat();
 			tm.sort(function(a:String, b:String):Number
 			{
 				return Math.random() - .5;
 			});
 			tm.length = 8;
-			result += tm.join("");
-			return result;
+			return tm.join("");
 		}
 		
 		

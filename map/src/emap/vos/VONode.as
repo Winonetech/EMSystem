@@ -13,9 +13,10 @@ package emap.vos
 	import com.winonetech.core.VO;
 	
 	import emap.core.em;
+	import emap.interfaces.INode;
 	
 	
-	public final class VONode extends VO
+	public class VONode extends VO implements INode
 	{
 		
 		/**
@@ -24,33 +25,39 @@ package emap.vos
 		 * 
 		 */
 		
-		public function VONode($json:Object = null)
+		public function VONode($data:Object = null)
 		{
-			super($json);
+			super($data, "node");
 		}
 		
 		
 		/**
-		 * 
-		 * x
-		 * 
+		 * @inheritDoc
 		 */
 		
-		public function get x():Number
+		public function get serial():String
 		{
-			return getProperty("x", Number);
+			return getProperty("serial");
 		}
 		
 		
 		/**
-		 * 
-		 * y
-		 * 
+		 * @inheritDoc
 		 */
 		
-		public function get y():Number
+		public function get nodeX():Number
 		{
-			return getProperty("y", Number);
+			return getProperty("nodeX", Number);
+		}
+		
+		
+		/**
+		 * @inheritDoc
+		 */
+		
+		public function get nodeY():Number
+		{
+			return getProperty("nodeY", Number);
 		}
 		
 		
@@ -65,36 +72,6 @@ package emap.vos
 			return getProperty("floor_id");
 		}
 		
-		/**
-		 * @private
-		 */
-		public function set floorID($value:String):void
-		{
-			setProperty("floor_id", $value);
-			clsRelation(VOFloor);
-		}
-		
-		
-		/**
-		 * 
-		 * positionID
-		 * 
-		 */
-		
-		public function get positionID():String
-		{
-			return getProperty("position_id");
-		}
-		
-		/**
-		 * @private
-		 */
-		public function set positionID($value:String):void
-		{
-			setProperty("position_id", $value);
-			clsRelation(VOPosition);
-		}
-		
 		
 		/**
 		 * 
@@ -105,18 +82,6 @@ package emap.vos
 		em function get floor():VOFloor
 		{
 			return getRelation(VOFloor, floorID);
-		}
-		
-		
-		/**
-		 * 
-		 * position
-		 * 
-		 */
-		
-		em function get position():VOPosition
-		{
-			return getRelation(VOPosition, positionID);
 		}
 		
 		

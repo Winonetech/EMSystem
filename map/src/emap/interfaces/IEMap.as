@@ -18,6 +18,15 @@ package emap.interfaces
 		
 		/**
 		 * 
+		 * 清空所有视图数据
+		 * 
+		 */
+		
+		function clear():void;
+		
+		
+		/**
+		 * 
 		 * 查看位置
 		 * 
 		 * @param $data:* 可以传入Position，Position的id

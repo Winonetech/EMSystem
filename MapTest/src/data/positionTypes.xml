@@ -1,0 +1,40 @@
+<positionTypes>
+	<positionType>
+		<!-- ID由数据库自动生成 -->
+		<id>1</id>
+		<!-- 标签 -->
+		<label>店铺</label>
+		<!-- 编码，预览模式根据此属性生成不同形式的铺位设施，如镂空的天井，实体的店铺，不可见只有LOGO的洗手间等 -->
+		<code>entity</code>
+		<!-- 顺序 -->
+		<order>1</order>
+		<!-- 在预览模式下是否在列表中显示 -->
+		<visible>false</visible>
+		<!-- 图标 -->
+		<icon></icon>
+	</positionType>
+	<positionType>
+		<id>2</id>
+		<label>天井</label>
+		<code>hollow</code>
+		<order>2</order>
+		<visible>false</visible>
+		<icon></icon>
+	</positionType>
+	<positionType>
+		<id>3</id>
+		<label>洗手间</label>
+		<code>unseen</code>
+		<order>3</order>
+		<visible>true</visible>
+		<icon></icon>
+	</positionType>
+	<positionType>
+		<id>4</id>
+		<label>入口</label>
+		<code>terrain</code>
+		<order>4</order>
+		<visible>true</visible>
+		<icon></icon>
+	</positionType>
+</positionTypes>

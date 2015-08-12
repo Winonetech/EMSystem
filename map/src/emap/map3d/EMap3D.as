@@ -10,14 +10,19 @@ package emap.map3d
 	
 	import alternativa.engine3d.core.Object3D;
 	import alternativa.engine3d.core.events.Event3D;
+	import alternativa.engine3d.core.events.MouseEvent3D;
+	
+	import caurina.transitions.Tweener;
 	
 	import cn.vision.collections.Map;
 	import cn.vision.utils.MathUtil;
 	
 	import emap.core.EMConfig;
+	import emap.core.em;
 	import emap.interfaces.IEMap;
 	import emap.map3d.utils.Map3DUtil;
 	import emap.tools.SourceManager;
+	import emap.vos.VOEMap;
 	import emap.vos.VOFloor;
 	import emap.vos.VOPosition;
 	
@@ -33,16 +38,35 @@ package emap.map3d
 		 * 
 		 */
 		
-		public function EMap3D()
+		public function EMap3D($config:EMConfig = null)
 		{
 			super();
 			
-			initialize();
+			initialize($config);
 		}
 		
 		
 		/**
 		 * @inheritDoc
+		 */
+		
+		public function clear():void
+		{
+			//remove all
+			floorsViewMap = new Map;
+			floorsViewArr.length = 0;
+			positionsViewMap = new Map;
+			
+			floorNext = floorPrev = null;
+			
+			while (container.numChildren) container.removeChildAt(0);
+		}
+		
+		
+		/**
+		 * 
+		 * 寻路
+		 * 
 		 */
 		
 		public function find($start:String, $end:String):void
@@ -58,7 +82,7 @@ package emap.map3d
 		{
 			super.reset($tween);
 			
-			initializePosition ? viewPosition(initializePosition) : viewFloor(1);
+			initializePosition ? viewPosition(initializePosition, $tween) : viewFloor(1, $tween);
 		}
 		
 		
@@ -66,10 +90,20 @@ package emap.map3d
 		 * @inheritDoc
 		 */
 		
-		override public function moveTo($x:Number, $y:Number, $tween:Boolean=false):void
+		override public function moveTo($x:Number, $y:Number, $tween:Boolean = false):void
 		{
-			cameraMoveX = $x + offsetX;
-			cameraMoveY = $y + offsetY;
+			aimCameraMoveX = $x + offsetX;
+			aimCameraMoveY =-$y + offsetY;
+			
+			if ($tween)
+			{
+				updateTween();
+			}
+			else
+			{
+				cameraMoveX = aimCameraMoveX;
+				cameraMoveY = aimCameraMoveY;
+			}
 		}
 		
 		
@@ -80,13 +114,10 @@ package emap.map3d
 		public function viewPosition($data:*, $tween:Boolean = false):void
 		{
 			if ($data is Position)
-			{
 				var position:Position = $data;
-			}
 			else if ($data is String)
-			{
 				if (positionsViewMap) position = positionsViewMap[$data];
-			}
+			
 			if (position)
 			{
 				viewFloor(position.floor, $tween);
@@ -111,21 +142,34 @@ package emap.map3d
 			else if ($data is uint)
 				floor = floorsViewArr[MathUtil.clamp($data - 1, 0, floorsViewArr.length - 1)];
 			
-			if (floor && floor!= floorCurrent)
+			if (floor && floor!= floorNext)
 			{
-				floorCurrent && (floorCurrent.visible = false);
-				floorCurrent = floor;
-				floorCurrent.visible = true;
-				/*if ($tween)
+				floorPrev = floorNext;
+				floorNext = floor;
+				floorNext.visible = true;
+				Tweener.removeTweens(floorPrev);
+				Tweener.removeTweens(floorNext);
+				if ($tween)
 				{
-					
+					if (floorPrev)
+					{
+						var s:Boolean = floorNext.order > floorPrev.order;
+						var a:Number = cameraDistance * (s ? -1 : 1);
+						floorNext.z = cameraDistance * (s ? 1 : -1);
+						Tweener.addTween(floorPrev, {z:a, time:1});
+						Tweener.addTween(floorNext, {z:0, time:1, onComplete:callbackFloorTweenComplete});
+					}
+					else
+					{
+						floorNext.z = -cameraDistance;
+						Tweener.addTween(floorNext, {z:0, time:1});
+					}
 				}
 				else
 				{
-					floorCurrent && (floorCurrent.visible = false);
-					floorCurrent = floor;
-					floorCurrent.visible = true;
-				}*/
+					callbackFloorTweenComplete();
+					floorNext.z = 0;
+				}
 			}
 		}
 		
@@ -137,18 +181,19 @@ package emap.map3d
 		override protected function uploadAllSource():void
 		{
 			if (mapCreated && contextCreated)
-			{
 				SourceManager.uploadAllSources(main);
-			}
 		}
 		
 		
 		/**
 		 * @private
 		 */
-		private function initialize():void
+		private function initialize($config:EMConfig):void
 		{
+			config = $config;
+			
 			main.addChild(container = new Object3D);
+			main.addEventListener(MouseEvent3D.CLICK, handlerClick);
 		}
 		
 		/**
@@ -156,67 +201,100 @@ package emap.map3d
 		 */
 		private function update():void
 		{
-			if (floorsMap && positionsMap && positionTypesMap && (!hallEnabled || (hallEnabled && hallsMap)))
+			if (emConfig && floorsMap && positionsMap && positionTypesMap && (!hallEnabled || (hallEnabled && hallsMap)))
 			{
-				//remove all
-				floorsViewMap = new Map;
-				floorsViewArr.length = 0;
-				positionsViewMap = new Map;
+				clear();
 				
-				for each (var voFloor:VOFloor in floorsMap)
-				{
-					var floor:Floor = new Floor(config, voFloor);
-					floorsViewArr[floorsViewArr.length] = floor;
-					floorsViewMap[floor.id] = floor;
-					container.addChild(floor).visible = false;
-				}
-				floorsViewArr.sortOn("order", Array.NUMERIC);
+				updateFloors();
 				
-				var order:Function = function($floor:Floor, $index:uint, $floors:Array):void
-				{
-					$floor.data.order = $index + 1;
-				};
-				floorsViewArr.forEach(order);
-				
-				var l:uint = positionsArr.length, f:uint = 0, position:Position;
-				
-				var startRender:Function = function($e:Event = null):void
-				{
-					if (position) 
-					{
-						position.removeEventListener(Event3D.ADDED, startRender);
-						position = null;
-					}
-					if (f < l)
-					{
-						var positionVO:VOPosition = positionsArr[f++];
-						var floor:Floor = floorsViewMap[positionVO ? positionVO.floorID : null];
-						if (positionVO && floor)
-						{
-							position = new Position(config, positionVO);
-							position.addEventListener(Event3D.ADDED, startRender);
-							positionsViewMap[position.id] = position;
-							floor.addPosition(position);
-						}
-						else
-						{
-							startRender();
-						}
-					}
-					else
-					{
-						complete();
-					}
-				};
-				
-				startRender();
+				updatePositions();
 			}
 		}
 		
 		/**
 		 * @private
 		 */
-		private function complete():void
+		private function updateFloors():void
+		{
+			for each (var voFloor:VOFloor in floorsMap)
+			{
+				var floor:Floor = new Floor(emConfig, voFloor);
+				floorsViewArr[floorsViewArr.length] = floor;
+				floorsViewMap[floor.id] = floor;
+				container.addChild(floor).visible = false;
+			}
+			floorsViewArr.sortOn("order", Array.NUMERIC);
+			
+			var order:Function = function($floor:Floor, $index:uint, $floors:Array):void
+			{
+				$floor.data.order = $index + 1;
+			};
+			floorsViewArr.forEach(order);
+		}
+		
+		/**
+		 * @private
+		 */
+		private function updatePositions():void
+		{
+			var l:uint = positionsArr.length, f:uint = 0, position:Position;
+			
+			var startRender:Function = function($e:Event = null):void
+			{
+				if (position) 
+				{
+					position.removeEventListener(Event3D.ADDED, startRender);
+					position = null;
+				}
+				if (f < l)
+				{
+					var positionVO:VOPosition = positionsArr[f++];
+					var floor:Floor = floorsViewMap[positionVO ? positionVO.floorID : null];
+					if (positionVO && floor)
+					{
+						position = new Position(emConfig, positionVO);
+						position.interact = {};
+						position.addEventListener(Event3D.ADDED, startRender);
+						positionsViewMap[position.id] = position;
+						floor.addPosition(position);
+					}
+					else
+					{
+						startRender();
+					}
+				}
+				else
+				{
+					updateInteracts();
+					updateComplete();
+					uploadAllSource();
+					
+					reset();
+				}
+			};
+			
+			startRender();
+		}
+		
+		/**
+		 * @private
+		 */
+		private function updateInteracts():void
+		{
+			if (interactsMap && positionsViewMap)
+			{
+				for (var key:String in interactsMap)
+				{
+					var position:Position = positionsViewMap[key];
+					if (position)position.interact = interactsMap[key];
+				}
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		private function updateComplete():void
 		{
 			mapCreated = true;
 			
@@ -237,11 +315,30 @@ package emap.map3d
 			var maxY:Number = Math.max.apply(null, maxys);
 			
 			container.x = - .5 * (minX + maxX);
-			container.y = - .5 * (minY + maxY);
-			
-			reset();
-			
-			uploadAllSource();
+			container.y =   .5 * (minY + maxY);
+		}
+		
+		/**
+		 * @private
+		 */
+		private function callbackFloorTweenComplete():void
+		{
+			if (floorPrev)
+			{
+				floorPrev.visible = false;
+				floorPrev.z = 0;
+			}
+		}
+		
+		
+		
+		private function handlerClick($e:MouseEvent3D):void
+		{
+			if ($e.target is Position)
+			{
+				var position:Position = $e.target as Position;
+				position.selected = !position.selected;
+			}
 		}
 		
 		
@@ -251,9 +348,15 @@ package emap.map3d
 		 * 
 		 */
 		
+		public function get font():String
+		{
+			return em::font;
+		}
+		
 		public function set font($value:String):void
 		{
-			config.font = $value;
+			em::font = $value;
+			if (emConfig) emConfig.font = $value;
 		}
 		
 		
@@ -273,6 +376,22 @@ package emap.map3d
 		
 		public function set hallEnabled($value:Boolean):void
 		{
+		}
+		
+		
+		/**
+		 * @inheritDoc
+		 */
+		
+		public function set config($value:VOEMap):void
+		{
+			if ($value)
+			{
+				if ($value is EMConfig)
+					emConfig = $value as EMConfig;
+				else
+					throw new ArgumentError("参数必须为EMConfig类型", 3001);
+			}
 		}
 		
 		
@@ -336,7 +455,6 @@ package emap.map3d
 		{
 			nodesMap = $data;
 			
-			update();
 		}
 		
 		
@@ -348,7 +466,20 @@ package emap.map3d
 		{
 			routesMap = $data;
 			
-			update();
+		}
+		
+		
+		/**
+		 * 
+		 * 可交互的positions
+		 * 
+		 */
+		
+		public function set interacts($data:Map):void
+		{
+			interactsMap = $data;
+			
+			updateInteracts();
 		}
 		
 		
@@ -401,7 +532,12 @@ package emap.map3d
 		/**
 		 * @private
 		 */
-		private var floorCurrent:Floor;
+		private var floorNext:Floor;
+		
+		/**
+		 * @private
+		 */
+		private var floorPrev:Floor;
 		
 		/**
 		 * @private
@@ -451,7 +587,18 @@ package emap.map3d
 		/**
 		 * @private
 		 */
-		private const config:EMConfig = new EMConfig;
+		private var interactsMap:Map;
+		
+		/**
+		 * @private
+		 */
+		private var emConfig:EMConfig;
+		
+		
+		/**
+		 * @private
+		 */
+		em var font:String;
 		
 	}
 }

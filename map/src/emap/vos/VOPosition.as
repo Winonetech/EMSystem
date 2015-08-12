@@ -13,9 +13,10 @@ package emap.vos
 	import emap.core.em;
 	import emap.data.Layout;
 	import emap.interfaces.ILayout;
+	import emap.interfaces.INode;
 	
 	
-	public final class VOPosition extends VO implements ILayout
+	public class VOPosition extends VO implements ILayout, INode
 	{
 		
 		/**
@@ -24,9 +25,9 @@ package emap.vos
 		 * 
 		 */
 		
-		public function VOPosition($json:Object = null)
+		public function VOPosition($data:Object = null)
 		{
-			super($json);
+			super($data, "position");
 		}
 		
 		
@@ -38,7 +39,7 @@ package emap.vos
 		{
 			super.parse($data);
 			
-			em::layout = new Layout(coordinates);
+			em::layout = new Layout(getProperty("coordinate"));
 		}
 		
 		
@@ -50,7 +51,7 @@ package emap.vos
 		
 		public function get coordinates():String
 		{
-			return getProperty("coordinate");
+			return layout.build();
 		}
 		
 		
@@ -248,11 +249,23 @@ package emap.vos
 		
 		/**
 		 * 
+		 * 节点序列号
+		 * 
+		 */
+		
+		public function get serial():String
+		{
+			return getProperty("serial");
+		}
+		
+		
+		/**
+		 * 
 		 * 高度
 		 * 
 		 */
 		
-		public function get thick():uint
+		public function get thick():Number
 		{
 			return getProperty("thick", Number);
 		}
@@ -284,18 +297,6 @@ package emap.vos
 		
 		/**
 		 * 
-		 * nodeID
-		 * 
-		 */
-		
-		public function get nodeID():String
-		{
-			return getProperty("node_id");
-		}
-		
-		
-		/**
-		 * 
 		 * 位置编码，参见PositionType.code
 		 * 
 		 */
@@ -313,6 +314,26 @@ package emap.vos
 		public function get layout():Layout
 		{
 			return em::layout;
+		}
+		
+		
+		/**
+		 * @inheritDoc
+		 */
+		
+		public function get nodeX():Number
+		{
+			return layout ? layout.cenX : 0;
+		}
+		
+		
+		/**
+		 * @inheritDoc
+		 */
+		
+		public function get nodeY():Number
+		{
+			return layout ? layout.cenY : 0;
 		}
 		
 		
@@ -348,7 +369,7 @@ package emap.vos
 		
 		em function get node():VONode
 		{
-			return getRelation(VONode, nodeID);
+			return getRelation(VONode, serial);
 		}
 		
 		

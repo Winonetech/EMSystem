@@ -1,0 +1,115 @@
+<positions>
+	<position>
+		<!-- ID由数据库自动生成 -->
+		<id>1</id>
+		<!-- 颜色 -->
+		<color>0xFF0000</color>
+		<!-- 坐标布局 -->
+		<coordinate>m|100-100,l|200-100,l|200-300,l|100-300,l|100-100</coordinate>
+		<!-- 图标 -->
+		<icon></icon>
+		<!-- 图标X轴偏移 -->
+		<iconOffsetX></iconOffsetX>
+		<!-- 图标Y轴便宜 -->
+		<iconOffsetY></iconOffsetY>
+		<!-- 图标旋转 -->
+		<iconRotation></iconRotation>
+		<!-- 图标缩放 -->
+		<iconScale></iconScale>
+		<!-- 图标是否悬浮或贴紧 -->
+		<iconSuspend>false</iconSuspend>
+		<!-- 图标是否可见 -->
+		<iconVisible>true</iconVisible>
+		<!-- 标签 -->
+		<label>位置1</label>
+		<!-- 标签颜色 -->
+		<labelColor>0xFFFFFF</labelColor>
+		<!-- 标签X轴偏移 -->
+		<labelOffsetX>0</labelOffsetX>
+		<!-- 标签Y轴偏移 -->
+		<labelOffsetY>50</labelOffsetY>
+		<!-- 标签旋转 -->
+		<labelRotation>0</labelRotation>
+		<!-- 标签缩放 -->
+		<labelScale>1.5</labelScale>
+		<!-- 标签是否可见 -->
+		<labelVisible>true</labelVisible>
+		<!-- 节点编号，程序自动生成 -->
+		<serial>192168001016-20150802142503-4A3C0DRW</serial>
+		<!-- 厚度 -->
+		<thick>50</thick>
+		<!-- 关联楼层ID -->
+		<floor_id>2</floor_id>
+		<!-- 关联位置类别ID -->
+		<position_type_id>1</position_type_id>
+	</position>
+	<position>
+		<id>2</id>
+		<color>0x0000FF</color>
+		<coordinate>m|300-100,l|500-100,l|500-300,l|300-300,l|300-100,m|350-150,l|450-150,l|450-250,l|350-250,l|350-150</coordinate>
+		<icon></icon>
+		<iconOffsetX></iconOffsetX>
+		<iconOffsetY></iconOffsetY>
+		<iconRotation></iconRotation>
+		<iconScale></iconScale>
+		<iconSuspend></iconSuspend>
+		<iconVisible></iconVisible>
+		<label>位置2</label>
+		<labelColor>0xFFFFFF</labelColor>
+		<labelOffsetX></labelOffsetX>
+		<labelOffsetY>80</labelOffsetY>
+		<labelRotation></labelRotation>
+		<labelScale>1.5</labelScale>
+		<labelVisible>true</labelVisible>
+		<serial>192168001016-20150802142503-BS84JT6Q</serial>
+		<thick>50</thick>
+		<floor_id>2</floor_id>
+		<position_type_id>1</position_type_id>
+	</position>
+	<position>
+		<id>3</id>
+		<color>0xFF0000</color>
+		<coordinate>m|600-100,l|700-100,l|700-200,l|600-200,l|600-100</coordinate>
+		<icon></icon>
+		<iconOffsetX></iconOffsetX>
+		<iconOffsetY></iconOffsetY>
+		<iconRotation></iconRotation>
+		<iconScale></iconScale>
+		<iconSuspend></iconSuspend>
+		<iconVisible></iconVisible>
+		<label>位置3</label>
+		<labelColor>0xFFFFFF</labelColor>
+		<labelOffsetX></labelOffsetX>
+		<labelOffsetY></labelOffsetY>
+		<labelRotation></labelRotation>
+		<labelScale>1.5</labelScale>
+		<labelVisible>true</labelVisible>
+		<serial>192168001016-20150802142503-S843J4HS</serial>
+		<thick>50</thick>
+		<floor_id>1</floor_id>
+		<position_type_id>1</position_type_id>
+	</position>
+	<position>
+		<id>4</id>
+		<color>0xFF00FF</color>
+		<coordinate>m|100-700,c|300-700$200-600,l|300-800,l|100-800,l|100-700</coordinate>
+		<icon></icon>
+		<iconOffsetX></iconOffsetX>
+		<iconOffsetY></iconOffsetY>
+		<iconRotation></iconRotation>
+		<iconScale></iconScale>
+		<iconSuspend></iconSuspend>
+		<iconVisible></iconVisible>
+		<label>位置4</label>
+		<labelColor>0xFFFFFF</labelColor>
+		<labelOffsetX></labelOffsetX>
+		<labelOffsetY></labelOffsetY>
+		<labelRotation></labelRotation>
+		<labelScale>1.5</labelScale>
+		<labelVisible>true</labelVisible>
+		<serial>192168001016-20150802142503-AD3R5T7Y</serial>
+		<thick>25</thick>
+		<floor_id>2</floor_id>
+		<position_type_id>2</position_type_id>
+	</position>
+</positions>

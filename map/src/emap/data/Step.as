@@ -11,7 +11,7 @@ package emap.data
 	import cn.vision.core.VSObject;
 	
 	import emap.core.em;
-	import emap.map3d.utils.Map3DUtil;
+	import emap.utils.StepUtil;
 	
 	import flash.geom.Point;
 	
@@ -41,14 +41,18 @@ package emap.data
 		
 		public function getPoints($start:Point):Vector.<Point>
 		{
-			if (style == "curveTo" && $start)
+			if (start != $start)
 			{
-				var l:Number = Point.distance($start, aim) + 
-					Point.distance(aim, ctr) + Point.distance($start, ctr);
-				var s:Number = 1 / (l * .1);
-				var result:Vector.<Point> = Map3DUtil.getCurvePoints($start, aim, ctr, s);
+				if (style == "curveTo" && $start)
+				{
+					start = $start;
+					var l:Number = Point.distance($start, aim) + 
+						Point.distance(aim, ctr) + Point.distance($start, ctr);
+					var s:Number = 1 / (l * .1);
+					points = StepUtil.getCurvePoints($start, aim, ctr, s);
+				}
 			}
-			return result;
+			return points;
 		}
 		
 		
@@ -83,10 +87,11 @@ package emap.data
 					{
 						case "m":
 						case "l":
-							em::style = (c == "m") ? "moveTo" : "lineTo";
+							var temp:String = (c == "m") ? "moveTo" : "lineTo";
+							em::style = temp;
 							t2 = t1[1].split("-");
 							aim.x = Number(t2[0]);
-							aim.y =-Number(t2[1]);
+							aim.y = Number(t2[1]);
 							break;
 						case "c":
 							em::ctr = new Point;
@@ -95,9 +100,9 @@ package emap.data
 							t3 = t2[0].split("-");
 							t4 = t2[1].split("-");
 							aim.x = Number(t3[0]);
-							aim.y =-Number(t3[1]);
+							aim.y = Number(t3[1]);
 							ctr.x = Number(t4[0]);
-							ctr.y =-Number(t4[1]);
+							ctr.y = Number(t4[1]);
 							break;
 					}
 				}
@@ -140,6 +145,17 @@ package emap.data
 		{
 			return em::ctr;
 		}
+		
+		
+		/**
+		 * @private
+		 */
+		private var start:Point;
+		
+		/**
+		 * @private
+		 */
+		private var points:Vector.<Point>;
 		
 		
 		/**

@@ -1,0 +1,22 @@
+<floor_hall_relation>
+	<relation>
+		<hall_id>1</hall_id>
+		<floor_id>1</floor_id>
+	</relation>
+	<relation>
+		<hall_id>1</hall_id>
+		<floor_id>2</floor_id>
+	</relation>
+	<relation>
+		<hall_id>1</hall_id>
+		<floor_id>3</floor_id>
+	</relation>
+	<relation>
+		<hall_id>2</hall_id>
+		<floor_id>1</floor_id>
+	</relation>
+	<relation>
+		<hall_id>2</hall_id>
+		<floor_id>2</floor_id>
+	</relation>
+</floor_hall_relation>

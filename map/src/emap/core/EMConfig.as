@@ -1,12 +1,10 @@
 package emap.core
 {
 	
-	import cn.vision.core.VSObject;
-	
-	import flash.text.Font;
+	import emap.vos.VOEMap;
 	
 	
-	public final class EMConfig extends VSObject
+	public class EMConfig extends VOEMap
 	{
 		
 		/**
@@ -15,37 +13,10 @@ package emap.core
 		 * 
 		 */
 		
-		public function EMConfig()
+		public function EMConfig($data:Object = null)
 		{
-			super();
+			super($data);
 		}
-		
-		
-		/**
-		 * 
-		 * 小图标宽度
-		 * 
-		 */
-		
-		public var iconWidth:Number = 256;
-		
-		
-		/**
-		 * 
-		 * 小图标高度
-		 * 
-		 */
-		
-		public var iconHeight:Number = 256;
-		
-		
-		/**
-		 * 
-		 * 位置厚度
-		 * 
-		 */
-		
-		public var positionThick:Number = 50;
 		
 		
 		/**
@@ -54,7 +25,18 @@ package emap.core
 		 * 
 		 */
 		
-		public var font:String = "msyh";
+		public function get font():String
+		{
+			return getProperty("font", String);
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set font($value:String):void
+		{
+			setProperty("font", $value);
+		}
 		
 	}
 }

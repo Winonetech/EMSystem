@@ -1,0 +1,26 @@
+<halls>
+	<hall>
+		<!-- ID由数据库自动生成 -->
+		<id>1</id>
+		<!-- 标签 -->
+		<label>A馆</label>
+		<!-- 坐标布局 -->
+		<coordinate>m|50-50,l|950-50,l|950-450,l|50-450,l|50-50</coordinate>
+		<!-- 颜色 -->
+		<color>0xCCCCCC</color>
+		<!-- 关联商场ID -->
+		<emporium_id>1</emporium_id>
+	</hall>
+	<hall>
+		<!-- ID由数据库自动生成 -->
+		<id>2</id>
+		<!-- 标签 -->
+		<label>B馆</label>
+		<!-- 坐标布局 -->
+		<coordinate>m|50-550,l|950-550,l|950-950,l|50-950,l|50-550</coordinate>
+		<!-- 颜色 -->
+		<color>0xCCCCCC</color>
+		<!-- 关联商场ID -->
+		<emporium_id>1</emporium_id>
+	</hall>
+</halls>

@@ -17,7 +17,7 @@ package emap.vos
 	import emap.interfaces.ILayout;
 	
 	
-	public final class VOFloor extends VO implements ILayout
+	public class VOFloor extends VO implements ILayout
 	{
 		
 		/**
@@ -26,9 +26,9 @@ package emap.vos
 		 * 
 		 */
 		
-		public function VOFloor($json:Object = null)
+		public function VOFloor($data:Object = null)
 		{
-			super($json);
+			super($data, "floor");
 		}
 		
 		
@@ -40,7 +40,7 @@ package emap.vos
 		{
 			super.parse($data);
 			
-			em::layout = new Layout(coordinates);
+			em::layout = new Layout(getProperty("coordinate"));
 		}
 		
 		
@@ -64,7 +64,31 @@ package emap.vos
 		
 		public function get coordinates():String
 		{
-			return getProperty("coordinate");
+			return layout.build();
+		}
+		
+		
+		/**
+		 * 
+		 * description
+		 * 
+		 */
+		
+		public function get description():String
+		{
+			return getProperty("description");
+		}
+		
+		
+		/**
+		 * 
+		 * image
+		 * 
+		 */
+		
+		public function get image():String
+		{
+			return getProperty("image");
 		}
 		
 		
@@ -101,18 +125,6 @@ package emap.vos
 		
 		
 		/**
-		 * 
-		 * hallID
-		 * 
-		 */
-		
-		public function get hallID():String
-		{
-			return getProperty("veneus_id");
-		}
-		
-		
-		/**
 		 * @inheritDoc
 		 */
 		
@@ -124,14 +136,11 @@ package emap.vos
 		
 		/**
 		 * 
-		 * hall
+		 * hall 集合。
 		 * 
 		 */
 		
-		em function get hall():VOHall
-		{
-			return getRelation(VOHall, hallID);
-		}
+		public var hallsMap:Map;
 		
 		
 		/**
@@ -141,15 +150,6 @@ package emap.vos
 		 */
 		
 		public var positionMap:Map;
-		
-		
-		/**
-		 * 
-		 * store 集合。
-		 * 
-		 */
-		
-		public var storeMap:Map;
 		
 		
 		/**
