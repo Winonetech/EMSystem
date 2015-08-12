@@ -1,8 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
-					   xmlns:s="library://ns.adobe.com/flex/spark" 
-					   xmlns:mx="library://ns.adobe.com/flex/mx">
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   xmlns:mp="mp.*"
+					   xmlns:components="editor.components.*"
+					   xmlns:floor="editor.components.floor.*"
+					   xmlns:position="editor.components.position.*"
+					   width="1040" creationComplete="init(event)">
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
+	
+	
+		<s:BorderContainer x="0" y="0" width="286" height="482" borderVisible="true">
+			
+		
+		<s:TabBar id="tabs" x="0" y="0" chromeColor="#9CABB1" cornerRadius="4" dataProvider="{vs}"
+				  focusAlpha="0.5" focusColor="#70B2EE"/>   
+		
+		<mx:ViewStack id="vs" y="23" left="0" width="100%" height="448" chromeColor="#F4F6F7" borderVisible="true">  
+				<s:NavigatorContent label="楼层"  
+									width="100%" height="100%"  id= "vf"> 
+					<s:VGroup id = "vgroup" width="100%" height="100%">
+						
+					
+						<floor:Toolone x="0" y="0" height="66">
+						</floor:Toolone>
+					</s:VGroup>
+				</s:NavigatorContent>
+				<s:NavigatorContent label="位置"  
+									width="100%" height="100%" id="vp" >  
+					<s:VGroup id = "lvgroup" width="100%" height="100%">
+						<position:ToolTwo width="286" height="50">
+						</position:ToolTwo>
+					</s:VGroup>
+						
+				
+				</s:NavigatorContent>
+			
+				<s:NavigatorContent label="节点"  
+									width="100%" height="100%"  id="vn">  
+					<position:ToolTwo x="0" y="0" width="285" height="45">
+					</position:ToolTwo>
+				</s:NavigatorContent>
+				<s:NavigatorContent label="路径"  
+									width="100%" height="100%" id = "vr">  
+					
+						<mx:HRule x="0" y="49" width="286" height="14"/>
+						<s:CheckBox x="50" y="77" width="239" label="路径一" />
+						<mx:HRule x="0" y="102" width="286" height="14"/>
+						<mx:HRule x="-1" y="166" width="287" height="14"/>
+						<s:CheckBox x="47" y="139" width="239" label="路径二"/>  
+						<mx:HRule x="-1" y="227" width="287" height="14"/>
+						<s:CheckBox x="44" y="201" width="239" label="路径三"/>
+					<floor:Toolone x="-1" y="-1" width="287" height="59">
+					</floor:Toolone>
+					
+				</s:NavigatorContent>
+			</mx:ViewStack>
+		
+		</s:BorderContainer>
+	
+	<components:PropertyPanel id="property" x="791" y="0" width="249" height="477" >
+	</components:PropertyPanel>
+	<components:Debugger x="0" y="485">
+	</components:Debugger>
+	<fx:Script>
+		<![CDATA[
+			import editor.components.floor.FloorPlate;
+			
+			import core.MEConfig;
+			
+			import emap.vos.VOFloor;
+			import emap.vos.VOPosition;
+			
+			import mx.events.FlexEvent;
+			
+			protected function checkbox_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				property.setCurrentState("node",true);
+			}  
+			
+			protected function checkbox1_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+			protected function init(event:FlexEvent):void
+			{
+				MEConfig.instance.propertyPanel = property;
+				MEConfig.instance.floorNC = vgroup;
+				MEConfig.instance.nodeNC = vn;
+				MEConfig.instance.positionNC = vp;
+				MEConfig.instance.routeNC = vr;
+			}
+			
+			protected function floor_clickHandler(event:MouseEvent):void
+			{
+				var f:VOFloor = new VOFloor;
+				f.order = 1;
+				var fp:FloorPlate = new FloorPlate;
+				fp.floor = f;
+				vf.addElement(fp);
+			
+				
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
 </s:WindowedApplication>

@@ -13,10 +13,10 @@ package emap.utils
 	import cn.vision.utils.NetUtil;
 	
 	import flash.net.NetworkInfo;
-	import flash.net.NetworkInterface;
+	import flash.net.NetworkInterface;   
 	
 	
-	public final class NodeUtil extends NoInstance
+	public final class NodeUtil extends NoInstance 
 	{
 		
 		/**
@@ -24,9 +24,9 @@ package emap.utils
 		 * 生成唯一序列号
 		 * 
 		 */
-		
+		    
 		public static function generateSerial():String
-		{
+		{ 
 			var ni:NetworkInterface = NetUtil.getNetworkInterface();
 			var result:String = "";
 			if (ni)

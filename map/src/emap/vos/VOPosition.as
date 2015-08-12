@@ -9,7 +9,6 @@ package emap.vos
 	
 	
 	import com.winonetech.core.VO;
-	
 	import emap.core.em;
 	import emap.data.Layout;
 	import emap.interfaces.ILayout;
@@ -37,7 +36,6 @@ package emap.vos
 		override public function parse($data:Object):void
 		{
 			super.parse($data);
-			
 			em::layout = new Layout(coordinates);
 		}
 		
