@@ -9,7 +9,6 @@ package emap.vos
 	
 	
 	import com.winonetech.core.VO;
-	
 	import emap.core.em;
 	import emap.data.Layout;
 	import emap.interfaces.ILayout;

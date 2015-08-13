@@ -12,14 +12,14 @@ package emap.map2d
 	
 	import cn.vision.core.UI;
 	import cn.vision.utils.MathUtil;
-	
-	import flash.display.DisplayObject;
+	  
+	import flash.display.DisplayObject;  
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	  
 	
-	
-	public class Viewer2D extends UI
+	public class Viewer2D extends UI   
 	{
 		public function Viewer2D()
 		{
