@@ -13,7 +13,7 @@ package emap.vos
 	import com.winonetech.core.VO;
 	
 	
-	public final class VOPositionType extends VO
+	public class VOPositionType extends VO
 	{
 		
 		/**
@@ -22,15 +22,15 @@ package emap.vos
 		 * 
 		 */
 		
-		public function VOPositionType($json:Object = null)
+		public function VOPositionType($data:Object = null)
 		{
-			super($json);
+			super($data, "positionType");
 		}
 		
 		
 		/**
 		 * 
-		 * 代码数据。
+		 * code
 		 * 
 		 */
 		
@@ -42,19 +42,31 @@ package emap.vos
 		
 		/**
 		 * 
-		 * name
+		 * icon
 		 * 
 		 */
 		
-		public function get name():String
+		public function get icon():String
 		{
-			return getProperty("name");
+			return getProperty("icon");
 		}
 		
 		
 		/**
 		 * 
-		 * 排序。
+		 * label
+		 * 
+		 */
+		
+		public function get label():String
+		{
+			return getProperty("label");
+		}
+		
+		
+		/**
+		 * 
+		 * 排序
 		 * 
 		 */
 		
@@ -69,6 +81,18 @@ package emap.vos
 		public function set order($value:uint):void
 		{
 			setProperty("order", $value);
+		}
+		
+		
+		/**
+		 * 
+		 * 是否可见
+		 * 
+		 */
+		
+		public function get visible():Boolean
+		{
+			return getProperty("visible", Boolean);
 		}
 		
 		

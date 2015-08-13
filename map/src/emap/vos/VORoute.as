@@ -10,10 +10,11 @@ package emap.vos
 	
 	import com.winonetech.core.VO;
 	
+	import emap.consts.RouteTypeConsts;
 	import emap.core.em;
 	
 	
-	public final class VORoute extends VO
+	public class VORoute extends VO
 	{
 		
 		/**
@@ -22,9 +23,45 @@ package emap.vos
 		 * 
 		 */
 		
-		public function VORoute($json:Object = null)
+		public function VORoute($data:Object = null)
 		{
-			super($json);
+			super($data, "route");
+		}
+		
+		
+		/**
+		 * 
+		 * 类型，如果是曲线时，ctrlX与ctrlY属性可用。
+		 * 
+		 */
+		
+		public function get type():String
+		{
+			return getProperty("type");
+		}
+		
+		
+		/**
+		 * 
+		 * 控制X，只在类型为曲线时该值可用
+		 * 
+		 */
+		
+		public function get ctrlX():Number
+		{
+			return type == RouteTypeConsts.CURVE ? getProperty("ctrlX", Number) : NaN;
+		}
+		
+		
+		/**
+		 * 
+		 * 控制Y，只在类型为曲线时该值可用
+		 * 
+		 */
+		
+		public function get ctrlY():Number
+		{
+			return type == RouteTypeConsts.CURVE ? getProperty("ctrlY", Number) : NaN;
 		}
 		
 		
@@ -34,18 +71,9 @@ package emap.vos
 		 * 
 		 */
 		
-		public function get node1ID():String
+		public function get serial1():String
 		{
-			return getProperty("node_id_b");
-		}
-		
-		/**
-		 * @private
-		 */
-		public function set node1ID($value:String):void
-		{
-			setProperty("node_id_b", $value);
-			clsRelation(VONode);
+			return getProperty("serial1");
 		}
 		
 		
@@ -55,18 +83,9 @@ package emap.vos
 		 * 
 		 */
 		
-		public function get node2ID():String
+		public function get serial2():String
 		{
-			return getProperty("node_id_e");
-		}
-		
-		/**
-		 * @private
-		 */
-		public function set node2ID($value:String):void
-		{
-			setProperty("node_id_e", $value);
-			clsRelation(VONode);
+			return getProperty("serial2");
 		}
 		
 		
@@ -78,7 +97,7 @@ package emap.vos
 		
 		em function get node1():VONode
 		{
-			return getRelation(VONode, node1ID);
+			return getRelation(VONode, serial1);
 		}
 		
 		
@@ -90,7 +109,7 @@ package emap.vos
 		
 		em function get node2():VONode
 		{
-			return getRelation(VONode, node2ID);
+			return getRelation(VONode, serial2);
 		}
 		
 	}

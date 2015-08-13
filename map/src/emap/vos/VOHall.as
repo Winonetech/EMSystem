@@ -12,8 +12,12 @@ package emap.vos
 	
 	import com.winonetech.core.VO;
 	
+	import emap.core.em;
+	import emap.data.Layout;
+	import emap.interfaces.ILayout;
 	
-	public final class VOHall extends VO
+	
+	public class VOHall extends VO implements ILayout
 	{
 		
 		/**
@@ -22,21 +26,47 @@ package emap.vos
 		 * 
 		 */
 		
-		public function VOHall($json:Object = null)
+		public function VOHall($data:Object = null)
 		{
-			super($json);
+			super($data, "hall");
+			
+			em::layout = new Layout(getProperty("coordinate"));
 		}
 		
 		
 		/**
 		 * 
-		 * name
+		 * 颜色
 		 * 
 		 */
 		
-		public function get name():String
+		public function get color():uint
 		{
-			return getProperty("name");
+			return getProperty("color");
+		}
+		
+		
+		/**
+		 * 
+		 * 一组坐标，地图模块根据坐标组画出地图形状。
+		 * 
+		 */
+		
+		public function get coordinates():String
+		{
+			return layout.build();
+		}
+		
+		
+		/**
+		 * 
+		 * label
+		 * 
+		 */
+		
+		public function get label():String
+		{
+			return getProperty("label");
 		}
 		
 		
@@ -52,11 +82,21 @@ package emap.vos
 		}
 		
 		/**
-		 * 
+		 * @private
 		 */
 		public function set order($value:uint):void
 		{
 			setProperty("order", $value);
+		}
+		
+		
+		/**
+		 * @inheritDoc
+		 */
+		
+		public function get layout():Layout
+		{
+			return em::layout;
 		}
 		
 		
@@ -67,6 +107,12 @@ package emap.vos
 		 */
 		
 		public var floorMap:Map;
+		
+		
+		/**
+		 * @private
+		 */
+		em var layout:Layout;
 		
 	}
 }

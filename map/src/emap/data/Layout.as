@@ -67,7 +67,13 @@ package emap.data
 							addo(step.aim);
 							break;
 						case StepStyleConsts.CURVE_TO:
-							if (last) step.getPoints(last.aim).forEach(addo);
+							if (last) 
+							{
+								var cache:Vector.<Point> = step.getPoints(last.aim);
+								cache.forEach(addo);
+								var end:Point = cache[cache.length - 1];
+								if (end.x != step.aim.x || end.y != step.aim.y) addo(step.aim);
+							}
 							break;
 					}
 					resl[resl.length] = step;
@@ -90,6 +96,22 @@ package emap.data
 			}
 		}
 		
+		
+		/**
+		 * 
+		 * 构建步骤数据。
+		 * 
+		 */
+		
+		public function build():String
+		{
+			return steps.join(",");
+		}
+		
+		
+		/**
+		 * @inheritDoc
+		 */
 		
 		public function toString():String
 		{
@@ -219,18 +241,6 @@ package emap.data
 		public function get steps():Vector.<Step>
 		{
 			return em::steps;
-		}
-		
-		
-		/**
-		 * 
-		 * 点集合。
-		 * 
-		 */
-		
-		public function get points():Vector.<Point>
-		{
-			return em::points;
 		}
 		
 		

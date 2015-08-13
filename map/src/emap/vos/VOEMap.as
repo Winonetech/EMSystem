@@ -13,7 +13,7 @@ package emap.vos
 	import com.winonetech.core.VO;
 	
 	
-	public final class VOEMap extends VO
+	public class VOEMap extends VO
 	{
 		
 		/**
@@ -22,9 +22,9 @@ package emap.vos
 		 * 
 		 */
 		
-		public function VOEMap($json:Object = null)
+		public function VOEMap($data:Object = null)
 		{
-			super($json);
+			super($data, "emporium");
 		}
 		
 		
@@ -49,6 +49,54 @@ package emap.vos
 		public function get hallEnabled():Boolean
 		{
 			return getProperty("hallEnabled");
+		}
+		
+		
+		/**
+		 * 
+		 * 小图标宽度
+		 * 
+		 */
+		
+		public function get iconWidth():Number
+		{
+			return getProperty("iconWidth", Number);
+		}
+		
+		
+		/**
+		 * 
+		 * 小图标高度
+		 * 
+		 */
+		
+		public function get iconHeight():Number
+		{
+			return getProperty("iconHeight", Number);
+		}
+		
+		
+		/**
+		 * 
+		 * 实体位置厚度
+		 * 
+		 */
+		
+		public function get thickEntity():Number
+		{
+			return getProperty("thickEntity", Number);
+		}
+		
+		
+		/**
+		 * 
+		 * 镂空位置厚度
+		 * 
+		 */
+		
+		public function get thickHollow():Number
+		{
+			return getProperty("thickHollow", Number);
 		}
 		
 		

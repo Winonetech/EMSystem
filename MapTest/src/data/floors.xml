@@ -1,0 +1,40 @@
+<floors>
+	<floor>
+		<!-- ID由数据库自动生成 -->
+		<id>1</id>
+		<!-- 坐标布局 -->
+		<coordinate>m|25-25,l|975-25,l|975-975,l|25-975,l|25-25</coordinate>
+		<!-- 颜色 -->
+		<color>0xCCCCCC</color>
+		<!-- 描述 -->
+		<description></description>
+		<!-- 参照图 -->
+		<image></image>
+		<!-- 标签 -->
+		<label>一楼</label>
+		<!-- 楼层顺序 -->
+		<order>1</order>
+		<!-- 关联商场ID -->
+		<emporium_id>1</emporium_id>
+	</floor>
+	<floor>
+		<id>2</id>
+		<coordinate>m|25-25,l|975-25,l|975-425,l|525-425,l|525-575,l|975-575,l|975-975,l|25-975,l|25-575,l|475-575,l|475-425,l|25-425,l|25-25</coordinate>
+		<color>0xCCCCCC</color>
+		<description></description>
+		<image></image>
+		<label>二楼</label>
+		<order>2</order>
+		<emporium_id>1</emporium_id>
+	</floor>
+	<floor>
+		<id>3</id>
+		<coordinate>m|25-25,l|975-25,l|975-425,l|25-425,l|25-25</coordinate>
+		<color>0xCCCCCC</color>
+		<description></description>
+		<image></image>
+		<label>三楼</label>
+		<order>3</order>
+		<emporium_id>1</emporium_id>
+	</floor>
+</floors>

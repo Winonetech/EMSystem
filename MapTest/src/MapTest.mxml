@@ -20,10 +20,13 @@
 	<fx:Script>
 		<![CDATA[
 			import cn.vision.collections.Map;
+			import cn.vision.system.VSFile;
+			import cn.vision.utils.FileUtil;
 			import cn.vision.utils.MathUtil;
 			
 			import com.winonetech.core.Store;
 			
+			import emap.core.EMConfig;
 			import emap.map3d.EMap3D;
 			import emap.tools.SourceManager;
 			import emap.utils.NodeUtil;
@@ -42,7 +45,12 @@
 				var container:UIComponent = new UIComponent;
 				addElementAt(container, 0);
 				
-				map = new EMap3D;
+				
+				var config:EMConfig = new EMConfig(getXML("data/emporium.xml"));
+				
+				trace(config.toXML());
+				
+				map = new EMap3D(config);
 				container.addChild(map);
 				map.width = width;
 				map.height = height;
@@ -51,7 +59,8 @@
 			
 			private function initializeData(map:EMap3D):void
 			{
-				var list:XMLList = TestData.FLOORS.children();
+				var xml:XML = getXML("data/floors.xml");
+				var list:XMLList = xml.children();
 				var floorsMap:Map = new Map;
 				for each (var item:XML in list)
 				{
@@ -64,14 +73,16 @@
 					radio.group = floorRadio;
 					floorsMenu.addElement(radio);
 				}
-				list = TestData.POSITION_TYPES.children();
+				xml = getXML("data/positionTypes.xml");
+				list = xml.children();
 				var positionTypesMap:Map = new Map;
 				for each (item in list)
 				{
 					var positionType:VOPositionType =store.registData(item, VOPositionType);
 					positionTypesMap[positionType.id] = positionType;
 				}
-				list = TestData.POSITIONS.children();
+				xml = getXML("data/positions.xml");
+				list = xml.children();
 				var positionsArr:Array = [];
 				for each (item in list)
 				{
@@ -94,7 +105,17 @@
 			
 			protected function floorRadio_changeHandler(event:Event):void
 			{
-				map.viewFloor(floorRadio.selectedValue);
+				map.viewFloor(floorRadio.selectedValue, true);
+			}
+			
+			
+			private function getXML(path:String):XML
+			{
+				var file:VSFile = new VSFile(FileUtil.resolvePathApplication(path));
+				var stream:FileStream = new FileStream;
+				stream.open(file, FileMode.READ);
+				var temp:String = stream.readUTFBytes(stream.bytesAvailable);
+				return XML(temp);
 			}
 			
 			private var store:Store = Store.instance;

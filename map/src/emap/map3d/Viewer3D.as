@@ -13,8 +13,6 @@ package emap.map3d
 	import alternativa.engine3d.core.View;
 	import alternativa.engine3d.lights.AmbientLight;
 	import alternativa.engine3d.lights.DirectionalLight;
-	import alternativa.engine3d.materials.FillMaterial;
-	import alternativa.engine3d.primitives.Plane;
 	
 	import caurina.transitions.Tweener;
 	
@@ -31,7 +29,6 @@ package emap.map3d
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
-	import flash.geom.Vector3D;
 	import flash.utils.Timer;
 	
 	
@@ -73,20 +70,22 @@ package emap.map3d
 		
 		public function reset($tween:Boolean = false):void
 		{
+			aimCameraMoveX = 0;
+			aimCameraMoveY = 0;
+			aimCameraDistance  = initializeCameraDistance;
+			aimCameraRotationX = initializeRotationX;
+			aimCameraRotationZ = initializeRotationZ;
 			if ($tween)
 			{
-				Tweener.removeTweens(this);
-				Tweener.addTween(this, {time:1, 
-					cameraRotationX:initializeRotationX,
-					cameraRotationZ:initializeRotationZ,
-					cameraDistance :initializeCameraDistance
-				});
+				updateTween();
 			}
 			else
 			{
-				cameraRotationX = initializeRotationX;
-				cameraRotationZ = initializeRotationZ;
-				cameraDistance  = initializeCameraDistance;
+				cameraMoveX     = aimCameraMoveX;
+				cameraMoveY     = aimCameraMoveY;
+				cameraDistance  = aimCameraDistance;
+				cameraRotationX = aimCameraRotationX;
+				cameraRotationZ = aimCameraRotationZ;
 			}
 		}
 		
@@ -101,6 +100,19 @@ package emap.map3d
 		{
 			if (contextCreated)
 				SourceManager.uploadAllSources(main);
+		}
+		
+		
+		protected function updateTween():void
+		{
+			Tweener.removeTweens(this);
+			Tweener.addTween(this, {time:1,
+				cameraMoveX:aimCameraMoveX,
+				cameraMoveY:aimCameraMoveY,
+				cameraDistance :aimCameraDistance,
+				cameraRotationX:aimCameraRotationX,
+				cameraRotationZ:aimCameraRotationZ
+			});
 		}
 		
 		
@@ -134,8 +146,8 @@ package emap.map3d
 			background = new Background(diagnal * Math.cos(angle), diagnal * Math.sin(angle), 16, 10);
 			background.x = 0;
 			background.y = 0;
-			background.z = maxCameraDistance + 1000;
-			background.source = 0x000000;
+			background.z = maxCameraDistance * 2;
+			background.source = 0xAAAAAA;
 			camera.addChild(background);
 			
 			directLight = new DirectionalLight(0xFFFFFF);
@@ -148,9 +160,9 @@ package emap.map3d
 			ambientLight = new AmbientLight(0xAAAAAA);
 			main.addChild(ambientLight);
 			
-			/*var temp:Plane = new Plane;
+			/*var temp:Box = new Box(10, 10, 200);
 			temp.setMaterialToAllSurfaces(new FillMaterial(0xFF00FF));
-			main.addChild(temp).z = 1;*/
+			cameraContainerM.addChild(temp);*/
 			
 			reset();
 			
@@ -188,17 +200,14 @@ package emap.map3d
 		 */
 		private function move($x:Number, $y:Number):void
 		{
-			Tweener.removeTweens(this);
 			var fac:Number = Math.cos(cameraRotationX);
 			$y = -$y / (fac == 0 ? 1 : fac);
-			
 			var cos:Number = Math.cos(em::cameraRotationZ);
 			var sin:Number = Math.sin(em::cameraRotationZ);
+			aimCameraMoveX = start.x - factor * ($x * cos - $y * sin);
+			aimCameraMoveY = start.y - factor * ($x * sin + $y * cos);
 			
-			Tweener.addTween(this, {time:1,
-				cameraMoveX:start.x - factor * ($x * cos - $y * sin),
-				cameraMoveY:start.y - factor * ($x * sin + $y * cos)
-			});
+			updateTween();
 		}
 		
 		/**
@@ -206,11 +215,10 @@ package emap.map3d
 		 */
 		private function rotate($x:Number, $y:Number):void
 		{
-			Tweener.removeTweens(this);
-			Tweener.addTween(this, {time:1,
-				cameraRotationZ:start.x - $x * .005,
-				cameraRotationX:start.y - $y * .005
-			});
+			aimCameraRotationZ = start.x - $x * .005;
+			aimCameraRotationX = start.y - $y * .005;
+			
+			updateTween();
 		}
 		
 		
@@ -252,7 +260,9 @@ package emap.map3d
 		 */
 		private function handlerMouseWheel($e:MouseEvent):void
 		{
-			cameraDistance -= $e.delta * 10;
+			aimCameraDistance = cameraDistance - $e.delta * 100;
+			
+			updateTween();
 		}
 		
 		/**
@@ -769,6 +779,31 @@ package emap.map3d
 		 */
 		protected var contextCreated:Boolean;
 		
+		/**
+		 * 目标cameraMoveX
+		 */
+		protected var aimCameraMoveX:Number;
+		
+		/**
+		 * 目标cameraMoveY
+		 */
+		protected var aimCameraMoveY:Number;
+		
+		/**
+		 * 目标cameraRotationX
+		 */
+		protected var aimCameraRotationX:Number;
+		
+		/**
+		 * 目标cameraRotationZ
+		 */
+		protected var aimCameraRotationZ:Number;
+		
+		/**
+		 * 目标cameraDistance
+		 */
+		protected var aimCameraDistance:Number;
+		
 		
 		/**
 		 * @private
@@ -929,7 +964,7 @@ package emap.map3d
 		/**
 		 * @private
 		 */
-		em var minCameraRotationX:Number = 0;
+		em var minCameraRotationX:Number = Math.PI / 6;
 		
 		/**
 		 * @private

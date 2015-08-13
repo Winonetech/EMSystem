@@ -1,7 +1,6 @@
 package emap.map3d.utils
 {
 	import alternativa.engine3d.core.Object3D;
-	import alternativa.engine3d.materials.TextureMaterial;
 	import alternativa.engine3d.primitives.Plane;
 	import alternativa.engine3d.resources.BitmapTextureResource;
 	
@@ -20,7 +19,6 @@ package emap.map3d.utils
 	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import flash.geom.Matrix;
-	import flash.geom.Point;
 	import flash.text.AntiAliasType;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
@@ -44,35 +42,6 @@ package emap.map3d.utils
 		
 		/**
 		 * 
-		 * 获取二次贝塞尔曲线上的点
-		 * 
-		 * @param $start:Point 起始点
-		 * @param $end:Point 结束点
-		 * @param $ctrl:Point 控制点
-		 * @param $seg:Number 分段
-		 * @param $begin:Boolean (default = false) 是否包含起始点
-		 * 
-		 */
-		
-		public static function getCurvePoints($start:Point, $end:Point, $ctrl:Point, $seg:Number = .1, $begin:Boolean = false):Vector.<Point>
-		{
-			if ($start && $end && $ctrl)
-			{
-				var result:Vector.<Point> = new Vector.<Point>;
-				for (var t:Number = $seg; t <= 1; t += $seg)
-				{
-					//二次Bz曲线的公式
-					var x:Number = (1 - t) * (1 - t) * $start.x + 2 * t * (1 - t) * $ctrl.x + t * t * $end.x;
-					var y:Number = (1 - t) * (1 - t) * $start.y + 2 * t * (1 - t) * $ctrl.y + t * t * $end.y;              
-					result[result.length] = new Point(x, y);
-				}
-			}
-			return result;
-		}
-		
-		
-		/**
-		 * 
 		 * 根据形状和布局生成一个形状。
 		 * 
 		 */
@@ -90,7 +59,7 @@ package emap.map3d.utils
 					//Y轴反向截取
 					var bmd:BitmapData = new BitmapData(w, h, true, 0);
 					var mat:Matrix = new Matrix;
-					mat.createBox(1, -1, 0, -$layout.minX, $layout.maxY);
+					mat.createBox(1, -1, 0, -$layout.minX, -$layout.minY);
 					bmd.draw($shape, mat);
 					
 					var tex:PixelTextureMaterial = new PixelTextureMaterial(new BitmapTextureResource(bmd));
@@ -99,13 +68,12 @@ package emap.map3d.utils
 					plane.setMaterialToAllSurfaces(tex);
 					
 					plane.x = plane.boundBox.maxX;
-					plane.y = plane.boundBox.minY;
+					plane.y =-plane.boundBox.maxY;
 					
 					var object:Object3D = new Object3D;
 					object.addChild(plane);
-					
 					object.x = $layout.minX;
-					object.y = $layout.maxY;
+					object.y =-$layout.minY;
 				}
 			}
 			return object;

@@ -51,7 +51,7 @@ package emap.map3d
 		
 		public function drawHollow($steps:Vector.<Step>):void
 		{
-			if (shape) StepUtil.drawSteps(shape.graphics, $steps);
+			if (shape) StepUtil.drawSteps(shape.graphics, $steps, true);
 		}
 		
 		
@@ -113,7 +113,7 @@ package emap.map3d
 				shape.graphics.clear();
 				shape.graphics.beginFill(em::color);
 				
-				StepUtil.drawSteps(shape.graphics, em::layout.steps);
+				StepUtil.drawSteps(shape.graphics, em::layout.steps, true);
 			}
 		}
 		

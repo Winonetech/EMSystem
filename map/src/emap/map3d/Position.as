@@ -13,6 +13,8 @@ package emap.map3d
 	import alternativa.engine3d.objects.Mesh;
 	import alternativa.engine3d.resources.Geometry;
 	
+	import caurina.transitions.Tweener;
+	
 	import cn.vision.utils.ArrayUtil;
 	import cn.vision.utils.StringUtil;
 	
@@ -61,7 +63,7 @@ package emap.map3d
 		 */
 		private function initialize($config:EMConfig, $data:VOPosition):void
 		{
-			useHandCursor = true;
+			mouseEnabled = mouseChildren = false;
 			
 			config = $config;
 			data = $data;
@@ -95,15 +97,16 @@ package emap.map3d
 			var side:Boolean = (code == PositionCodeConsts.HOLLOW || code == PositionCodeConsts.ENTITY);
 			if (side)
 			{
+				var bottom:Number = code == PositionCodeConsts.HOLLOW ? 0 : -selectH;
 				//获取所有面
 				var faces:Array = [], l:uint = steps.length - 1, num:uint = 0, step:Step, next:Step;
 				var cret:Function = function($start:Point, $end:Point):void
 				{
 					faces[faces.length] = [
-						new Vector3D($start.x, $start.y, 0),
-						new Vector3D($end  .x, $end  .y, 0),
-						new Vector3D($start.x, $start.y, thick),
-						new Vector3D($end  .x, $end  .y, thick),
+						new Vector3D($start.x, -$start.y, bottom),
+						new Vector3D($end  .x, -$end  .y, bottom),
+						new Vector3D($start.x, -$start.y, thick),
+						new Vector3D($end  .x, -$end  .y, thick),
 					];
 				};
 				for (var i:uint = 0; i < l; i++)
@@ -119,6 +122,9 @@ package emap.map3d
 							var points:Vector.<Point> = next.getPoints(step.aim);
 							var o:uint = points.length - 1;
 							cret(step.aim, points[0]);
+							var end:Point = points[points.length - 1];
+							if (end.x != next.aim.x || end.y != next.aim.y)
+								cret(points[points.length - 1], next.aim);
 							for (var j:uint = 0; j < o; j++)
 								cret(points[j], points[j + 1]);
 							break;
@@ -180,7 +186,7 @@ package emap.map3d
 			{
 				var shape:Shape = new Shape;
 				shape.graphics.beginFill(color);
-				StepUtil.drawSteps(shape.graphics, steps);
+				StepUtil.drawSteps(shape.graphics, steps, true);
 				shape.graphics.endFill();
 				
 				addChild(plane = Map3DUtil.getPlaneByShape(shape, layout)).z = thick;
@@ -212,7 +218,7 @@ package emap.map3d
 			if (iconLayer)
 			{
 				iconLayer.x = cenX + iconOffsetX;
-				iconLayer.y = cenY - iconOffsetY;
+				iconLayer.y =-cenY - iconOffsetY;
 				iconLayer.rotationZ = iconRotation;
 				iconLayer.scaleX = iconLayer.scaleY = iconScale;
 			}
@@ -240,7 +246,7 @@ package emap.map3d
 			if (textLayer)
 			{
 				textLayer.x = cenX + labelOffsetX;
-				textLayer.y = cenY - labelOffsetY;
+				textLayer.y =-cenY - labelOffsetY;
 				textLayer.rotationZ = labelRotation;
 				textLayer.scaleX = textLayer.scaleY = labelScale;
 			}
@@ -297,6 +303,60 @@ package emap.map3d
 				update();
 			}
 		}
+		
+		
+		/**
+		 * 
+		 * 交互
+		 * 
+		 */
+		
+		public function get interact():*
+		{
+			return em::interact;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set interact($value:*):void
+		{
+			em::interact = $value;
+			
+			mouseEnabled = useHandCursor = Boolean(interact);
+		}
+		
+		
+		/**
+		 * 
+		 * 交互
+		 * 
+		 */
+		
+		public function get selected():Boolean
+		{
+			return em::selected as Boolean;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set selected($value:Boolean):void
+		{
+			if (selected!= $value)
+			{
+				em::selected = $value;
+				Tweener.removeTweens(this);
+				Tweener.addTween(this, {z:selected ? selectH : 0, time:1});
+			}
+		}
+		
+		
+		/**
+		 * 
+		 * ID
+		 * 
+		 */
 		
 		public function get id():String
 		{
@@ -528,13 +588,8 @@ package emap.map3d
 		
 		internal function get thick():Number
 		{
-			var result:Number = data ? data.thick : config.positionThick;
-			switch (code)
-			{
-				case PositionCodeConsts.HOLLOW :result*=.5;break;
-				case PositionCodeConsts.TERRAIN:result = 1;break;
-			}
-			return result;
+			return code == PositionCodeConsts.TERRAIN ? 1 : (data && data.thick > 0 ? data.thick : 
+				(   code == PositionCodeConsts.HOLLOW ? config.thickHollow : config.thickEntity));
 		}
 		
 		
@@ -544,7 +599,7 @@ package emap.map3d
 		 * 
 		 */
 		
-		public function get floor():Floor
+		internal function get floor():Floor
 		{
 			return parent as Floor;
 		}
@@ -571,18 +626,6 @@ package emap.map3d
 		internal function get steps():Vector.<Step>
 		{
 			return layout ? layout.steps : null;
-		}
-		
-		
-		/**
-		 * 
-		 * 绘制点集
-		 * 
-		 */
-		
-		internal function get points():Vector.<Point>
-		{
-			return layout ? layout.points : null;
 		}
 		
 		
@@ -621,11 +664,31 @@ package emap.map3d
 		 */
 		private var timerHandler:Function;
 		
+		/**
+		 * @private
+		 */
+		private var selectH:Number = 15;
+		
 		
 		/**
 		 * @private
 		 */
 		em var data:VOPosition;
+		
+		/**
+		 * @private
+		 */
+		em var interact:*;
+		
+		/**
+		 * @private
+		 */
+		em var selected:Boolean;
+		
+		/**
+		 * @private
+		 */
+		em var thick:Number;
 		
 	}
 }
