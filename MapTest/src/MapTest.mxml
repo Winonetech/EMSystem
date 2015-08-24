@@ -14,6 +14,7 @@
 			<s:RadioButton label="旋转" value="rotate" group="{modeRadio}" color="0xFFFFFF"/>
 		</s:HGroup>
 		<s:HGroup id="floorsMenu"/>
+		<s:Button label="search" click="button_clickHandler(event)"/>
 	</s:HGroup>
 	
 	
@@ -27,10 +28,15 @@
 			import com.winonetech.core.Store;
 			
 			import emap.core.EMConfig;
+			import emap.interfaces.INode;
 			import emap.map3d.EMap3D;
+			import emap.map3d.vos.E3VONode;
+			import emap.map3d.vos.E3VOPosition;
+			import emap.map3d.vos.E3VORoute;
 			import emap.tools.SourceManager;
 			import emap.utils.NodeUtil;
 			import emap.vos.VOFloor;
+			import emap.vos.VONode;
 			import emap.vos.VOPosition;
 			import emap.vos.VOPositionType;
 			
@@ -41,14 +47,12 @@
 			 */
 			private function init():void
 			{
-				trace(NodeUtil.generateSerial());
 				var container:UIComponent = new UIComponent;
 				addElementAt(container, 0);
 				
 				
 				var config:EMConfig = new EMConfig(getXML("data/emporium.xml"));
 				
-				trace(config.toXML());
 				
 				map = new EMap3D(config);
 				container.addChild(map);
@@ -73,6 +77,7 @@
 					radio.group = floorRadio;
 					floorsMenu.addElement(radio);
 				}
+				
 				xml = getXML("data/positionTypes.xml");
 				list = xml.children();
 				var positionTypesMap:Map = new Map;
@@ -81,32 +86,54 @@
 					var positionType:VOPositionType =store.registData(item, VOPositionType);
 					positionTypesMap[positionType.id] = positionType;
 				}
+				
 				xml = getXML("data/positions.xml");
 				list = xml.children();
 				var positionsArr:Array = [];
+				var serialsMap:Map = new Map;
 				for each (item in list)
 				{
-					var position:VOPosition = store.registData(item, VOPosition);
+					var position:E3VOPosition = store.registData(item, E3VOPosition);
+					store.registData(position, INode);
 					positionsArr[positionsArr.length] = position;
+					position.floor = floorsMap[position.floorID];
+					position.positionType = positionTypesMap[position.positionTypeID];
+					serialsMap[position.serial] = position;
+				}
+				
+				xml = getXML("data/nodes.xml");
+				list = xml.children();
+				var nodesMap:Map = new Map;
+				for each (item in list)
+				{
+					var node:E3VONode = store.registData(item, E3VONode);
+					store.registData(node, INode);
+					nodesMap[node.id] = node;
+					node.floor = floorsMap[node.floorID];
+					serialsMap[node.serial] = node;
+				}
+				
+				xml = getXML("data/routes.xml");
+				list = xml.children();
+				var routesMap:Map = new Map;
+				for each (item in list)
+				{
+					var route:E3VORoute = store.registData(item, E3VORoute);
+					routesMap[route.id] = route;
+					route.node1 = serialsMap[route.serial1];
+					route.node2 = serialsMap[route.serial2];
 				}
 				
 				map.initializePosition = "1";
 				map.floors = floorsMap;
 				map.positionTypes = positionTypesMap;
 				map.positions = positionsArr;
+				map.nodes = nodesMap;
+				map.routes = routesMap;
+				
 			}
 			
 			private var map:EMap3D;
-			
-			protected function modeRadio_changeHandler(event:Event):void
-			{
-				map.mode = modeRadio.selectedValue as String;
-			}
-			
-			protected function floorRadio_changeHandler(event:Event):void
-			{
-				map.viewFloor(floorRadio.selectedValue, true);
-			}
 			
 			
 			private function getXML(path:String):XML
@@ -119,6 +146,21 @@
 			}
 			
 			private var store:Store = Store.instance;
+			
+			protected function modeRadio_changeHandler(event:Event):void
+			{
+				map.mode = modeRadio.selectedValue as String;
+			}
+			
+			protected function floorRadio_changeHandler(event:Event):void
+			{
+				map.viewFloor(floorRadio.selectedValue, true);
+			}
+			
+			protected function button_clickHandler(event:MouseEvent):void
+			{
+				map.find("192168001016-20150802142503-4A3C0DRW", "192168001016-20150802142503-WF2X45TH");
+			}
 			
 		]]>
 	</fx:Script>

@@ -46,7 +46,7 @@ package emap.map3d
 		
 		public function addPosition($position:Position):void
 		{
-			if ($position.code == PositionCodeConsts.HOLLOW)
+			if ($position.code == PositionCodeConsts.PATIO)
 			{
 				ground.drawHollow($position.steps);
 			}

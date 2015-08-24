@@ -94,10 +94,10 @@ package emap.map3d
 		{
 			Map3DUtil.destroyObject3D(mesh);
 			//判断是否需要创建侧面。
-			var side:Boolean = (code == PositionCodeConsts.HOLLOW || code == PositionCodeConsts.ENTITY);
+			var side:Boolean = (code == PositionCodeConsts.PATIO || code == PositionCodeConsts.ENTITY);
 			if (side)
 			{
-				var bottom:Number = code == PositionCodeConsts.HOLLOW ? 0 : -selectH;
+				var bottom:Number = code == PositionCodeConsts.PATIO ? 0 : -selectH;
 				//获取所有面
 				var faces:Array = [], l:uint = steps.length - 1, num:uint = 0, step:Step, next:Step;
 				var cret:Function = function($start:Point, $end:Point):void
@@ -396,7 +396,7 @@ package emap.map3d
 		
 		internal function get code():String
 		{
-			return data ? data.positionCode : null;
+			return data ? data.typeCode : null;
 		}
 		
 		
@@ -589,7 +589,7 @@ package emap.map3d
 		internal function get thick():Number
 		{
 			return code == PositionCodeConsts.TERRAIN ? 1 : (data && data.thick > 0 ? data.thick : 
-				(   code == PositionCodeConsts.HOLLOW ? config.thickHollow : config.thickEntity));
+				(   code == PositionCodeConsts.PATIO ? config.thickHollow : config.thickEntity));
 		}
 		
 		

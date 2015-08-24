@@ -25,11 +25,11 @@ package emap.consts
 		
 		/**
 		 * 
-		 * 镂空
+		 * 天井
 		 * 
 		 */
 		
-		public static const HOLLOW:String = "hollow";
+		public static const PATIO:String = "hollow";
 		
 		
 		/**
@@ -48,6 +48,34 @@ package emap.consts
 		 */
 		
 		public static const UNSEEN:String = "unseen";
+		
+		
+		/**
+		 * 
+		 * 直升电梯
+		 * 
+		 */
+		
+		public static const LIFT:String = "lift";
+		
+		
+		/**
+		 * 
+		 * 楼梯
+		 * 
+		 */
+		
+		public static const STAIRS:String = "stairs";
+		
+		
+		/**
+		 * 
+		 * 手扶电梯
+		 * 
+		 */
+		
+		public static const ESCALATOR:String = "escalator";
+
 		
 	}
 }

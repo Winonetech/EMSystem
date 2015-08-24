@@ -5,7 +5,7 @@
 		<!-- 节点编号，程序自动生成 -->
 		<serial>192168001016-20150802142503-AS3R5TY6</serial>
 		<!-- X坐标 -->
-		<x>300</x>
+		<x>150</x>
 		<!-- Y坐标 -->
 		<y>350</y>
 		<!-- 关联楼层ID -->
@@ -20,9 +20,30 @@
 	</node>
 	<node>
 		<id>3</id>
-		<serial>192168001016-20150802142503-AR7T5I4W</serial>
+		<serial>192168001016-20150802142503-K5RT3EWQ</serial>
 		<x>500</x>
 		<y>650</y>
 		<floor_id>2</floor_id>
+	</node>
+	<node>
+		<id>4</id>
+		<serial>192168001016-20150802142503-ARSTEI4C</serial>
+		<x>650</x>
+		<y>350</y>
+		<floor_id>2</floor_id>
+	</node>
+	<node>
+		<id>5</id>
+		<serial>192168001016-20150802142503-TREW231W</serial>
+		<x>400</x>
+		<y>650</y>
+		<floor_id>1</floor_id>
+	</node>
+	<node>
+		<id>6</id>
+		<serial>192168001016-20150802142503-A4E3W9T2</serial>
+		<x>400</x>
+		<y>350</y>
+		<floor_id>1</floor_id>
 	</node>
 </nodes>

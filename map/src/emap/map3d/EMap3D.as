@@ -27,6 +27,7 @@ package emap.map3d
 	import emap.vos.VOPosition;
 	
 	import flash.events.Event;
+	import emap.map3d.finding.Finder;
 	
 	
 	public final class EMap3D extends Viewer3D implements IEMap
@@ -71,6 +72,7 @@ package emap.map3d
 		
 		public function find($start:String, $end:String):void
 		{
+			finder.find($start, $end);
 		}
 		
 		
@@ -192,6 +194,7 @@ package emap.map3d
 		{
 			config = $config;
 			
+			finder = new Finder;
 			main.addChild(container = new Object3D);
 			main.addEventListener(MouseEvent3D.CLICK, handlerClick);
 		}
@@ -403,6 +406,8 @@ package emap.map3d
 		{
 			floorsMap = $data;
 			
+			finder.floors = $data;
+			
 			update();
 		}
 		
@@ -430,6 +435,8 @@ package emap.map3d
 				positionsArr = $data.concat();
 				positionsMap = Map3DUtil.analyzeArr(positionsArr);
 				
+				finder.positions = positionsMap;
+				
 				update();
 			}
 		}
@@ -443,6 +450,8 @@ package emap.map3d
 		{
 			positionTypesMap = $data;
 			
+			finder.positionTypes = $data;
+			
 			update();
 		}
 		
@@ -455,6 +464,8 @@ package emap.map3d
 		{
 			nodesMap = $data;
 			
+			finder.nodes = $data;
+			
 		}
 		
 		
@@ -466,6 +477,7 @@ package emap.map3d
 		{
 			routesMap = $data;
 			
+			finder.routes = $data;
 		}
 		
 		
@@ -588,6 +600,11 @@ package emap.map3d
 		 * @private
 		 */
 		private var interactsMap:Map;
+		
+		/**
+		 * @private
+		 */
+		private var finder:Finder;
 		
 		/**
 		 * @private

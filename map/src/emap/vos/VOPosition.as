@@ -8,11 +8,16 @@ package emap.vos
 	 */
 	
 	
+	import cn.vision.collections.Map;
+	
 	import com.winonetech.core.VO;
+	
 	import emap.core.em;
 	import emap.data.Layout;
 	import emap.interfaces.ILayout;
 	import emap.interfaces.INode;
+	
+	import versions.version1.a3d.A3D;
 	
 	
 	public class VOPosition extends VO implements ILayout, INode
@@ -27,6 +32,8 @@ package emap.vos
 		public function VOPosition($data:Object = null)
 		{
 			super($data, "position");
+			
+			initialize();
 		}
 		
 		
@@ -39,6 +46,15 @@ package emap.vos
 			super.parse($data);
 			
 			em::layout = new Layout(getProperty("coordinate"));
+		}
+		
+		
+		/**
+		 * @private
+		 */
+		private function initialize():void
+		{
+			em::routes = new Map;
 		}
 		
 		
@@ -271,9 +287,7 @@ package emap.vos
 		
 		
 		/**
-		 * 
-		 * floorID
-		 * 
+		 * @inheritDoc
 		 */
 		
 		public function get floorID():String
@@ -296,13 +310,13 @@ package emap.vos
 		
 		/**
 		 * 
-		 * 位置编码，参见PositionType.code
+		 * 位置编码
 		 * 
 		 */
 		
-		public function get positionCode():String
+		public function get typeCode():String
 		{
-			return em::positionType ? em::positionType.code : null;
+			return positionType ? positionType.code : null;
 		}
 		
 		
@@ -337,15 +351,22 @@ package emap.vos
 		
 		
 		/**
+		 * @inheritDoc
+		 */
+		
+		public function get routes():Map
+		{
+			return em::routes;
+		}
+		
+		
+		/**
 		 * 
 		 * floor
 		 * 
 		 */
 		
-		em function get floor():VOFloor
-		{
-			return getRelation(VOFloor, floorID);
-		}
+		public var floor:VOFloor;
 		
 		
 		/**
@@ -354,28 +375,19 @@ package emap.vos
 		 * 
 		 */
 		
-		em function get positionType():VOPositionType
-		{
-			return getRelation(VOPositionType, positionTypeID);
-		}
-		
-		
-		/**
-		 * 
-		 * node
-		 * 
-		 */
-		
-		em function get node():VONode
-		{
-			return getRelation(VONode, serial);
-		}
+		public var positionType:VOPositionType;
 		
 		
 		/**
 		 * @private
 		 */
 		em var layout:Layout;
+		
+		
+		/**
+		 * @private
+		 */
+		em var routes:Map;
 		
 	}
 }

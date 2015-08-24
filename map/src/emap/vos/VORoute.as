@@ -11,7 +11,7 @@ package emap.vos
 	import com.winonetech.core.VO;
 	
 	import emap.consts.RouteTypeConsts;
-	import emap.core.em;
+	import emap.interfaces.INode;
 	
 	
 	public class VORoute extends VO
@@ -26,6 +26,18 @@ package emap.vos
 		public function VORoute($data:Object = null)
 		{
 			super($data, "route");
+		}
+		
+		
+		/**
+		 * 
+		 * 方向，
+		 * 
+		 */
+		
+		public function get direction():int
+		{
+			return getProperty("direction", int);
 		}
 		
 		
@@ -95,10 +107,7 @@ package emap.vos
 		 * 
 		 */
 		
-		em function get node1():VONode
-		{
-			return getRelation(VONode, serial1);
-		}
+		public var node1:INode;
 		
 		
 		/**
@@ -107,10 +116,7 @@ package emap.vos
 		 * 
 		 */
 		
-		em function get node2():VONode
-		{
-			return getRelation(VONode, serial2);
-		}
+		public var node2:INode;
 		
 	}
 }

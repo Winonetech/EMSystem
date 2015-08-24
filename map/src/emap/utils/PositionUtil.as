@@ -1,13 +1,18 @@
 package emap.utils
 {
+	
+	/**
+	 * 
+	 * 定义了一些Position常用函数
+	 * 
+	 */
+	
+	
 	import cn.vision.core.NoInstance;
 	
 	import emap.consts.PositionCodeConsts;
-	import emap.data.Layout;
 	import emap.data.Transform;
 	
-	import flash.display.BitmapData;
-	import flash.geom.Rectangle;
 	
 	public final class PositionUtil extends NoInstance
 	{
@@ -24,8 +29,9 @@ package emap.utils
 		
 		public static function displayAssets($code:String):Boolean
 		{
-			return $code != PositionCodeConsts.HOLLOW;
+			return $code != PositionCodeConsts.PATIO;
 		}
+		
 		
 		/**
 		 * 
@@ -40,7 +46,8 @@ package emap.utils
 		
 		public static function suspendIcon($code:String, $suspend:Boolean):Boolean
 		{
-			return $code == PositionCodeConsts.UNSEEN || ($code == PositionCodeConsts.TERRAIN && $suspend);
+			return  $code == PositionCodeConsts.UNSEEN || 
+					($code == PositionCodeConsts.TERRAIN && $suspend);
 		}
 		
 		
@@ -71,6 +78,24 @@ package emap.utils
 				ih *= s;
 			}
 			return new Transform(0, 0, iw, ih, s);
+		}
+		
+		
+		/**
+		 * 
+		 * 通过code判断是否为跨层节点，跨层节点包含直升电梯，手扶梯和楼梯
+		 * 
+		 * @param $code:String 编码。
+		 * 
+		 * @return Boolean 是否显示标签和图标，true为显示，false为不显示。
+		 * 
+		 */
+		
+		public static function validateCrossFloor($code:String):Boolean
+		{
+			return $code == PositionCodeConsts.LIFT || 
+					$code == PositionCodeConsts.ESCALATOR || 
+					$code == PositionCodeConsts.STAIRS;
 		}
 		
 	}

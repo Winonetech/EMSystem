@@ -28,6 +28,17 @@ package emap.vos
 		public function VONode($data:Object = null)
 		{
 			super($data, "node");
+			
+			initialize();
+		}
+		
+		
+		/**
+		 * @private
+		 */
+		private function initialize():void
+		{
+			em::routes = new Map;
 		}
 		
 		
@@ -47,7 +58,7 @@ package emap.vos
 		
 		public function get nodeX():Number
 		{
-			return getProperty("nodeX", Number);
+			return getProperty("x", Number);
 		}
 		
 		
@@ -57,14 +68,12 @@ package emap.vos
 		
 		public function get nodeY():Number
 		{
-			return getProperty("nodeY", Number);
+			return getProperty("y", Number);
 		}
 		
 		
 		/**
-		 * 
-		 * floorID
-		 * 
+		 * @inheritDoc
 		 */
 		
 		public function get floorID():String
@@ -74,24 +83,28 @@ package emap.vos
 		
 		
 		/**
-		 * 
-		 * floor
-		 * 
+		 * @inheritDoc
 		 */
 		
-		em function get floor():VOFloor
+		public function get routes():Map
 		{
-			return getRelation(VOFloor, floorID);
+			return em::routes;
 		}
 		
 		
 		/**
 		 * 
-		 * path 集合。
+		 * floor
 		 * 
 		 */
 		
-		public var pathMap:Map;
+		public var floor:VOFloor
+		
+		
+		/**
+		 * @private
+		 */
+		em var routes:Map;
 		
 	}
 }

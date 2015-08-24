@@ -1,11 +1,24 @@
 package emap.interfaces
 {
+	
+	/**
+	 * 
+	 * 节点接口。
+	 * 
+	 */
+	
+	
+	import cn.vision.collections.Map;
+	
+	import emap.vos.VOFloor;
+	
+	
 	public interface INode
 	{
 		
 		/**
 		 * 
-		 * 序列号，每个位置或节点的序列号都是唯一的。
+		 * 序列号，每个位置或节点的序列号都是唯一的
 		 * 
 		 */
 		
@@ -14,7 +27,7 @@ package emap.interfaces
 		
 		/**
 		 * 
-		 * X坐标。
+		 * X坐标
 		 * 
 		 */
 		
@@ -23,11 +36,29 @@ package emap.interfaces
 		
 		/**
 		 * 
-		 * Y坐标。
+		 * Y坐标
 		 * 
 		 */
 		
 		function get nodeY():Number;
+		
+		
+		/**
+		 * 
+		 * 楼层ID
+		 * 
+		 */
+		
+		function get floorID():String;
+		
+		
+		/**
+		 * 
+		 * 路径集合
+		 * 
+		 */
+		
+		function get routes():Map;
 		
 	}
 }

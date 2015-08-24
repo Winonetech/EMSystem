@@ -84,9 +84,9 @@
 		<labelRotation></labelRotation>
 		<labelScale>1.5</labelScale>
 		<labelVisible>true</labelVisible>
-		<serial>192168001016-20150802142503-S843J4HS</serial>
+		<serial>192168001016-20150802142503-S823J4HD</serial>
 		<thick>50</thick>
-		<floor_id>1</floor_id>
+		<floor_id>2</floor_id>
 		<position_type_id>1</position_type_id>
 	</position>
 	<position>
@@ -111,5 +111,74 @@
 		<thick>25</thick>
 		<floor_id>2</floor_id>
 		<position_type_id>2</position_type_id>
+	</position>
+	<position>
+		<id>5</id>
+		<color>0xFF00FF</color>
+		<coordinate>m|200-650</coordinate>
+		<icon></icon>
+		<iconOffsetX></iconOffsetX>
+		<iconOffsetY></iconOffsetY>
+		<iconRotation></iconRotation>
+		<iconScale></iconScale>
+		<iconSuspend></iconSuspend>
+		<iconVisible></iconVisible>
+		<label>电梯</label>
+		<labelColor>0xFFFFFF</labelColor>
+		<labelOffsetX></labelOffsetX>
+		<labelOffsetY></labelOffsetY>
+		<labelRotation></labelRotation>
+		<labelScale>1.5</labelScale>
+		<labelVisible>true</labelVisible>
+		<serial>192168001016-20150802142503-R4E3WQS2</serial>
+		<thick>25</thick>
+		<floor_id>2</floor_id>
+		<position_type_id>5</position_type_id>
+	</position>
+	<position>
+		<id>6</id>
+		<color>0xFF00FF</color>
+		<coordinate>m|200-650</coordinate>
+		<icon></icon>
+		<iconOffsetX></iconOffsetX>
+		<iconOffsetY></iconOffsetY>
+		<iconRotation></iconRotation>
+		<iconScale></iconScale>
+		<iconSuspend></iconSuspend>
+		<iconVisible></iconVisible>
+		<label>电梯</label>
+		<labelColor>0xFFFFFF</labelColor>
+		<labelOffsetX></labelOffsetX>
+		<labelOffsetY></labelOffsetY>
+		<labelRotation></labelRotation>
+		<labelScale>1.5</labelScale>
+		<labelVisible>true</labelVisible>
+		<serial>192168001016-20150802142503-7TFG4HBC</serial>
+		<thick>25</thick>
+		<floor_id>1</floor_id>
+		<position_type_id>5</position_type_id>
+	</position>
+	<position>
+		<id>7</id>
+		<color>0x0000FF</color>
+		<coordinate>m|300-100,l|500-100,l|500-300,l|300-300,l|300-100,m|350-150,l|450-150,l|450-250,l|350-250,l|350-150</coordinate>
+		<icon></icon>
+		<iconOffsetX></iconOffsetX>
+		<iconOffsetY></iconOffsetY>
+		<iconRotation></iconRotation>
+		<iconScale></iconScale>
+		<iconSuspend></iconSuspend>
+		<iconVisible></iconVisible>
+		<label>位置2</label>
+		<labelColor>0xFFFFFF</labelColor>
+		<labelOffsetX></labelOffsetX>
+		<labelOffsetY>80</labelOffsetY>
+		<labelRotation></labelRotation>
+		<labelScale>1.5</labelScale>
+		<labelVisible>true</labelVisible>
+		<serial>192168001016-20150802142503-WF2X45TH</serial>
+		<thick>50</thick>
+		<floor_id>1</floor_id>
+		<position_type_id>1</position_type_id>
 	</position>
 </positions>
