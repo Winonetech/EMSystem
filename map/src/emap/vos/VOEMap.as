@@ -30,18 +30,6 @@ package emap.vos
 		
 		/**
 		 * 
-		 * logo
-		 * 
-		 */
-		
-		public function get logo():String
-		{
-			return getProperty("logo");
-		}
-		
-		
-		/**
-		 * 
 		 * 启用场馆。
 		 * 
 		 */
@@ -49,6 +37,18 @@ package emap.vos
 		public function get hallEnabled():Boolean
 		{
 			return getProperty("hallEnabled");
+		}
+		
+		
+		/**
+		 * 
+		 * logo
+		 * 
+		 */
+		
+		public function get logo():String
+		{
+			return getProperty("logo");
 		}
 		
 		

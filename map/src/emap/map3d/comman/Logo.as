@@ -14,7 +14,7 @@ package emap.map3d.comman
 	import emap.core.em;
 	import emap.data.Transform;
 	import emap.map3d.utils.Map3DUtil;
-	import emap.tools.SourceManager;
+	import emap.map3d.tools.SourceEmap3D;
 	import emap.utils.PositionUtil;
 	
 	import flash.display.BitmapData;
@@ -58,6 +58,18 @@ package emap.map3d.comman
 		
 		
 		/**
+		 * 
+		 * 根据传入的宽高转换为二的倍数宽高
+		 * 
+		 */
+		
+		protected function getBmdWH($value:Number):Number
+		{
+			return Map3DUtil.to2Square($value);
+		}
+		
+		
+		/**
 		 * @private
 		 */
 		private function initialize($maxWidth:Number, $maxHeight:Number, $color:uint):void
@@ -93,8 +105,8 @@ package emap.map3d.comman
 		{
 			offsetX = .5 * $rect.width;
 			offsetY = .5 * $rect.height;
-			var w:uint = Map3DUtil.to2Square($rect.width);
-			var h:uint = Map3DUtil.to2Square($rect.height);
+			var w:uint = getBmdWH($rect.width);
+			var h:uint = getBmdWH($rect.height);
 			if (w && h && $data)
 			{
 				var bmd:BitmapData = new BitmapData(w, h, true, color);
@@ -105,10 +117,10 @@ package emap.map3d.comman
 				var tex:PixelTextureMaterial = new PixelTextureMaterial(res, null, 1, false);
 				tex.alphaThreshold = 1;
 				applyLogo(w, h, tex);
-				SourceManager.uploadSource(res);
+				SourceEmap3D.uploadSource(res);
 			}
 		}
-		 
+		
 		
 		/**
 		 * @private
@@ -118,8 +130,31 @@ package emap.map3d.comman
 			var loaderInfo:LoaderInfo = $e.target as LoaderInfo;
 			loaderInfo.removeEventListener(Event.COMPLETE, handlerDefault);
 			loaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, handlerDefault);
-			if ($e.type == Event.COMPLETE)
-				resolveContent(loaderInfo.content);
+			if ($e.type == Event.COMPLETE) resolveContent(loaderInfo.content);
+		}
+		
+		
+		/**
+		 * 
+		 * 缩放比
+		 * 
+		 */
+		
+		public function get scale():Number
+		{
+			return em::scale;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set scale($value:Number):void
+		{
+			if (scale!= $value)
+			{
+				em::scale = $value;
+				scaleX = scaleY = $value;
+			}
 		}
 		
 		
@@ -181,6 +216,11 @@ package emap.map3d.comman
 		 */
 		protected var maxHeight:Number;
 		
+		
+		/**
+		 * @private
+		 */
+		em var scale:Number;
 		
 		/**
 		 * @private

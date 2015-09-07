@@ -8,11 +8,14 @@ package emap.map3d.finding
 	 */
 	
 	
+	import alternativa.engine3d.core.Object3D;
+	
 	import cn.vision.collections.Map;
 	import cn.vision.core.VSObject;
 	
 	import emap.consts.RouteDirectionConsts;
 	import emap.interfaces.INode;
+	import emap.map3d.EMap3D;
 	import emap.map3d.interfaces.IE3Node;
 	import emap.map3d.vos.E3VORoute;
 	import emap.utils.PositionUtil;
@@ -30,16 +33,20 @@ package emap.map3d.finding
 		 * 
 		 */
 		
-		public function Finder()
+		public function Finder($emap3d:EMap3D = null)
 		{
 			super();
+			
+			initialize($emap3d);
 		}
 		
 		
 		/**
-		 * @private
+		 * 
+		 * 寻路。
+		 * 
 		 */
-		public function find($start:*, $end:*):void
+		public function find($start:*, $end:*, $tween:Boolean = false):void
 		{
 			if ($start is IE3Node)
 				var node1:IE3Node = $start;
@@ -55,13 +62,14 @@ package emap.map3d.finding
 			{
 				if (node1.floorID == node2.floorID)
 				{
-					if (floorNetwork[node1.floorID])
-						floorNetwork[node1.floorID].find(node1, node2);
+					var network:Network = floorNetwork[node1.floorID];
+					if (network) var path:Path = network.find(node1, node2);
 				}
 				else
 				{
-					keyNetwork.find(node1, node2);
+					path = keyNetwork.find(node1, node2);
 				}
+				shower.show(path, $tween);
 			}
 		}
 		
@@ -71,7 +79,7 @@ package emap.map3d.finding
 		 */
 		private function update():void
 		{
-			if (floorsMap && positionTypesMap && positionsMap && nodesMap && routesMap)
+			if (floorsMap && positionTypesMap && positionsArr && nodesMap && routesMap)
 			{
 				clear();
 				
@@ -97,9 +105,17 @@ package emap.map3d.finding
 		/**
 		 * @private
 		 */
+		private function initialize($emap3d:EMap3D):void
+		{
+			shower = new Shower($emap3d);
+		}
+		
+		/**
+		 * @private
+		 */
 		private function setupPositions():void
 		{
-			for each (var position:VOPosition in positionsMap)
+			for each (var position:VOPosition in positionsArr)
 			{
 				totalNetwork[position.serial] = position;
 				floorNetwork[position.floorID] = floorNetwork[position.floorID] || new Network;
@@ -174,9 +190,9 @@ package emap.map3d.finding
 		/**
 		 * @private
 		 */
-		public function set positions($value:Map):void
+		public function set positions($value:Array):void
 		{
-			positionsMap = $value;
+			positionsArr = $value;
 			
 			update();
 		}
@@ -205,17 +221,22 @@ package emap.map3d.finding
 		/**
 		 * @private
 		 */
+		private var shower:Shower;
+		
+		/**
+		 * @private
+		 */
+		private var keyNetwork:Keywork;
+		
+		/**
+		 * @private
+		 */
 		private var totalNetwork:Map;
 		
 		/**
 		 * @private
 		 */
 		private var floorNetwork:Map;
-		
-		/**
-		 * @private
-		 */
-		private var keyNetwork:Keywork;
 		
 		/**
 		 * @private
@@ -235,7 +256,7 @@ package emap.map3d.finding
 		/**
 		 * @private
 		 */
-		private var positionsMap:Map;
+		private var positionsArr:Array;
 		
 		/**
 		 * @private

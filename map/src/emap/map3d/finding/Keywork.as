@@ -11,6 +11,7 @@ package emap.map3d.finding
 	import cn.vision.collections.Map;
 	import cn.vision.utils.ArrayUtil;
 	
+	import emap.core.em;
 	import emap.map3d.interfaces.IE3Node;
 	import emap.map3d.vos.E3VORoute;
 	import emap.utils.RouteUtil;
@@ -48,7 +49,6 @@ package emap.map3d.finding
 					//此处寻到的节点并不是最终的节点数组，而是关键点数组，需要将省略的节点加入
 					var tempNodes:Vector.<IE3Node> = findPath();
 					var pathNodes:Vector.<IE3Node> = new Vector.<IE3Node>;
-					var pathRoutes:Map = new Map;
 					var l:int = tempNodes.length - 1;
 					var i:uint = 0;
 					//加入省略的节点
@@ -73,15 +73,7 @@ package emap.map3d.finding
 						i++;
 					}
 					ArrayUtil.push(pathNodes, tempNodes[l]);
-					l = pathNodes.length - 1;
-					i = 0;
-					while (i < l)
-					{
-						var route:E3VORoute = getRoute(pathNodes[i], pathNodes[i + 1]);
-						pathRoutes[RouteUtil.getKey(pathNodes[i], pathNodes[i + 1])] = route;
-						i++;
-					}
-					pathes[key] = new Path(pathNodes, pathRoutes);
+					pathes[key] = new Path(pathNodes, start, end);
 				}
 			}
 			return pathes[key];
@@ -187,8 +179,11 @@ package emap.map3d.finding
 						floors[key.floorID])
 					{
 						var path:Path = floors[key.floorID].find(key, nod);
-						pathes[path.key] = path;
-						key.pathes[path.key] = path;
+						if(!path.block)
+						{
+							pathes[path.key] = path;
+							key.pathes[path.key] = path;
+						}
 					}
 				}
 			}

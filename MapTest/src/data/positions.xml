@@ -116,13 +116,13 @@
 		<id>5</id>
 		<color>0xFF00FF</color>
 		<coordinate>m|200-650</coordinate>
-		<icon></icon>
+		<icon>cache/icons/toilet.png</icon>
 		<iconOffsetX></iconOffsetX>
 		<iconOffsetY></iconOffsetY>
 		<iconRotation></iconRotation>
-		<iconScale></iconScale>
-		<iconSuspend></iconSuspend>
-		<iconVisible></iconVisible>
+		<iconScale>0.25</iconScale>
+		<iconSuspend>false</iconSuspend>
+		<iconVisible>true</iconVisible>
 		<label>电梯</label>
 		<labelColor>0xFFFFFF</labelColor>
 		<labelOffsetX></labelOffsetX>
@@ -154,7 +154,7 @@
 		<labelScale>1.5</labelScale>
 		<labelVisible>true</labelVisible>
 		<serial>192168001016-20150802142503-7TFG4HBC</serial>
-		<thick>25</thick>
+		<thick></thick>
 		<floor_id>1</floor_id>
 		<position_type_id>5</position_type_id>
 	</position>

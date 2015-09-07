@@ -1,4 +1,4 @@
-package emap.tools
+package emap.map3d.tools
 {
 	
 	/**
@@ -22,7 +22,7 @@ package emap.tools
 	import flash.text.TextFormat;
 	
 	
-	public final class SourceManager extends NoInstance
+	public final class SourceEmap3D extends NoInstance
 	{
 		
 		
@@ -85,7 +85,7 @@ package emap.tools
 			{
 				var sources:Vector.<Resource> = $root.getResources(true);
 				for each (var source:Resource in sources)
-					SourceManager.uploadSource(source);
+					SourceEmap3D.uploadSource(source);
 			}
 		}
 		
@@ -121,18 +121,6 @@ package emap.tools
 				TEXT_SOURCE[$color] = new BitmapTextureResource(diffBmd);
 			}
 			return TEXT_SOURCE[$color];
-		}
-		
-		
-		/**
-		 * 
-		 * 获取一个文本样式。
-		 * 
-		 */
-		
-		public static function getTextFormat($font:String):TextFormat
-		{
-			return TEXT_FORMATS[$font] = TEXT_FORMATS[$font] || new TextFormat($font, 20, null, false, null, null, null, null, "left");;
 		}
 		
 		
@@ -174,11 +162,6 @@ package emap.tools
 		 * @private
 		 */
 		private static const COLOR_MATERIALS:Object = {};
-		
-		/**
-		 * @private
-		 */
-		private static const TEXT_FORMATS:Object = {};
 		
 		/**
 		 * @private

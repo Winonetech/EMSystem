@@ -14,6 +14,8 @@ package emap.map3d.vos
 	import emap.map3d.interfaces.IE3Node;
 	import emap.vos.VONode;
 	
+	import flash.geom.Point;
+	
 	
 	public final class E3VONode extends VONode implements IE3Node
 	{
@@ -52,9 +54,7 @@ package emap.map3d.vos
 		
 		
 		/**
-		 * 
-		 * 临时路径集合
-		 * 
+		 * @inheritDoc
 		 */
 		
 		public function get pathes():Map

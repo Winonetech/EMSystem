@@ -1,20 +1,18 @@
 package emap.map3d.utils
 {
+	
 	import alternativa.engine3d.core.Object3D;
 	import alternativa.engine3d.primitives.Plane;
 	import alternativa.engine3d.resources.BitmapTextureResource;
 	
-	import cn.vision.collections.Map;
 	import cn.vision.core.NoInstance;
 	import cn.vision.utils.FontUtil;
 	import cn.vision.utils.MathUtil;
 	
-	import com.winonetech.core.VO;
-	
 	import emap.core.em;
 	import emap.data.Layout;
+	import emap.managers.TextFormatManager;
 	import emap.map3d.comman.PixelTextureMaterial;
-	import emap.tools.SourceManager;
 	
 	import flash.display.BitmapData;
 	import flash.display.Shape;
@@ -94,7 +92,7 @@ package emap.map3d.utils
 		{
 			field.textColor = $color;
 			field.text = $text;
-			var temp:TextFormat = SourceManager.getTextFormat($font);
+			var temp:TextFormat = TextFormatManager.getTextFormat($font);
 			if (format!= temp) format = temp;
 			field.embedFonts = FontUtil.containsFont(format.font);
 			field.setTextFormat(format);
@@ -142,27 +140,6 @@ package emap.map3d.utils
 		public static function numable($source:Number, $target:Number):Boolean
 		{
 			return $source != $target && !isNaN($target);
-		}
-		
-		
-		/**
-		 * 
-		 * 遍历数组，并返回一个Map类型。
-		 * 
-		 * @param $arr:Array 数组。
-		 * 
-		 * @return Map Map类型。
-		 * 
-		 */
-		
-		public static function analyzeArr($arr:Array):Map
-		{
-			if ($arr && $arr.length)
-			{
-				var map:Map = new Map;
-				for each (var vo:VO in $arr) map[vo.id] = vo;
-			}
-			return map;
 		}
 		
 		

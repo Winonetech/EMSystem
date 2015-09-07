@@ -13,11 +13,14 @@ package emap.map3d.finding
 	import cn.vision.utils.ArrayUtil;
 	
 	import emap.consts.RouteDirectionConsts;
+	import emap.core.em;
 	import emap.interfaces.INode;
+	import emap.map3d.Floor;
 	import emap.map3d.interfaces.IE3Node;
 	import emap.map3d.vos.E3VORoute;
 	import emap.utils.NodeUtil;
 	import emap.utils.RouteUtil;
+	import emap.vos.VOFloor;
 	
 	
 	public class Network extends VSObject
@@ -86,17 +89,7 @@ package emap.map3d.finding
 				if(!pathes[key])
 				{
 					setup($node1, $node2);
-					var pathNodes:Vector.<IE3Node> = findPath();
-					var pathRoutes:Map = new Map;
-					var l:int = pathNodes.length - 1;
-					var i:uint = 0;
-					while (i < l)
-					{
-						var route:E3VORoute = getRoute(pathNodes[i], pathNodes[i + 1]);
-						pathRoutes[RouteUtil.getKey(pathNodes[i], pathNodes[i + 1])] = route;
-						i++;
-					}
-					pathes[key] = new Path(pathNodes, pathRoutes);
+					pathes[key] = new Path(findPath(), start, end);
 				}
 			}
 			return pathes[key];

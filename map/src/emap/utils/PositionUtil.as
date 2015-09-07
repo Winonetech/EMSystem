@@ -17,19 +17,92 @@ package emap.utils
 	public final class PositionUtil extends NoInstance
 	{
 		
+		
 		/**
 		 * 
-		 * 通过code判断是否需要显示标签和图标
+		 * 通过code判断是否需要显示图标。
 		 * 
 		 * @param $code:String 编码。
 		 * 
-		 * @return Boolean 是否显示标签和图标，true为显示，false为不显示。
+		 * @return Boolean true为显示，false为不显示。
 		 * 
 		 */
 		
-		public static function displayAssets($code:String):Boolean
+		public static function displayIcon($code:String):Boolean
 		{
 			return $code != PositionCodeConsts.PATIO;
+		}
+		
+		
+		/**
+		 * 
+		 * 通过code判断是否需要显示标签。
+		 * 
+		 * @param $code:String 编码。
+		 * 
+		 * @return Boolean true为显示，false为不显示。
+		 * 
+		 */
+		
+		public static function displayLabel($code:String):Boolean
+		{
+			return	$code != PositionCodeConsts.ESCALATOR && 
+					$code != PositionCodeConsts.LIFT && 
+					$code != PositionCodeConsts.PATIO && 
+					$code != PositionCodeConsts.STAIRS && 
+					$code != PositionCodeConsts.UNSEEN;
+		}
+		
+		
+		/**
+		 * 
+		 * 通过code判断是否需要显示侧面。
+		 * 
+		 * @param $code:String 编码。
+		 * 
+		 * @return Boolean true为显示，false为不显示。
+		 * 
+		 */
+		
+		public static function displayMesh($code:String):Boolean
+		{
+			return $code == PositionCodeConsts.ENTITY || 
+					$code == PositionCodeConsts.PATIO;
+		}
+		
+		
+		/**
+		 * 
+		 * 通过code判断是否需要显示平面。
+		 * 
+		 * @param $code:String 编码。
+		 * 
+		 * @return Boolean true为显示，false为不显示。
+		 * 
+		 */
+		
+		public static function displayPlane($code:String):Boolean
+		{
+			return $code == PositionCodeConsts.ENTITY || 
+					$code == PositionCodeConsts.TERRAIN;
+		}
+		
+		
+		/**
+		 * 
+		 * 验证是位置是否可交互。
+		 * 
+		 * @param $code:String 编码。
+		 * 
+		 * @return Boolean true为可交互，false为不交互。
+		 * 
+		 */
+		
+		public static function interactable($code:String):Boolean
+		{
+			return $code != PositionCodeConsts.PATIO && 
+					$code != PositionCodeConsts.TERRAIN && 
+					$code != PositionCodeConsts.UNSEEN;
 		}
 		
 		
@@ -46,8 +119,11 @@ package emap.utils
 		
 		public static function suspendIcon($code:String, $suspend:Boolean):Boolean
 		{
-			return  $code == PositionCodeConsts.UNSEEN || 
-					($code == PositionCodeConsts.TERRAIN && $suspend);
+			return $code == PositionCodeConsts.UNSEEN || 
+					$code == PositionCodeConsts.ESCALATOR || 
+					$code == PositionCodeConsts.LIFT || 
+					$code == PositionCodeConsts.STAIRS || 
+				   ($code == PositionCodeConsts.TERRAIN && $suspend);
 		}
 		
 		

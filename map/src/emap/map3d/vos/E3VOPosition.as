@@ -14,6 +14,8 @@ package emap.map3d.vos
 	import emap.map3d.interfaces.IE3Node;
 	import emap.vos.VOPosition;
 	
+	import flash.geom.Point;
+	
 	
 	public final class E3VOPosition extends VOPosition implements IE3Node
 	{

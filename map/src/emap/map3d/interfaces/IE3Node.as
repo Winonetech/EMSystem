@@ -5,6 +5,8 @@ package emap.map3d.interfaces
 	
 	import emap.interfaces.INode;
 	
+	import flash.geom.Point;
+	
 	
 	public interface IE3Node extends INode
 	{

@@ -62,20 +62,9 @@ package emap.map3d.vos
 		{
 			if (isNaN(em::distance))
 			{
-				em::distance = (node1.floorID == node2.floorID)
-					? NodeUtil.distance(node1, node2, ctrl)
-					: NodeUtil.diffrent(node1, node2);
+				em::distance = NodeUtil.distance(node1, node2);
 			}
 			return em::distance;
-		}
-		
-		
-		/**
-		 * @private
-		 */
-		private function get ctrl():Point
-		{
-			return type == RouteTypeConsts.CURVE ? new Point(ctrlX, ctrlY) : null;
 		}
 		
 		

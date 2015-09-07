@@ -43,37 +43,13 @@ package emap.vos
 		
 		/**
 		 * 
-		 * 类型，如果是曲线时，ctrlX与ctrlY属性可用。
+		 * 是否为跨层路径，true为跨层，false为同层或无效路径。
 		 * 
 		 */
 		
-		public function get type():String
+		public function get cross():Boolean
 		{
-			return getProperty("type");
-		}
-		
-		
-		/**
-		 * 
-		 * 控制X，只在类型为曲线时该值可用
-		 * 
-		 */
-		
-		public function get ctrlX():Number
-		{
-			return type == RouteTypeConsts.CURVE ? getProperty("ctrlX", Number) : NaN;
-		}
-		
-		
-		/**
-		 * 
-		 * 控制Y，只在类型为曲线时该值可用
-		 * 
-		 */
-		
-		public function get ctrlY():Number
-		{
-			return type == RouteTypeConsts.CURVE ? getProperty("ctrlY", Number) : NaN;
+			return (node1 && node2) ? node1.floorID != node2.floorID : false;
 		}
 		
 		

@@ -10,6 +10,8 @@ package emap.map3d
 	
 	import alternativa.engine3d.core.Object3D;
 	
+	import caurina.transitions.Tweener;
+	
 	import cn.vision.core.UI;
 	
 	import emap.consts.PositionCodeConsts;
@@ -64,6 +66,20 @@ package emap.map3d
 		public function completeSteps():void
 		{
 			ground.completeSteps();
+		}
+		
+		
+		/**
+		 * 
+		 * 重置。
+		 * 
+		 */
+		
+		public function reset():void
+		{
+			Tweener.removeTweens(this);
+			z = 0;
+			visible = false;
 		}
 		
 		

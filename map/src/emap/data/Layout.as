@@ -12,6 +12,7 @@ package emap.data
 	
 	import emap.consts.StepStyleConsts;
 	import emap.core.em;
+	import emap.utils.StepUtil;
 	
 	import flash.geom.Point;
 	
@@ -43,7 +44,7 @@ package emap.data
 		{
 			if ($data)
 			{
-				var temp:Array = $data.split(",");
+				var temp:Vector.<Step> = StepUtil.resolveSteps($data);
 				var resl:Vector.<Step>  = new Vector.<Step>;
 				var repl:Vector.<Point> = new Vector.<Point>;
 				var last:Step, step:Step;
@@ -57,28 +58,36 @@ package emap.data
 					xvec[xvec.length] = $point.x;
 					yvec[yvec.length] = $point.y;
 					repl[repl.length] = $point;
-				}
-				for each(var item:String in temp)
+				};
+				
+				if (temp.length < 2)
 				{
-					step = new Step(item);
-					switch (step.style)
-					{
-						case StepStyleConsts.LINE_TO:
-							addo(step.aim);
-							break;
-						case StepStyleConsts.CURVE_TO:
-							if (last) 
-							{
-								var cache:Vector.<Point> = step.getPoints(last.aim);
-								cache.forEach(addo);
-								var end:Point = cache[cache.length - 1];
-								if (end.x != step.aim.x || end.y != step.aim.y) addo(step.aim);
-							}
-							break;
-					}
-					resl[resl.length] = step;
-					last = step;
+					addo(temp.length > 0 ? temp[0].aim: new Point);
 				}
+				else
+				{
+					for each(step in temp)
+					{
+						switch (step.style)
+						{
+							case StepStyleConsts.LINE_TO:
+								addo(step.aim);
+								break;
+							case StepStyleConsts.CURVE_TO:
+								if (last) 
+								{
+									var cache:Vector.<Point> = step.getPoints(last.aim);
+									cache.forEach(addo);
+									var end:Point = cache[cache.length - 1];
+									if (end.x != step.aim.x || end.y != step.aim.y) addo(step.aim);
+								}
+								break;
+						}
+						resl[resl.length] = step;
+						last = step;
+					}
+				}
+				
 				
 				em::minX = Math.min.apply(null, xvec);
 				em::maxX = Math.max.apply(null, xvec);

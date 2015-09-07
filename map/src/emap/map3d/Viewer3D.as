@@ -22,7 +22,7 @@ package emap.map3d
 	
 	import emap.core.em;
 	import emap.map3d.utils.Map3DUtil;
-	import emap.tools.SourceManager;
+	import emap.map3d.tools.SourceEmap3D;
 	
 	import flash.display.Stage3D;
 	import flash.events.Event;
@@ -99,10 +99,13 @@ package emap.map3d
 		protected function uploadAllSource():void
 		{
 			if (contextCreated)
-				SourceManager.uploadAllSources(main);
+				SourceEmap3D.uploadAllSources(main);
 		}
 		
 		
+		/**
+		 * @private
+		 */
 		protected function updateTween():void
 		{
 			Tweener.removeTweens(this);
@@ -160,10 +163,6 @@ package emap.map3d
 			ambientLight = new AmbientLight(0xAAAAAA);
 			main.addChild(ambientLight);
 			
-			/*var temp:Box = new Box(10, 10, 200);
-			temp.setMaterialToAllSurfaces(new FillMaterial(0xFF00FF));
-			cameraContainerM.addChild(temp);*/
-			
 			reset();
 			
 			camera.lookAt(0, 0, 0);
@@ -185,7 +184,7 @@ package emap.map3d
 			
 			var handlerAddedToStage:Function = function():void
 			{
-				SourceManager.initializeStage(scene = stage.stage3Ds[0]);
+				SourceEmap3D.initializeStage(scene = stage.stage3Ds[0]);
 				
 				scene.addEventListener(Event.CONTEXT3D_CREATE, handlerContext3DCreate);
 				
@@ -241,6 +240,9 @@ package emap.map3d
 			Tweener.removeTweens(this);
 		}
 		
+		/**
+		 * @private
+		 */
 		private function handlerMouseMove($e:MouseEvent):void
 		{
 			this[mode](mouseX - mouse.x, mouseY - mouse.y);

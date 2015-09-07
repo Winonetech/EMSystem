@@ -29,7 +29,7 @@ package emap.map3d
 	import emap.map3d.comman.LogoPlane;
 	import emap.map3d.comman.LogoSprite;
 	import emap.map3d.utils.Map3DUtil;
-	import emap.tools.SourceManager;
+	import emap.map3d.tools.SourceEmap3D;
 	import emap.utils.PositionUtil;
 	import emap.utils.StepUtil;
 	import emap.vos.VOPosition;
@@ -74,6 +74,8 @@ package emap.map3d
 		 */
 		private function update():void
 		{
+			mouseEnabled = useHandCursor = PositionUtil.interactable(code);
+			
 			if (steps && steps.length > 2)
 			{
 				updateMesh();
@@ -94,8 +96,7 @@ package emap.map3d
 		{
 			Map3DUtil.destroyObject3D(mesh);
 			//判断是否需要创建侧面。
-			var side:Boolean = (code == PositionCodeConsts.PATIO || code == PositionCodeConsts.ENTITY);
-			if (side)
+			if (PositionUtil.displayMesh(code))
 			{
 				var bottom:Number = code == PositionCodeConsts.PATIO ? 0 : -selectH;
 				//获取所有面
@@ -161,7 +162,7 @@ package emap.map3d
 				
 				//创建Mesh
 				var gem:Geometry = new Geometry(num);
-				gem.addVertexStream(SourceManager.ATTRIBUTES);
+				gem.addVertexStream(SourceEmap3D.ATTRIBUTES);
 				gem.setAttributeValues(VertexAttributes.POSITION, vxs);
 				gem.setAttributeValues(VertexAttributes.TEXCOORDS[0], uvs);
 				gem.setAttributeValues(VertexAttributes.NORMAL, nms);
@@ -169,7 +170,7 @@ package emap.map3d
 				
 				addChild(mesh = new Mesh);
 				mesh.geometry = gem;
-				mesh.addSurface(SourceManager.getColorMaterial(color), 0, num);
+				mesh.addSurface(SourceEmap3D.getColorMaterial(color), 0, num);
 				mesh.calculateBoundBox();
 			}
 		}
@@ -181,8 +182,7 @@ package emap.map3d
 		{
 			Map3DUtil.destroyObject3D(plane);
 			//判断是否需要创建顶面
-			var top:Boolean = (code == PositionCodeConsts.TERRAIN || code == PositionCodeConsts.ENTITY);
-			if (top)
+			if (PositionUtil.displayPlane(code))
 			{
 				var shape:Shape = new Shape;
 				shape.graphics.beginFill(color);
@@ -200,8 +200,9 @@ package emap.map3d
 		{
 			Map3DUtil.destroyObject3D(iconLayer);
 			if (iconVisible && !StringUtil.isEmpty(icon) &&
-				PositionUtil.displayAssets(code))
+				PositionUtil.displayIcon(code))
 			{
+				//判断是否需要图标悬浮，而生成不同的图标组件。
 				iconLayer =!PositionUtil.suspendIcon(code, iconSuspend)
 					? new LogoPlane (config.iconWidth, config.iconHeight) 
 					: new LogoSprite(config.iconWidth, config.iconHeight, color);
@@ -220,7 +221,7 @@ package emap.map3d
 				iconLayer.x = cenX + iconOffsetX;
 				iconLayer.y =-cenY - iconOffsetY;
 				iconLayer.rotationZ = iconRotation;
-				iconLayer.scaleX = iconLayer.scaleY = iconScale;
+				iconLayer.scale = iconScale;
 			}
 		}
 		
@@ -231,7 +232,7 @@ package emap.map3d
 		{
 			textLayer = Map3DUtil.destroyObject3D(textLayer);
 			if (labelVisible && !StringUtil.isEmpty(label) &&
-				PositionUtil.displayAssets(code))
+				PositionUtil.displayLabel(code))
 			{
 				addChild(textLayer = Map3DUtil.getPlaneByText(label, 
 					config.font, labelColor)).z = thick + 1;
@@ -307,29 +308,7 @@ package emap.map3d
 		
 		/**
 		 * 
-		 * 交互
-		 * 
-		 */
-		
-		public function get interact():*
-		{
-			return em::interact;
-		}
-		
-		/**
-		 * @private
-		 */
-		public function set interact($value:*):void
-		{
-			em::interact = $value;
-			
-			mouseEnabled = useHandCursor = Boolean(interact);
-		}
-		
-		
-		/**
-		 * 
-		 * 交互
+		 * 选中
 		 * 
 		 */
 		
@@ -674,11 +653,6 @@ package emap.map3d
 		 * @private
 		 */
 		em var data:VOPosition;
-		
-		/**
-		 * @private
-		 */
-		em var interact:*;
 		
 		/**
 		 * @private

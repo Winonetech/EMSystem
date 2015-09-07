@@ -3,7 +3,7 @@ package emap.map3d
 	
 	/**
 	 * 
-	 * 电子地图
+	 * 电子地图。
 	 * 
 	 */
 	
@@ -15,19 +15,21 @@ package emap.map3d
 	import caurina.transitions.Tweener;
 	
 	import cn.vision.collections.Map;
+	import cn.vision.utils.ArrayUtil;
 	import cn.vision.utils.MathUtil;
 	
 	import emap.core.EMConfig;
 	import emap.core.em;
 	import emap.interfaces.IEMap;
+	import emap.map3d.core.E3Config;
+	import emap.map3d.finding.Finder;
 	import emap.map3d.utils.Map3DUtil;
-	import emap.tools.SourceManager;
+	import emap.map3d.tools.SourceEmap3D;
 	import emap.vos.VOEMap;
 	import emap.vos.VOFloor;
 	import emap.vos.VOPosition;
 	
 	import flash.events.Event;
-	import emap.map3d.finding.Finder;
 	
 	
 	public final class EMap3D extends Viewer3D implements IEMap
@@ -47,26 +49,13 @@ package emap.map3d
 		}
 		
 		
-		/**
-		 * @inheritDoc
-		 */
-		
-		public function clear():void
-		{
-			//remove all
-			floorsViewMap = new Map;
-			floorsViewArr.length = 0;
-			positionsViewMap = new Map;
-			
-			floorNext = floorPrev = null;
-			
-			while (container.numChildren) container.removeChildAt(0);
-		}
-		
 		
 		/**
 		 * 
-		 * 寻路
+		 * 寻路。
+		 * 
+		 * @param $start:String 起始节点序列号。
+		 * @param $end:String 终止节点序列号。
 		 * 
 		 */
 		
@@ -125,7 +114,6 @@ package emap.map3d
 				viewFloor(position.floor, $tween);
 				moveTo(position.layout.cenX, position.layout.cenY, $tween);
 			}
-			
 		}
 		
 		
@@ -135,44 +123,108 @@ package emap.map3d
 		
 		public function viewFloor($data:*, $tween:Boolean = false):void
 		{
-			if ($data is Floor)
-				var floor:Floor = $data;
-			else if ($data is VOFloor)
-				floor = floorsViewMap[$data.id];
-			else if ($data is String)
-				floor = floorsViewMap[$data];
-			else if ($data is uint)
-				floor = floorsViewArr[MathUtil.clamp($data - 1, 0, floorsViewArr.length - 1)];
-			
-			if (floor && floor!= floorNext)
+			em::viewFloors($data, $tween);
+		}
+		
+		
+		/**
+		 * 
+		 * 查看楼层，并返回楼层的Z坐标位置。
+		 * 
+		 */
+		
+		em function viewFloors($data:*, $tween:Boolean = false):*
+		{
+			var map:Map = new Map, arr:Array = [];
+			var add:Function = function(item:*):void
 			{
-				floorPrev = floorNext;
-				floorNext = floor;
-				floorNext.visible = true;
-				Tweener.removeTweens(floorPrev);
-				Tweener.removeTweens(floorNext);
-				if ($tween)
+				var floor:Floor = resolveFloor(item);
+				if (floor)
 				{
-					if (floorPrev)
+					map[floor.id] = floor;
+					arr[arr.length] = floor;
+				}
+			};
+			
+			if ($data is Array || $data is Map)
+				for each (var item:* in $data) add(item);
+			else
+				add($data);
+			
+			arr.sortOn("order", Array.NUMERIC);
+			
+			//计算需要显示的楼层的目标Z值
+			var l:uint = arr.length;
+			if (l)
+			{
+				var m:uint = arr[uint(l * .5)].order;
+				var d:Number = cameraDistance;
+				var s:Number = -floorSpace * .5 * (l - 1);
+				var ends:Object = {};
+				for (var i:uint = 0; i < l; i++) ends[arr[i].id] = floorSpace * i + s;
+				
+			}
+			var t:uint = floorsViewArr.length;
+			//遍历所有楼层
+			for (i = 0; i < t; i++)
+			{
+				var floor:Floor = floorsViewArr[i];
+				//判断该楼层是否需要显示
+				if (map[floor.id])
+				{
+					if ($tween)
 					{
-						var s:Boolean = floorNext.order > floorPrev.order;
-						var a:Number = cameraDistance * (s ? -1 : 1);
-						floorNext.z = cameraDistance * (s ? 1 : -1);
-						Tweener.addTween(floorPrev, {z:a, time:1});
-						Tweener.addTween(floorNext, {z:0, time:1, onComplete:callbackFloorTweenComplete});
+						//判断切换前是否显示
+						if (floor.visible)
+						{
+							//清除缓动
+							Tweener.removeTweens(floor);
+						}
+						else
+						{
+							//移动至起始目标Z值，设置为显示
+							floor.z = (floor.order < m) ? -d :
+								(floor.order == m ? (middle < m ? d : -d) : d);
+							floor.visible = true;
+						}
+						//添加缓动至终止目标Z值
+						Tweener.addTween(floor, {z:ends[floor.id], time:1});
 					}
 					else
 					{
-						floorNext.z = -cameraDistance;
-						Tweener.addTween(floorNext, {z:0, time:1});
+						Tweener.removeTweens(floor);
+						floor.z = ends[floor.id];
+						floor.visible = true;
 					}
 				}
 				else
 				{
-					callbackFloorTweenComplete();
-					floorNext.z = 0;
+					if ($tween)
+					{
+						//判断切换前是否显示
+						if (floor.visible)
+						{
+							//如果order在范围之内，则直接消失，否则移动至目标位置后消失
+							if (arr[0].order < floor.order && floor.order < arr[l - 1].order)
+							{
+								floor.visible = false;
+							}
+							else
+							{
+								Tweener.addTween(floor, {z:(arr[0].order > floor.order ? -d : d),
+									time:1, onComplete:floor.reset});
+							}
+						}
+					}
+					else
+					{
+						floor.reset();
+					}
 				}
 			}
+			//记录最中间的一个楼层
+			middle = m;
+			return ends;
 		}
 		
 		
@@ -183,9 +235,38 @@ package emap.map3d
 		override protected function uploadAllSource():void
 		{
 			if (mapCreated && contextCreated)
-				SourceManager.uploadAllSources(main);
+				SourceEmap3D.uploadAllSources(main);
 		}
 		
+		
+		/**
+		 * @private
+		 */
+		private function clear():void
+		{
+			//remove all
+			floorsViewArr.length = 0;
+			floorsViewMap = new Map;
+			positionsViewMap = new Map;
+			floorNext = floorPrev = null;
+			while (em::container.numChildren) em::container.removeChildAt(0);
+		}
+		
+		/**
+		 * @private
+		 */
+		private function resolveFloor($data:*):Floor
+		{
+			if ($data is Floor)
+				var floor:Floor = $data;
+			else if ($data is VOFloor)
+				floor = floorsViewMap[$data.id];
+			else if ($data is String)
+				floor = floorsViewMap[$data];
+			else if ($data is uint)
+				floor = floorsViewArr[MathUtil.clamp($data - 1, 0, floorsViewArr.length - 1)];
+			return floor;
+		}
 		
 		/**
 		 * @private
@@ -193,9 +274,8 @@ package emap.map3d
 		private function initialize($config:EMConfig):void
 		{
 			config = $config;
-			
-			finder = new Finder;
-			main.addChild(container = new Object3D);
+			main.addChild(em::container = new Object3D);
+			finder = new Finder(this);
 			main.addEventListener(MouseEvent3D.CLICK, handlerClick);
 		}
 		
@@ -204,7 +284,7 @@ package emap.map3d
 		 */
 		private function update():void
 		{
-			if (emConfig && floorsMap && positionsMap && positionTypesMap && (!hallEnabled || (hallEnabled && hallsMap)))
+			if (emConfig && floorsMap && positionsArr && positionTypesMap && (!hallEnabled || (hallEnabled && hallsMap)))
 			{
 				clear();
 				
@@ -224,8 +304,9 @@ package emap.map3d
 				var floor:Floor = new Floor(emConfig, voFloor);
 				floorsViewArr[floorsViewArr.length] = floor;
 				floorsViewMap[floor.id] = floor;
-				container.addChild(floor).visible = false;
+				em::container.addChild(floor).visible = false;
 			}
+			
 			floorsViewArr.sortOn("order", Array.NUMERIC);
 			
 			var order:Function = function($floor:Floor, $index:uint, $floors:Array):void
@@ -241,7 +322,6 @@ package emap.map3d
 		private function updatePositions():void
 		{
 			var l:uint = positionsArr.length, f:uint = 0, position:Position;
-			
 			var startRender:Function = function($e:Event = null):void
 			{
 				if (position) 
@@ -256,7 +336,6 @@ package emap.map3d
 					if (positionVO && floor)
 					{
 						position = new Position(emConfig, positionVO);
-						position.interact = {};
 						position.addEventListener(Event3D.ADDED, startRender);
 						positionsViewMap[position.id] = position;
 						floor.addPosition(position);
@@ -268,30 +347,13 @@ package emap.map3d
 				}
 				else
 				{
-					updateInteracts();
 					updateComplete();
 					uploadAllSource();
 					
 					reset();
 				}
 			};
-			
 			startRender();
-		}
-		
-		/**
-		 * @private
-		 */
-		private function updateInteracts():void
-		{
-			if (interactsMap && positionsViewMap)
-			{
-				for (var key:String in interactsMap)
-				{
-					var position:Position = positionsViewMap[key];
-					if (position)position.interact = interactsMap[key];
-				}
-			}
 		}
 		
 		/**
@@ -317,24 +379,14 @@ package emap.map3d
 			var maxX:Number = Math.max.apply(null, maxxs);
 			var maxY:Number = Math.max.apply(null, maxys);
 			
-			container.x = - .5 * (minX + maxX);
-			container.y =   .5 * (minY + maxY);
+			em::container.x = - .5 * (minX + maxX);
+			em::container.y =   .5 * (minY + maxY);
 		}
+		
 		
 		/**
 		 * @private
 		 */
-		private function callbackFloorTweenComplete():void
-		{
-			if (floorPrev)
-			{
-				floorPrev.visible = false;
-				floorPrev.z = 0;
-			}
-		}
-		
-		
-		
 		private function handlerClick($e:MouseEvent3D):void
 		{
 			if ($e.target is Position)
@@ -353,12 +405,14 @@ package emap.map3d
 		
 		public function get font():String
 		{
-			return em::font;
+			return emConfig ? emConfig.font : null;
 		}
 		
+		/**
+		 * @private
+		 */
 		public function set font($value:String):void
 		{
-			em::font = $value;
 			if (emConfig) emConfig.font = $value;
 		}
 		
@@ -369,16 +423,7 @@ package emap.map3d
 		
 		public function get hallEnabled():Boolean
 		{
-			return false;
-		}
-		
-		
-		/**
-		 * @inheritDoc
-		 */
-		
-		public function set hallEnabled($value:Boolean):void
-		{
+			return emConfig.hallEnabled;
 		}
 		
 		
@@ -390,8 +435,8 @@ package emap.map3d
 		{
 			if ($value)
 			{
-				if ($value is EMConfig)
-					emConfig = $value as EMConfig;
+				if ($value is E3Config)
+					emConfig = $value as E3Config;
 				else
 					throw new ArgumentError("参数必须为EMConfig类型", 3001);
 			}
@@ -404,9 +449,7 @@ package emap.map3d
 		
 		public function set floors($data:Map):void
 		{
-			floorsMap = $data;
-			
-			finder.floors = $data;
+			finder.floors = floorsMap = $data;
 			
 			update();
 		}
@@ -430,15 +473,9 @@ package emap.map3d
 		
 		public function set positions($data:Array):void
 		{
-			if ($data)
-			{
-				positionsArr = $data.concat();
-				positionsMap = Map3DUtil.analyzeArr(positionsArr);
-				
-				finder.positions = positionsMap;
-				
-				update();
-			}
+			finder.positions = positionsArr = $data;
+			
+			update();
 		}
 		
 		
@@ -448,9 +485,7 @@ package emap.map3d
 		
 		public function set positionTypes($data:Map):void
 		{
-			positionTypesMap = $data;
-			
-			finder.positionTypes = $data;
+			finder.positionTypes = positionTypesMap = $data;
 			
 			update();
 		}
@@ -462,10 +497,7 @@ package emap.map3d
 		
 		public function set nodes($data:Map):void
 		{
-			nodesMap = $data;
-			
 			finder.nodes = $data;
-			
 		}
 		
 		
@@ -475,23 +507,7 @@ package emap.map3d
 		
 		public function set routes($data:Map):void
 		{
-			routesMap = $data;
-			
 			finder.routes = $data;
-		}
-		
-		
-		/**
-		 * 
-		 * 可交互的positions
-		 * 
-		 */
-		
-		public function set interacts($data:Map):void
-		{
-			interactsMap = $data;
-			
-			updateInteracts();
 		}
 		
 		
@@ -500,7 +516,7 @@ package emap.map3d
 		 */
 		private function get offsetX():Number
 		{
-			return container.x;
+			return em::container.x;
 		}
 		
 		/**
@@ -508,7 +524,15 @@ package emap.map3d
 		 */
 		private function get offsetY():Number
 		{
-			return container.y;
+			return em::container.y;
+		}
+		
+		/**
+		 * @private
+		 */
+		private function get floorSpace():Number
+		{
+			return emConfig ? emConfig.floorSpace : NaN;
 		}
 		
 		
@@ -529,7 +553,12 @@ package emap.map3d
 		/**
 		 * @private
 		 */
-		private var container:Object3D;
+		private var middle:uint;
+		
+		/**
+		 * @private
+		 */
+		private var finder:Finder;
 		
 		/**
 		 * @private
@@ -579,43 +608,23 @@ package emap.map3d
 		/**
 		 * @private
 		 */
-		private var positionsMap:Map;
-		
-		/**
-		 * @private
-		 */
 		private var positionTypesMap:Map;
 		
 		/**
 		 * @private
 		 */
-		private var nodesMap:Map;
-		
-		/**
-		 * @private
-		 */
-		private var routesMap:Map;
-		
-		/**
-		 * @private
-		 */
-		private var interactsMap:Map;
-		
-		/**
-		 * @private
-		 */
-		private var finder:Finder;
-		
-		/**
-		 * @private
-		 */
-		private var emConfig:EMConfig;
+		private var emConfig:E3Config;
 		
 		
 		/**
 		 * @private
 		 */
 		em var font:String;
+		
+		/**
+		 * @private
+		 */
+		em var container:Object3D;
 		
 	}
 }

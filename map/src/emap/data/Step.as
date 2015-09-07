@@ -9,9 +9,9 @@ package emap.data
 	
 	
 	import cn.vision.core.VSObject;
+	import cn.vision.utils.math.BezierUtil;
 	
 	import emap.core.em;
-	import emap.utils.StepUtil;
 	
 	import flash.geom.Point;
 	
@@ -49,7 +49,7 @@ package emap.data
 					var l:Number = Point.distance($start, aim) + 
 						Point.distance(aim, ctr) + Point.distance($start, ctr);
 					var s:Number = 1 / (l * .1);
-					points = StepUtil.getCurvePoints($start, aim, ctr, s);
+					points = BezierUtil.getCurvePoints($start, aim, ctr, s);
 				}
 			}
 			return points;
