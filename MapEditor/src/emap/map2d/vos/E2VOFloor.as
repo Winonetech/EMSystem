@@ -1,7 +1,7 @@
 package emap.map2d.vos
 {
 	import emap.vos.VOFloor;
-	
+	[Bindable]
 	public final class E2VOFloor extends VOFloor
 	{
 		

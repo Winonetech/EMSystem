@@ -3,7 +3,7 @@ package emap.map2d.vos
 	import emap.vos.VOFloor;
 	import emap.vos.VONode;
 	
-	
+	[Bindable]
 	public final class E2VONode extends VONode
 	{
 		
@@ -25,7 +25,7 @@ package emap.map2d.vos
 		
 		public function set nodeX($value:Number):void
 		{
-			setProperty("nodeX", $value);
+			setProperty("x", $value);
 		}
 		
 		
@@ -35,7 +35,7 @@ package emap.map2d.vos
 		
 		public function set nodeY($value:Number):void
 		{
-			setProperty("nodeY", $value);
+			setProperty("y", $value);
 		}
 		
 		
@@ -47,6 +47,18 @@ package emap.map2d.vos
 			setProperty("floor_id", $value);
 			clsRelation(VOFloor);
 		}
-		
+	
+		/**
+		 * @private
+		 */
+		public function set label($value:String):void
+		{
+			setProperty("label",$value);
+		}
+		public function get label():String
+		{
+			return getProperty("label");
+			
+		}
 	}
 }

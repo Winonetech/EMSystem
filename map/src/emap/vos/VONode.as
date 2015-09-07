@@ -47,7 +47,7 @@ package emap.vos
 		
 		public function get nodeX():Number
 		{
-			return getProperty("nodeX", Number);
+			return getProperty("x", Number);
 		}
 		
 		
@@ -57,7 +57,7 @@ package emap.vos
 		
 		public function get nodeY():Number
 		{
-			return getProperty("nodeY", Number);
+			return getProperty("y", Number);
 		}
 		
 		
@@ -74,6 +74,15 @@ package emap.vos
 		
 		
 		/**
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
 		 * 
 		 * floor
 		 * 

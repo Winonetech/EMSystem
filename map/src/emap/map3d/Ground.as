@@ -129,6 +129,7 @@ package emap.map3d
 			return data ? data.color : 0;
 		}
 		
+	
 		
 		/**
 		 * 

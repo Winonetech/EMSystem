@@ -15,7 +15,7 @@ package emap.vos
 	import emap.core.em;
 	import emap.data.Layout;
 	import emap.interfaces.ILayout;
-	
+	[Bindable]
 	public class VOFloor extends VO implements ILayout
 	{
 		

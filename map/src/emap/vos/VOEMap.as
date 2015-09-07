@@ -9,6 +9,7 @@ package emap.vos
 	
 	
 	import cn.vision.collections.Map;
+	import cn.vision.utils.IDUtil;
 	
 	import com.winonetech.core.VO;
 	
@@ -25,6 +26,7 @@ package emap.vos
 		public function VOEMap($data:Object = null)
 		{
 			super($data, "emporium");
+			IDUtil.generateID()
 		}
 		
 		
@@ -36,6 +38,22 @@ package emap.vos
 		
 		public function get logo():String
 		{
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			return getProperty("logo");
 		}
 		

@@ -110,6 +110,24 @@ package emap.map2d
 		/**
 		 * @private
 		 */
+		protected	 function caculateScale():void
+		{
+			if (baseWidth == 0 || baseHeight == 0)
+			{
+				minScale = 1;
+			}
+			else
+			{
+				minScale = (baseWidth / baseHeight > viewWidth / viewHeight)
+					? viewHeight / baseHeight : viewWidth  / baseWidth;
+			}
+			maxScale = minScale * 4;
+		}
+		
+		
+		/**
+		 * @private
+		 */
 		private function initialize():void
 		{
 			__mapX = __mapY = 0;
@@ -143,16 +161,6 @@ package emap.map2d
 				mapX = (isNaN(aimX))?0:aimX;
 				mapY = (isNaN(aimY))?0:aimY;
 			}
-		}
-		
-		/**
-		 * @private
-		 */
-		private function caculateScale():void
-		{
-			minScale = (baseWidth / baseHeight > viewWidth / viewHeight)
-				? viewHeight / baseHeight : viewWidth  / baseWidth;
-			maxScale = (maxScale >= 1) ? (minScale >= 1 ? minScale : minScale * 4) : 1;
 		}
 		
 		//限制

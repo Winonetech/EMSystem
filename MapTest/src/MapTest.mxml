@@ -66,6 +66,7 @@
 				{
 					var floor:VOFloor = store.registData(item, VOFloor);
 					floorsMap[floor.id] = floor;
+					
 					var radio:RadioButton = new RadioButton;
 					radio.label = floor.label;
 					radio.value = floor.id;

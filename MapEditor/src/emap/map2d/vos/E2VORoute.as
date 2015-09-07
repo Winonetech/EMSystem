@@ -15,7 +15,7 @@ package emap.map2d.vos
 	
 	import flash.geom.Point;
 	
-	
+	[Bindable]
 	public final class E2VORoute extends VORoute
 	{
 		
@@ -105,5 +105,20 @@ package emap.map2d.vos
 			clsRelation(VONode);
 		}
 		
+		/**
+		 * private
+		 * */
+		public function set label($value:String):void
+		{
+			setProperty("label",$value)
+		}
+		
+		/**
+		 * private
+		 * */
+		public function get label():String
+		{
+			return getProperty("label");
+		}
 	}
 }

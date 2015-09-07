@@ -1,6 +1,7 @@
 package emap.core
 {
 	
+	
 	import emap.vos.VOEMap;
 	
 	

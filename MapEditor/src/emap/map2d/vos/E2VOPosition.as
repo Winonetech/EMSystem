@@ -1,8 +1,9 @@
 package emap.map2d.vos
 {
 	import emap.vos.VOPosition;
+	import emap.core.em;
 	
-	
+	[Bindable]
 	public final class E2VOPosition extends VOPosition
 	{
 		
@@ -243,6 +244,11 @@ package emap.map2d.vos
 		public function set positionTypeID($value:String):void
 		{
 			setProperty("position_type_id", $value);
+		}
+		
+		public function get typeName():String
+		{
+			return em::positionType ? em::positionType.label : null;
 		}
 		
 	}

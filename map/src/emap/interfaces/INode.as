@@ -29,5 +29,6 @@ package emap.interfaces
 		
 		function get nodeY():Number;
 		
+		//function get pathes():Array;
 	}
 }

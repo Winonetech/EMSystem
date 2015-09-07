@@ -15,6 +15,7 @@ package emap.vos
 	import emap.interfaces.INode;
 	
 	
+	[Bindable]
 	public class VOPosition extends VO implements ILayout, INode
 	{
 		
@@ -353,6 +354,7 @@ package emap.vos
 		 * positionType
 		 * 
 		 */
+		
 		
 		em function get positionType():VOPositionType
 		{

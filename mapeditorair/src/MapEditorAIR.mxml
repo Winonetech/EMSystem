@@ -6,71 +6,102 @@
 					   xmlns:components="editor.components.*"
 					   xmlns:floor="editor.components.floor.*"
 					   xmlns:position="editor.components.position.*"
-					   width="1040" creationComplete="init(event)">
+					   xmlns:components2="emap.map2d.components.*"
+					   xmlns:floor1="emap.map2d.components.floor.*"
+					   xmlns:position2="emap.map2d.components.position.*"
+					   xmlns:node="emap.map2d.components.node.*"
+					   xmlns:route="emap.map2d.components.route.*"
+					   width="1040" height="600" creationComplete="init(event)">
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
-	
-	
-		<s:BorderContainer x="0" y="0" width="286" height="482" borderVisible="true">
+	<s:HGroup width="100%" height="100%">
+		
+		
+		
+		
+		<s:BorderContainer x="0" y="0" width="290" height="100%" borderVisible="true">
 			
-		
-		<s:TabBar id="tabs" x="0" y="0" chromeColor="#9CABB1" cornerRadius="4" dataProvider="{vs}"
-				  focusAlpha="0.5" focusColor="#70B2EE"/>   
-		
-		<mx:ViewStack id="vs" y="23" left="0" width="100%" height="448" chromeColor="#F4F6F7" borderVisible="true">  
+			
+			<s:TabBar id="tabs" x="0" y="0" chromeColor="#9CABB1" cornerRadius="4" dataProvider="{vs}"
+					  focusAlpha="0.5" focusColor="#70B2EE" width="100%" />   
+			
+			<mx:ViewStack id="vs" y="23" left="0" width="100%" height="100%" chromeColor="#F4F6F7" borderVisible="true" creationPolicy="all">  
 				<s:NavigatorContent label="楼层"  
 									width="100%" height="100%"  id= "vf"> 
-					<s:VGroup id = "vgroup" width="100%" height="100%">
+					<s:VGroup  width="100%" height="100%">
 						
-					
 						<floor:Toolone x="0" y="0" height="66">
 						</floor:Toolone>
+						<floor1:FloorGroup id="floorGroup" width="100%" height="100%">
+						</floor1:FloorGroup>
+						
+					
 					</s:VGroup>
 				</s:NavigatorContent>
 				<s:NavigatorContent label="位置"  
 									width="100%" height="100%" id="vp" >  
-					<s:VGroup id = "lvgroup" width="100%" height="100%">
-						<position:ToolTwo width="286" height="50">
-						</position:ToolTwo>
-					</s:VGroup>
+					<s:VGroup  width="100%" height="100%">
+						<position2:ToolTwo id="positionTool" width="100%" height="50">
+						</position2:ToolTwo>
 						
-				
+						
+						<position2:PositionGroup  id="pg" width="100%" height="100%">
+						</position2:PositionGroup>
+						
+					</s:VGroup>
+					
+					
 				</s:NavigatorContent>
-			
+				
 				<s:NavigatorContent label="节点"  
 									width="100%" height="100%"  id="vn">  
-					<position:ToolTwo x="0" y="0" width="285" height="45">
-					</position:ToolTwo>
+					<s:VGroup  width="100%" height="100%">
+						<node:ToolThree id="nodeTool" width="100%">
+						</node:ToolThree>
+						<node:NodeGroup id="ng" width="100%" height="100%">
+						</node:NodeGroup>
+						
+					</s:VGroup>
+			
 				</s:NavigatorContent>
 				<s:NavigatorContent label="路径"  
 									width="100%" height="100%" id = "vr">  
+					<s:VGroup  width="100%" height="100%">
 					
-						<mx:HRule x="0" y="49" width="286" height="14"/>
-						<s:CheckBox x="50" y="77" width="239" label="路径一" />
-						<mx:HRule x="0" y="102" width="286" height="14"/>
-						<mx:HRule x="-1" y="166" width="287" height="14"/>
-						<s:CheckBox x="47" y="139" width="239" label="路径二"/>  
-						<mx:HRule x="-1" y="227" width="287" height="14"/>
-						<s:CheckBox x="44" y="201" width="239" label="路径三"/>
-					<floor:Toolone x="-1" y="-1" width="287" height="59">
-					</floor:Toolone>
-					
+						<floor:Toolone  width="100%" height="59">
+						</floor:Toolone>
+						<route:RouteGroup id="rg" width="100%" height="100%">
+						</route:RouteGroup>
+					</s:VGroup>	
 				</s:NavigatorContent>
 			</mx:ViewStack>
-		
+			
 		</s:BorderContainer>
+		
+		<s:VGroup width="90%" height="100%">
+			<mx:UIComponent id="container"  width="100%" height="90%"/>
+			
+			<components:Debugger width="100%" height="150"></components:Debugger>
+		</s:VGroup>
+		<components2:PropertyPanel id="property" x="781" y="0" width="249" height="100%">
+		</components2:PropertyPanel>
+		
+	</s:HGroup>
 	
-	<components:PropertyPanel id="property" x="791" y="0" width="249" height="477" >
-	</components:PropertyPanel>
-	<components:Debugger x="0" y="485">
-	</components:Debugger>
+	
+	
+	
 	<fx:Script>
 		<![CDATA[
-			import editor.components.floor.FloorPlate;
-			
-			import core.MEConfig;
-			
+			import cn.vision.collections.Map;
+			import emap.map2d.components.position.ToolTwo
+			import emap.core.em;
+			import emap.map2d.EMap2D;
+			import emap.map2d.MapContainer;
+			import emap.map2d.command.InitDataCommand;
+			import emap.map2d.core.E2Provider;
+			import emap.map2d.core.MEConfig;
 			import emap.vos.VOFloor;
 			import emap.vos.VOPosition;
 			
@@ -91,23 +122,35 @@
 			protected function init(event:FlexEvent):void
 			{
 				MEConfig.instance.propertyPanel = property;
-				MEConfig.instance.floorNC = vgroup;
+				MEConfig.instance.floorGroup = floorGroup;
+				trace(MEConfig.instance.floorGroup==null)
 				MEConfig.instance.nodeNC = vn;
 				MEConfig.instance.positionNC = vp;
 				MEConfig.instance.routeNC = vr;
+				MEConfig.instance.positionGroup = pg;
+				MEConfig.instance.nodeGroup = ng;
+				MEConfig.instance.routeGroup = rg;
+				map = new MapContainer;
+				new InitDataCommand().execute();
+				var temp:EMap2D = new EMap2D;
+				temp.y = 15;
+				temp.x = 15;
+				temp.width = container.width;
+				temp.height = container.height;
+				container.addChild(temp);
+			
+				trace(E2Provider.instance.floorArr);
+				positionTool.dataProvider = E2Provider.instance.floorArr;
+				nodeTool.dataProvider = E2Provider.instance.floorArr;			//emap2d.map = mapcontainer
 			}
 			
-			protected function floor_clickHandler(event:MouseEvent):void
-			{
-				var f:VOFloor = new VOFloor;
-				f.order = 1;
-				var fp:FloorPlate = new FloorPlate;
-				fp.floor = f;
-				vf.addElement(fp);
 			
-				
-				
-			}
+			
+			
+			
+			
+			private var map:MapContainer;
+			
 			
 		]]>
 	</fx:Script>
