@@ -26,7 +26,7 @@ package emap.map3d.comman
 	import flash.geom.Matrix;
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
-	
+	  
 	
 	public class Logo extends Object3D
 	{

@@ -148,6 +148,10 @@ package emap.map2d
 		{
 			viewWidth  = w;
 			viewHeight = h;
+			graphics.clear();
+			graphics.beginFill(0, 0);
+			graphics.drawRect(0, 0, w, h);
+			graphics.endFill();
 			cover.graphics.clear();
 			cover.graphics.beginFill(0);
 			cover.graphics.drawRect(0,0,w,h);
