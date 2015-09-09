@@ -15,7 +15,6 @@ package emap.map3d
 	import caurina.transitions.Tweener;
 	
 	import cn.vision.collections.Map;
-	import cn.vision.utils.ArrayUtil;
 	import cn.vision.utils.MathUtil;
 	
 	import emap.core.EMConfig;
@@ -23,7 +22,6 @@ package emap.map3d
 	import emap.interfaces.IEMap;
 	import emap.map3d.core.E3Config;
 	import emap.map3d.finding.Finder;
-	import emap.map3d.utils.Map3DUtil;
 	import emap.map3d.tools.SourceEmap3D;
 	import emap.vos.VOEMap;
 	import emap.vos.VOFloor;
@@ -124,6 +122,17 @@ package emap.map3d
 		public function viewFloor($data:*, $tween:Boolean = false):void
 		{
 			em::viewFloors($data, $tween);
+		}
+		
+		
+		/**
+		 * @inheritDoc
+		 */
+		
+		override protected function uploadAllSource():void
+		{
+			if (mapCreated && contextCreated)
+				SourceEmap3D.uploadAllSources(main);
 		}
 		
 		
@@ -229,17 +238,6 @@ package emap.map3d
 		
 		
 		/**
-		 * @inheritDoc
-		 */
-		
-		override protected function uploadAllSource():void
-		{
-			if (mapCreated && contextCreated)
-				SourceEmap3D.uploadAllSources(main);
-		}
-		
-		
-		/**
 		 * @private
 		 */
 		private function clear():void
@@ -248,8 +246,8 @@ package emap.map3d
 			floorsViewArr.length = 0;
 			floorsViewMap = new Map;
 			positionsViewMap = new Map;
-			floorNext = floorPrev = null;
-			while (em::container.numChildren) em::container.removeChildAt(0);
+			while (floorContainer.numChildren) floorContainer.removeChildAt(0);
+			//finder clear
 		}
 		
 		/**
@@ -274,9 +272,11 @@ package emap.map3d
 		private function initialize($config:EMConfig):void
 		{
 			config = $config;
-			main.addChild(em::container = new Object3D);
-			finder = new Finder(this);
+			main.addChild(container = new Object3D);
 			main.addEventListener(MouseEvent3D.CLICK, handlerClick);
+			container.addChild(floorContainer = new Object3D);
+			container.addChild(pathContainer  = new Object3D);
+			finder = new Finder(this, pathContainer);
 		}
 		
 		/**
@@ -304,7 +304,7 @@ package emap.map3d
 				var floor:Floor = new Floor(emConfig, voFloor);
 				floorsViewArr[floorsViewArr.length] = floor;
 				floorsViewMap[floor.id] = floor;
-				em::container.addChild(floor).visible = false;
+				floorContainer.addChild(floor).visible = false;
 			}
 			
 			floorsViewArr.sortOn("order", Array.NUMERIC);
@@ -379,8 +379,8 @@ package emap.map3d
 			var maxX:Number = Math.max.apply(null, maxxs);
 			var maxY:Number = Math.max.apply(null, maxys);
 			
-			em::container.x = - .5 * (minX + maxX);
-			em::container.y =   .5 * (minY + maxY);
+			container.x = - .5 * (minX + maxX);
+			container.y =   .5 * (minY + maxY);
 		}
 		
 		
@@ -516,7 +516,7 @@ package emap.map3d
 		 */
 		private function get offsetX():Number
 		{
-			return em::container.x;
+			return container.x;
 		}
 		
 		/**
@@ -524,7 +524,7 @@ package emap.map3d
 		 */
 		private function get offsetY():Number
 		{
-			return em::container.y;
+			return container.y;
 		}
 		
 		/**
@@ -532,7 +532,7 @@ package emap.map3d
 		 */
 		private function get floorSpace():Number
 		{
-			return emConfig ? emConfig.floorSpace : NaN;
+			return emConfig && emConfig.floorSpace > 0 ? emConfig.floorSpace : 500;
 		}
 		
 		
@@ -563,22 +563,27 @@ package emap.map3d
 		/**
 		 * @private
 		 */
+		private var container:Object3D;
+		
+		/**
+		 * @private
+		 */
+		private var pathContainer:Object3D;
+		
+		/**
+		 * @private
+		 */
+		private var floorContainer:Object3D;
+		
+		/**
+		 * @private
+		 */
 		private var floorsViewArr:Array = [];
 		
 		/**
 		 * @private
 		 */
 		private var floorsViewMap:Map;
-		
-		/**
-		 * @private
-		 */
-		private var floorNext:Floor;
-		
-		/**
-		 * @private
-		 */
-		private var floorPrev:Floor;
 		
 		/**
 		 * @private
@@ -614,17 +619,6 @@ package emap.map3d
 		 * @private
 		 */
 		private var emConfig:E3Config;
-		
-		
-		/**
-		 * @private
-		 */
-		em var font:String;
-		
-		/**
-		 * @private
-		 */
-		em var container:Object3D;
 		
 	}
 }

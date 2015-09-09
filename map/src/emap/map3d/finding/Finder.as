@@ -33,11 +33,11 @@ package emap.map3d.finding
 		 * 
 		 */
 		
-		public function Finder($emap3d:EMap3D = null)
+		public function Finder($emap3d:EMap3D, $container:Object3D)
 		{
 			super();
 			
-			initialize($emap3d);
+			initialize($emap3d, $container);
 		}
 		
 		
@@ -105,9 +105,9 @@ package emap.map3d.finding
 		/**
 		 * @private
 		 */
-		private function initialize($emap3d:EMap3D):void
+		private function initialize($emap3d:EMap3D, $container:Object3D):void
 		{
-			shower = new Shower($emap3d);
+			shower = new Shower($emap3d, $container);
 		}
 		
 		/**

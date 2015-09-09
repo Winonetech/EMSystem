@@ -51,7 +51,7 @@
 				var container:UIComponent = new UIComponent;
 				addElementAt(container, 0);
 				
-				var st:Point = new Point(100, 100);
+				/* var st:Point = new Point(100, 100);
 				var ed:Point = new Point(300, 100);
 				var c1:Point = new Point(100, 0);
 				var c2:Point = new Point(200, 0);
@@ -91,18 +91,18 @@
 				
 				container.graphics.beginFill(0xFF0000);
 				container.graphics.drawCircle(c4.x, c4.y, 4);
-				container.graphics.endFill(); 
+				container.graphics.endFill();  */
 				
 				
 				
-				/* var config:E3Config = new E3Config(getXML("data/emporium.xml"));
+				var config:E3Config = new E3Config(getXML("data/emporium.xml"));
 				
 				
 				map = new EMap3D(config);
 				container.addChild(map);
 				map.width = width;
 				map.height = height;
-				initializeData(map); */
+				initializeData(map);
 			}
 			
 			private function initializeData(map:EMap3D):void

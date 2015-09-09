@@ -9,6 +9,9 @@ package emap.map3d.finding
 	
 	
 	import alternativa.engine3d.core.Object3D;
+	import alternativa.engine3d.materials.FillMaterial;
+	import alternativa.engine3d.objects.WireFrame;
+	import alternativa.engine3d.primitives.Box;
 	
 	import cn.vision.collections.Map;
 	import cn.vision.core.VSObject;
@@ -21,6 +24,7 @@ package emap.map3d.finding
 	import emap.map3d.EMap3D;
 	import emap.map3d.data.Axis3D;
 	import emap.map3d.interfaces.IE3Node;
+	import emap.map3d.tools.SourceEmap3D;
 	import emap.map3d.vos.E3VOPosition;
 	import emap.utils.NodeUtil;
 	import emap.utils.RouteUtil;
@@ -34,7 +38,7 @@ package emap.map3d.finding
 	import flash.utils.Timer;
 	
 	
-	public final class Shower extends VSObject
+	public final class Shower extends Object3D
 	{
 		
 		/**
@@ -43,11 +47,11 @@ package emap.map3d.finding
 		 * 
 		 */
 		
-		public function Shower($emap3d:EMap3D)
+		public function Shower($emap3d:EMap3D, $container:Object3D)
 		{
 			super();
 			
-			initialize($emap3d);
+			initialize($emap3d, $container);
 		}
 		
 		
@@ -70,6 +74,17 @@ package emap.map3d.finding
 				resolvePointsByPath();
 				
 				resolveVector3Ds2Axis();
+				
+				if ($tween)
+				{
+					
+				}
+				else
+				{
+					container.addChild(WireFrame.createLineStrip(points, 0xFF0000, 1, .5));
+					SourceEmap3D.uploadAllSources(container);
+					
+				}
 			}
 		}
 		
@@ -82,21 +97,25 @@ package emap.map3d.finding
 		
 		public function clear():void
 		{
-			timer.stop();
-			container.visible = false;
-			while (container.numChildren) container.removeChildAt(0);
+			/*timer.stop();
+			while (container.numChildren) container.removeChildAt(0);*/
 		}
 		
 		
 		/**
 		 * @private
 		 */
-		private function initialize($emap3d:EMap3D):void
+		private function initialize($emap3d:EMap3D, $container:Object3D):void
 		{
 			emap3d = $emap3d;
-			container = emap3d.em::container;
-			layouts = new Vector.<Axis3D>;
-			points  = new Vector.<Vector3D>;
+			container = $container;
+			var box:Box = new Box(100, 100, 500);
+			var mat:FillMaterial = new FillMaterial(0xFFFF00);
+			box.setMaterialToAllSurfaces(mat);
+			container.addChild(box);
+			
+			axis3d = new Vector.<Axis3D>;
+			points = new Vector.<Vector3D>;
 			
 			timer = new Timer(33);
 			timer.addEventListener(TimerEvent.TIMER, handlerTimer);
@@ -108,7 +127,14 @@ package emap.map3d.finding
 		private function resolveVector3Ds2Axis():void
 		{
 			var l:uint = points.length;
-			
+			var i:uint = 0;
+			while (i < l)
+			{
+				var p:Vector3D = points[i];
+				p.y = -p.y;
+				axis3d[i] = new Axis3D(p.x, p.y, p.z, 0, 0, 0);
+				i++;
+			}
 		}
 		
 		/**
@@ -120,8 +146,8 @@ package emap.map3d.finding
 			{
 				if (path.shows && path.shows.length)
 				{
-					layouts.length = 0;
-					points .length = 0;
+					axis3d.length = 0;
+					points.length = 0;
 					var shows:Vector.<IE3Node> = path.shows;
 					var i:uint = 0;
 					var l:int = shows.length;
@@ -151,6 +177,7 @@ package emap.map3d.finding
 			var n1:IE3Node = ($flag < l) ? $nodes[$flag] : null;
 			var n2:IE3Node = ($flag < l - 1) ? $nodes[$flag + 1] : null;
 			var n3:IE3Node = ($flag < l - 2) ? $nodes[$flag + 2] : null;
+			$flag++;
 			var bezier:Array = [];
 			//判断n1和n2节点是否存在
 			if (n1 && n2)
@@ -164,12 +191,18 @@ package emap.map3d.finding
 					if (d1 > $dis)
 					{
 						//判断第一条路径从$dis开始的长度是否超过radius
-						//若超过，获取直线上的点，并推入points
-						//否则将第一条路径从$dis开始的点推入bezier
 						if (d1 - $dis > radius)
+						{
+							//若超过，获取直线上的点，并推入points
 							pushPointsLine(n1, n2, $dis, radius);
+							//并将距离v2为$dis的点推入bezier
+							ArrayUtil.push(bezier, getVector3DByDis(n2, n1, $dis));
+						}
 						else
+						{
+							//否则将第一条路径从$dis开始的点推入bezier
 							ArrayUtil.push(bezier, getVector3DByDis(n1, n2, $dis));
+						}
 					}
 					else
 					{
@@ -181,13 +214,13 @@ package emap.map3d.finding
 					
 					//循环判断第二条路径长度是否超过$dis，如不超过，将路径终点推入bezier
 					//否则停止循环，推入第二条路径
-					var tmp:uint = $flag + 1;
+					var tmp:uint = $flag;
 					while (tmp < l - 1)
 					{
 						var v1:IE3Node = $nodes[tmp];
 						var v2:IE3Node = $nodes[tmp + 1];
 						var dn:Number  = distance(v1, v2);
-						if (d1 < $dis)
+						if (dn < radius)
 						{
 							//下一路径长度未超过$dis，v2推入bezier
 							ArrayUtil.push(bezier, getVector3DByNode(v2));
@@ -196,7 +229,7 @@ package emap.map3d.finding
 						else
 						{
 							//d2长度超过dis，第二条路径距v1为$dis的点推入bezier
-							ArrayUtil.push(bezier, getVector3DByDis(v1, v2, $dis));
+							ArrayUtil.push(bezier, getVector3DByDis(v1, v2, radius));
 							break;
 						}
 					}
@@ -211,7 +244,6 @@ package emap.map3d.finding
 					//获取n1与n2连接线上从$dis开始的点集合，并存入points
 					pushPointsLine(n1, n2, $dis, 0);
 					//更新标记
-					$flag++;
 				}
 			}
 			return $flag;
@@ -225,7 +257,7 @@ package emap.map3d.finding
 			const start:Vector3D = getVector3DByNode($start);
 			const end:Vector3D = getVector3DByNode($end);
 			const speed:Number = getLineSpeedByNodes($start, $end);
-			points.concat(LineUtil.getLineVector3Ds(start, end, speed, $front, $back));
+			points = points.concat(LineUtil.getLineVector3Ds(start, end, speed, $front, $back));
 		}
 		
 		/**
@@ -239,8 +271,7 @@ package emap.map3d.finding
 				const start:Vector3D = ArrayUtil.shift($bezier);
 				const end:Vector3D = $bezier.pop();
 				ArrayUtil.unshift($bezier, start, end, p, true);
-				points.concat(BezierUtil.getBezierVector3Ds.apply(null, $bezier));
-				
+				points = points.concat(BezierUtil.getBezierVector3Ds.apply(null, $bezier));
 			}
 		}
 		
@@ -306,7 +337,7 @@ package emap.map3d.finding
 		/**
 		 * @private
 		 */
-		private var layouts:Vector.<Axis3D>;
+		private var axis3d:Vector.<Axis3D>;
 		
 		/**
 		 * @private
@@ -343,6 +374,11 @@ package emap.map3d.finding
 		 * @private
 		 */
 		private var container:Object3D;
+		
+		/**
+		 * @private
+		 */
+		private var wire:WireFrame;
 		
 		/**
 		 * @private

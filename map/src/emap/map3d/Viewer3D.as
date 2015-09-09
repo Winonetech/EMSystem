@@ -21,8 +21,8 @@ package emap.map3d
 	import cn.vision.utils.StageUtil;
 	
 	import emap.core.em;
-	import emap.map3d.utils.Map3DUtil;
 	import emap.map3d.tools.SourceEmap3D;
+	import emap.map3d.utils.Map3DUtil;
 	
 	import flash.display.Stage3D;
 	import flash.events.Event;

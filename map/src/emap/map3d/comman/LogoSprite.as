@@ -44,18 +44,6 @@ package emap.map3d.comman
 		
 		
 		/**
-		 * 
-		 * LOGOSprite 的宽高乘以2用来
-		 * 
-		 */
-		
-		override protected function getBmdWH($value:Number):Number
-		{
-			return super.getBmdWH($value) * 2;
-		}
-		
-		
-		/**
 		 * @inheritDoc
 		 */
 		
