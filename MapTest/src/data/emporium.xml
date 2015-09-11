@@ -1,6 +1,8 @@
 <emporium>
 	<!-- ID由数据库自动生成 -->
 	<id>1</id>
+	<!-- 展示多个楼层时楼层之间的Z间距 -->
+	<floorSpace>500</floorSpace>
 	<!-- 是否启用馆 -->
 	<hallEnabled></hallEnabled>
 	<!-- 图标 -->

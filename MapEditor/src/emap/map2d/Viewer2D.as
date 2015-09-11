@@ -110,7 +110,7 @@ package emap.map2d
 		/**
 		 * @private
 		 */
-		protected	 function caculateScale():void
+		protected function caculateScale():void
 		{
 			if (baseWidth == 0 || baseHeight == 0)
 			{

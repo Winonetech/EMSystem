@@ -8,7 +8,7 @@
 					   xmlns:position="editor.components.position.*"
 					   xmlns:node="editor.components.node.*"
 					   xmlns:route="editor.components.route.*" xmlns:local="*" width="1200" height="630"
-					   >
+					   click="windowedapplication1_clickHandler(event)" >
 	
 	<fx:Script>
 		<![CDATA[

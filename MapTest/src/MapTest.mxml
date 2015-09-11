@@ -14,25 +14,32 @@
 			<s:RadioButton label="旋转" value="rotate" group="{modeRadio}" color="0xFFFFFF"/>
 		</s:HGroup>
 		<s:HGroup id="floorsMenu"/>
+		<s:Button label="search" click="button_clickHandler(event)"/>
 	</s:HGroup>
-	
 	
 	<fx:Script>
 		<![CDATA[
+			import caurina.transitions.Tweener;
+			
 			import cn.vision.collections.Map;
 			import cn.vision.system.VSFile;
+			import cn.vision.utils.ArrayUtil;
 			import cn.vision.utils.FileUtil;
-			import cn.vision.utils.MathUtil;
+			import cn.vision.utils.math.BezierUtil;
+			import cn.vision.utils.math.LineUtil;
 			
 			import com.winonetech.core.Store;
 			
-			import emap.core.EMConfig;
+			import emap.interfaces.INode;
 			import emap.map3d.EMap3D;
-			import emap.tools.SourceManager;
-			import emap.utils.NodeUtil;
+			import emap.map3d.core.E3Config;
+			import emap.map3d.vos.E3VONode;
+			import emap.map3d.vos.E3VOPosition;
+			import emap.map3d.vos.E3VORoute;
 			import emap.vos.VOFloor;
-			import emap.vos.VOPosition;
 			import emap.vos.VOPositionType;
+			
+			import flash.utils.getTimer;
 			
 			import mx.core.UIComponent;
 			/* 
@@ -41,14 +48,55 @@
 			 */
 			private function init():void
 			{
-				trace(NodeUtil.generateSerial());
 				var container:UIComponent = new UIComponent;
 				addElementAt(container, 0);
 				
+				/* var st:Point = new Point(100, 100);
+				var ed:Point = new Point(300, 100);
+				var c1:Point = new Point(100, 0);
+				var c2:Point = new Point(200, 0);
+				var c3:Point = new Point(200, 200);
+				var c4:Point = new Point(300, 200);
 				
-				var config:EMConfig = new EMConfig(getXML("data/emporium.xml"));
+				var gt:int = getTimer();
+				var points:Vector.<Point> = BezierUtil.getBezierPoints(st, ed, .01, true, c1, c2, c3, c4);
+				trace(getTimer() - gt);
 				
-				trace(config.toXML());
+				for each (var item:Point in points)
+				{
+					container.graphics.beginFill(0x00FF00);
+					container.graphics.drawCircle(item.x, item.y, 4);
+					container.graphics.endFill();
+				}
+				
+				container.graphics.beginFill(0xFF0000);
+				container.graphics.drawCircle(st.x, st.y, 4);
+				container.graphics.endFill();
+				
+				container.graphics.beginFill(0xFF0000);
+				container.graphics.drawCircle(ed.x, ed.y, 4);
+				container.graphics.endFill();
+				
+				container.graphics.beginFill(0xFF0000);
+				container.graphics.drawCircle(c1.x, c1.y, 4);
+				container.graphics.endFill();
+				
+				container.graphics.beginFill(0xFF0000);
+				container.graphics.drawCircle(c2.x, c2.y, 4);
+				container.graphics.endFill();
+				
+				container.graphics.beginFill(0xFF0000);
+				container.graphics.drawCircle(c3.x, c3.y, 4);
+				container.graphics.endFill();
+				
+				container.graphics.beginFill(0xFF0000);
+				container.graphics.drawCircle(c4.x, c4.y, 4);
+				container.graphics.endFill();  */
+				
+				
+				
+				var config:E3Config = new E3Config(getXML("data/emporium.xml"));
+				
 				
 				map = new EMap3D(config);
 				container.addChild(map);
@@ -74,6 +122,7 @@
 					radio.group = floorRadio;
 					floorsMenu.addElement(radio);
 				}
+				
 				xml = getXML("data/positionTypes.xml");
 				list = xml.children();
 				var positionTypesMap:Map = new Map;
@@ -82,32 +131,54 @@
 					var positionType:VOPositionType =store.registData(item, VOPositionType);
 					positionTypesMap[positionType.id] = positionType;
 				}
+				
 				xml = getXML("data/positions.xml");
 				list = xml.children();
 				var positionsArr:Array = [];
+				var serialsMap:Map = new Map;
 				for each (item in list)
 				{
-					var position:VOPosition = store.registData(item, VOPosition);
+					var position:E3VOPosition = store.registData(item, E3VOPosition);
+					store.registData(position, INode);
 					positionsArr[positionsArr.length] = position;
+					position.floor = floorsMap[position.floorID];
+					position.positionType = positionTypesMap[position.positionTypeID];
+					serialsMap[position.serial] = position;
+				}
+				
+				xml = getXML("data/nodes.xml");
+				list = xml.children();
+				var nodesMap:Map = new Map;
+				for each (item in list)
+				{
+					var node:E3VONode = store.registData(item, E3VONode);
+					store.registData(node, INode);
+					nodesMap[node.id] = node;
+					node.floor = floorsMap[node.floorID];
+					serialsMap[node.serial] = node;
+				}
+				
+				xml = getXML("data/routes.xml");
+				list = xml.children();
+				var routesMap:Map = new Map;
+				for each (item in list)
+				{
+					var route:E3VORoute = store.registData(item, E3VORoute);
+					routesMap[route.id] = route;
+					route.node1 = serialsMap[route.serial1];
+					route.node2 = serialsMap[route.serial2];
 				}
 				
 				map.initializePosition = "1";
 				map.floors = floorsMap;
 				map.positionTypes = positionTypesMap;
 				map.positions = positionsArr;
+				map.nodes = nodesMap;
+				map.routes = routesMap;
+				
 			}
 			
 			private var map:EMap3D;
-			
-			protected function modeRadio_changeHandler(event:Event):void
-			{
-				map.mode = modeRadio.selectedValue as String;
-			}
-			
-			protected function floorRadio_changeHandler(event:Event):void
-			{
-				map.viewFloor(floorRadio.selectedValue, true);
-			}
 			
 			
 			private function getXML(path:String):XML
@@ -120,6 +191,38 @@
 			}
 			
 			private var store:Store = Store.instance;
+			
+			protected function modeRadio_changeHandler(event:Event):void
+			{
+				map.mode = modeRadio.selectedValue as String;
+			}
+			
+			protected function floorRadio_changeHandler(event:Event):void
+			{
+				map.viewFloor(floorRadio.selectedValue, true);
+			}
+			
+			protected function button_clickHandler(event:MouseEvent):void
+			{
+				map.find("192168001016-20150802142503-4A3C0DRW", "192168001016-20150802142503-WF2X45TH");
+			}
+			
+			private function getLinePoints($start:Point, $end:Point, $seg:Number, $front:Number = 0, $back:Number = 0):Vector.<Point>
+			{
+				var dis:Number = Point.distance($start, $end);
+				var per:Number = $seg / (dis - $front - $back);
+				var fro:Number = $front / dis;
+				var bac:Number = (1 - $back / dis);
+				var points:Vector.<Point> = new Vector.<Point>;
+				if (0 < per && per <= 1)
+				{
+					for (var tmp:Number = fro; tmp < bac; tmp += per)
+					{
+						ArrayUtil.push(points, Point.interpolate($end, $start, tmp));
+					}
+				}
+				return points;
+			}
 			
 		]]>
 	</fx:Script>

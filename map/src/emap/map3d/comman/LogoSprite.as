@@ -8,8 +8,11 @@ package emap.map3d.comman
 	 */
 	
 	
+	import alternativa.engine3d.materials.FillMaterial;
 	import alternativa.engine3d.objects.Sprite3D;
+	import alternativa.engine3d.primitives.Box;
 	
+	import emap.core.em;
 	import emap.map3d.utils.Map3DUtil;
 	
 	
@@ -36,6 +39,21 @@ package emap.map3d.comman
 		{
 			sprite = Map3DUtil.destroyObject3D(sprite);
 			addChild(sprite = new Sprite3D($w, $h, $material));
+			sprite.alwaysOnTop = true;
+		}
+		
+		
+		/**
+		 * @inheritDoc
+		 */
+		
+		override public function set scale($value:Number):void
+		{
+			if (scale!= $value)
+			{
+				em::scale = $value;
+				scaleX = scaleY = scaleZ = $value;
+			}
 		}
 		
 		

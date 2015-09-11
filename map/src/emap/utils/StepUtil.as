@@ -27,35 +27,6 @@ package emap.utils
 		
 		/**
 		 * 
-		 * 获取二次贝塞尔曲线上的点
-		 * 
-		 * @param $start:Point 起始点
-		 * @param $end:Point 结束点
-		 * @param $ctrl:Point 控制点
-		 * @param $seg:Number 分段
-		 * @param $begin:Boolean (default = false) 是否包含起始点
-		 * 
-		 */
-		
-		public static function getCurvePoints($start:Point, $end:Point, $ctrl:Point, $seg:Number = .1, $begin:Boolean = false):Vector.<Point>
-		{
-			if ($start && $end && $ctrl)
-			{
-				var result:Vector.<Point> = new Vector.<Point>;
-				for (var t:Number = $seg; t <= 1; t += $seg)
-				{
-					//二次Bz曲线的公式
-					var x:Number = (1 - t) * (1 - t) * $start.x + 2 * t * (1 - t) * $ctrl.x + t * t * $end.x;
-					var y:Number = (1 - t) * (1 - t) * $start.y + 2 * t * (1 - t) * $ctrl.y + t * t * $end.y;              
-					result[result.length] = new Point(x, y);
-				}
-			}
-			return result;
-		}
-		
-		
-		/**
-		 * 
 		 * 生成步骤队列。
 		 * 
 		 * @param $data:String 需要解析的坐标数据。

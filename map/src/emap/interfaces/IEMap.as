@@ -18,15 +18,6 @@ package emap.interfaces
 		
 		/**
 		 * 
-		 * 清空所有视图数据
-		 * 
-		 */
-		
-		function clear():void;
-		
-		
-		/**
-		 * 
 		 * 查看位置
 		 * 
 		 * @param $data:* 可以传入Position，Position的id
@@ -55,7 +46,7 @@ package emap.interfaces
 		 * 
 		 */
 		
-		function set font($value:String):void;
+		function get font():String;
 		
 		
 		/**
@@ -65,11 +56,6 @@ package emap.interfaces
 		 */
 		
 		function get hallEnabled():Boolean;
-		
-		/**
-		 * @private
-		 */
-		function set hallEnabled($value:Boolean):void;
 		
 		
 		/**

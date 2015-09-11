@@ -20,7 +20,7 @@ package emap.map3d
 	import alternativa.engine3d.resources.Geometry;
 	
 	import emap.core.em;
-	import emap.tools.SourceManager;
+	import emap.map3d.tools.SourceEmap3D;
 	import emap.map3d.utils.Map3DUtil;
 	
 	import flash.display.BitmapData;
@@ -300,7 +300,7 @@ package emap.map3d
 				
 				setMaterialToAllSurfaces(new TextureMaterial(source));
 				
-				SourceManager.uploadSource(source);
+				SourceEmap3D.uploadSource(source);
 			}
 		}
 		

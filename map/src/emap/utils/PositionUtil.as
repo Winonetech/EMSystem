@@ -1,31 +1,110 @@
 package emap.utils
 {
+	
+	/**
+	 * 
+	 * 定义了一些Position常用函数
+	 * 
+	 */
+	
+	
 	import cn.vision.core.NoInstance;
 	
 	import emap.consts.PositionCodeConsts;
-	import emap.data.Layout;
 	import emap.data.Transform;
 	
-	import flash.display.BitmapData;
-	import flash.geom.Rectangle;
 	
 	public final class PositionUtil extends NoInstance
 	{
 		
+		
 		/**
 		 * 
-		 * 通过code判断是否需要显示标签和图标
+		 * 通过code判断是否需要显示图标。
 		 * 
 		 * @param $code:String 编码。
 		 * 
-		 * @return Boolean 是否显示标签和图标，true为显示，false为不显示。
+		 * @return Boolean true为显示，false为不显示。
 		 * 
 		 */
 		
-		public static function displayAssets($code:String):Boolean
+		public static function displayIcon($code:String):Boolean
 		{
-			return $code != PositionCodeConsts.HOLLOW;
+			return $code != PositionCodeConsts.PATIO;
 		}
+		
+		
+		/**
+		 * 
+		 * 通过code判断是否需要显示标签。
+		 * 
+		 * @param $code:String 编码。
+		 * 
+		 * @return Boolean true为显示，false为不显示。
+		 * 
+		 */
+		
+		public static function displayLabel($code:String):Boolean
+		{
+			return	$code != PositionCodeConsts.ESCALATOR && 
+					$code != PositionCodeConsts.LIFT && 
+					$code != PositionCodeConsts.PATIO && 
+					$code != PositionCodeConsts.STAIRS && 
+					$code != PositionCodeConsts.UNSEEN;
+		}
+		
+		
+		/**
+		 * 
+		 * 通过code判断是否需要显示侧面。
+		 * 
+		 * @param $code:String 编码。
+		 * 
+		 * @return Boolean true为显示，false为不显示。
+		 * 
+		 */
+		
+		public static function displayMesh($code:String):Boolean
+		{
+			return $code == PositionCodeConsts.ENTITY || 
+					$code == PositionCodeConsts.PATIO;
+		}
+		
+		
+		/**
+		 * 
+		 * 通过code判断是否需要显示平面。
+		 * 
+		 * @param $code:String 编码。
+		 * 
+		 * @return Boolean true为显示，false为不显示。
+		 * 
+		 */
+		
+		public static function displayPlane($code:String):Boolean
+		{
+			return $code == PositionCodeConsts.ENTITY || 
+					$code == PositionCodeConsts.TERRAIN;
+		}
+		
+		
+		/**
+		 * 
+		 * 验证是位置是否可交互。
+		 * 
+		 * @param $code:String 编码。
+		 * 
+		 * @return Boolean true为可交互，false为不交互。
+		 * 
+		 */
+		
+		public static function interactable($code:String):Boolean
+		{
+			return $code != PositionCodeConsts.PATIO && 
+					$code != PositionCodeConsts.TERRAIN && 
+					$code != PositionCodeConsts.UNSEEN;
+		}
+		
 		
 		/**
 		 * 
@@ -40,7 +119,11 @@ package emap.utils
 		
 		public static function suspendIcon($code:String, $suspend:Boolean):Boolean
 		{
-			return $code == PositionCodeConsts.UNSEEN || ($code == PositionCodeConsts.TERRAIN && $suspend);
+			return $code == PositionCodeConsts.UNSEEN || 
+					$code == PositionCodeConsts.ESCALATOR || 
+					$code == PositionCodeConsts.LIFT || 
+					$code == PositionCodeConsts.STAIRS || 
+				   ($code == PositionCodeConsts.TERRAIN && $suspend);
 		}
 		
 		
@@ -71,6 +154,24 @@ package emap.utils
 				ih *= s;
 			}
 			return new Transform(0, 0, iw, ih, s);
+		}
+		
+		
+		/**
+		 * 
+		 * 通过code判断是否为跨层节点，跨层节点包含直升电梯，手扶梯和楼梯
+		 * 
+		 * @param $code:String 编码。
+		 * 
+		 * @return Boolean 是否显示标签和图标，true为显示，false为不显示。
+		 * 
+		 */
+		
+		public static function validateCrossFloor($code:String):Boolean
+		{
+			return $code == PositionCodeConsts.LIFT || 
+					$code == PositionCodeConsts.ESCALATOR || 
+					$code == PositionCodeConsts.STAIRS;
 		}
 		
 	}

@@ -37,4 +37,12 @@
 		<visible>true</visible>
 		<icon></icon>
 	</positionType>
+	<positionType>
+		<id>5</id>
+		<label>电梯</label>
+		<code>lift</code>
+		<order>5</order>
+		<visible>true</visible>
+		<icon></icon>
+	</positionType>
 </positionTypes>

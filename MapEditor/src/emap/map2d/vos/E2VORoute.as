@@ -33,55 +33,6 @@ package emap.map2d.vos
 		
 		/**
 		 * 
-		 * type
-		 * 
-		 */
-		
-		public function set type($value:String):void
-		{
-			if (type!= $value)
-			{
-				$value = ($value == RouteTypeConsts.CURVE) ? $value : RouteTypeConsts.LINE;
-				setProperty("type", $value);
-				if ($value == RouteTypeConsts.CURVE)
-				{
-					if (em::node1 && em::node2)
-					{
-						var point:Point = Point.interpolate(new Point(em::node1.nodeX, em::node1.nodeY), new Point(em::node2.nodeX, em::node2.nodeY), .5);
-						ctrlX = point.x;
-						ctrlY = point.y;
-					}
-				}
-			}
-		}
-		
-		
-		/**
-		 * 
-		 * ctrlX
-		 * 
-		 */
-		
-		public function set ctrlX($value:Number):void
-		{
-			if (type == RouteTypeConsts.CURVE) setProperty("ctrlX", $value);
-		}
-		
-		
-		/**
-		 * 
-		 * ctrlY
-		 * 
-		 */
-		
-		public function set ctrlY($value:Number):void
-		{
-			if (type == RouteTypeConsts.CURVE) setProperty("ctrlY", $value);
-		}
-		
-		
-		/**
-		 * 
 		 * serial1
 		 * 
 		 */
