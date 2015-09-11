@@ -204,7 +204,7 @@
 			
 			protected function button_clickHandler(event:MouseEvent):void
 			{
-				map.find("192168001016-20150802142503-4A3C0DRW", "192168001016-20150802142503-WF2X45TH");
+				map.find("192168001016-20150802142503-4A3C0DRW", "192168001016-20150802142503-WF2X45TH", true);
 			}
 			
 			private function getLinePoints($start:Point, $end:Point, $seg:Number, $front:Number = 0, $back:Number = 0):Vector.<Point>

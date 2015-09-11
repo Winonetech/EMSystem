@@ -57,9 +57,9 @@ package emap.map3d
 		 * 
 		 */
 		
-		public function find($start:String, $end:String):void
+		public function find($start:String, $end:String, $tween:Boolean = false):void
 		{
-			finder.find($start, $end);
+			finder.find($start, $end, $tween);
 		}
 		
 		
