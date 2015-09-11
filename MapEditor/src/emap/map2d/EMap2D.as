@@ -85,7 +85,8 @@ package emap.map2d
 				if (!voRoute.cross)
 				{
 					var route:Route = new Route(voRoute);
-					content.addChild(route);
+					var floor:Floor = floorsViewMap[route.floorID]
+					floor.addChild(route);
 				}
 				//E2Config.instance.routeViewMap[voRoute.id] = route; 
 			}

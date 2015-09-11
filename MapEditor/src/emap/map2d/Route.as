@@ -18,6 +18,7 @@ package emap.map2d
 			voRoute = $value;
 			getNodeByRoute(voRoute);
 			updateLineTo();
+			if(!voRoute.cross) floorID = node1.floorID; 
 		}
 		public function updateLineTo():void
 		{
@@ -52,6 +53,7 @@ package emap.map2d
 			__scale = value;
 			this.scaleX = this.scaleY = 1/scale
 		}
+		public var floorID:String;
 		private var __scale:Number;
 		private var node1:E2VONode;
 		private var node2:E2VONode;

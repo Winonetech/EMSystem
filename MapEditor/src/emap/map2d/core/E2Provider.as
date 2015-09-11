@@ -19,6 +19,7 @@ package emap.map2d.core
 		public var floorArr:Array;
 		public  var hallMap:Map;
 		public  var nodeMap:Map;
+		public var serialMap:Map;
 		public var nodeArr:Array;
 		public  var positionArr:Array;
 		public  var positionTypeMap:Map;
