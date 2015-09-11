@@ -152,14 +152,13 @@ package emap.map3d.finding
 			ergodic.clear();
 			pathes.clear();
 			finded = false;
+			for each (var key:IE3Node in nodes) key.pathes.clear();
 			if (start && end)
 			{
 				delete nodes[start.serial];
 				delete nodes[end  .serial];
-				start.pathes.clear();
-				end  .pathes.clear();
 			}
-			for each (var key:IE3Node in nodes) key.pathes.clear();
+			
 			
 			start = $node1;
 			end   = $node2;

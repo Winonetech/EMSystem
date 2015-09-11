@@ -520,7 +520,7 @@ package emap.map3d
 				
 				camera.z = cameraDistance;
 				
-				camera.scaleX = camera.scaleY = factor = cameraDistance * .001;
+				camera.scaleX = camera.scaleY = camera.scaleZ = factor = cameraDistance * .001;
 				
 				//如果是寻路模式，控制线条粗细。
 			}
@@ -921,7 +921,7 @@ package emap.map3d
 		/**
 		 * @private
 		 */
-		em var minCameraDistance:Number = 300;
+		em var minCameraDistance:Number = 1000;
 		
 		/**
 		 * @private

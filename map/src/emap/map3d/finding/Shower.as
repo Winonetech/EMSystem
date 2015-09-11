@@ -8,20 +8,24 @@ package emap.map3d.finding
 	 */
 	
 	
+	import alternativa.engine3d.alternativa3d;
 	import alternativa.engine3d.core.Object3D;
 	import alternativa.engine3d.materials.FillMaterial;
 	import alternativa.engine3d.objects.WireFrame;
 	import alternativa.engine3d.primitives.Box;
+	import alternativa.engine3d.resources.WireGeometry;
 	
 	import cn.vision.collections.Map;
 	import cn.vision.core.VSObject;
 	import cn.vision.utils.ArrayUtil;
+	import cn.vision.utils.TimerUtil;
 	import cn.vision.utils.Vector3DUtil;
 	import cn.vision.utils.math.BezierUtil;
 	import cn.vision.utils.math.LineUtil;
 	
 	import emap.core.em;
 	import emap.map3d.EMap3D;
+	import emap.map3d.comman.Arrow;
 	import emap.map3d.data.Axis3D;
 	import emap.map3d.interfaces.IE3Node;
 	import emap.map3d.tools.SourceEmap3D;
@@ -57,6 +61,20 @@ package emap.map3d.finding
 		
 		/**
 		 * 
+		 * 清空上一次的路径演示。
+		 * 
+		 */
+		
+		public function clear():void
+		{
+			timer.stop();
+			while (container.numChildren) container.removeChildAt(0);
+			arrow.visible = false;
+		}
+		
+		
+		/**
+		 * 
 		 * 路径演示。
 		 * 
 		 */
@@ -77,30 +95,55 @@ package emap.map3d.finding
 				
 				if ($tween)
 				{
-					
+					count = 0;
+					wire = new WireFrame(0xFF0000, 1, 1);
+					TimerUtil.callLater(1000, timer.start);
 				}
 				else
 				{
-					container.addChild(WireFrame.createLineStrip(points, 0xFF0000, 1, .5));
-					SourceEmap3D.uploadAllSources(container);
-					
+					wire = WireFrame.createLineStrip(points, 0xFF0000, 1, 1);
 				}
+				container.addChild(wire);
+				container.addChild(arrow);
+				SourceEmap3D.uploadAllSources(container);
 			}
 		}
 		
 		
 		/**
-		 * 
-		 * 清空上一次的路径演示。
-		 * 
+		 * @private
 		 */
-		
-		public function clear():void
+		private function walk():void
 		{
-			/*timer.stop();
-			while (container.numChildren) container.removeChildAt(0);*/
+			arrow.visible = true;
+			if (count < points.length - 1)
+			{
+				var geometry:WireGeometry = wire.alternativa3d::geometry;
+				var p0:Vector3D = points[count];
+				var p1:Vector3D = points[count + 1];
+				geometry.alternativa3d::addLine(p0.x, p0.y, p0.z, p1.x, p1.y, p1.z);
+				wire.calculateBoundBox();
+				arrow.x = p1.x;
+				arrow.y = p1.y;
+				arrow.z = p1.z;
+				var v:Vector3D = p1.subtract(p0);
+				v.normalize();
+				var rx:Number = Math.atan2(v.z, v.y);
+				var ry:Number = Math.atan2(Math.abs(v.z), Math.abs(v.x));
+				var rz:Number = Math.atan2(v.y, v.x);
+				arrow.rotationX = rx;
+				arrow.rotationY = ry;
+				arrow.rotationZ = rz;
+				
+				trace(v, arrow.rotationX, arrow.rotationY, arrow.rotationZ);
+				count ++;
+				SourceEmap3D.uploadAllSources(wire);
+			}
+			else
+			{
+				timer.stop();
+			}
 		}
-		
 		
 		/**
 		 * @private
@@ -109,10 +152,9 @@ package emap.map3d.finding
 		{
 			emap3d = $emap3d;
 			container = $container;
-			var box:Box = new Box(100, 100, 500);
-			var mat:FillMaterial = new FillMaterial(0xFFFF00);
-			box.setMaterialToAllSurfaces(mat);
-			container.addChild(box);
+			
+			arrow = new Arrow;
+			arrow.visible = false;
 			
 			axis3d = new Vector.<Axis3D>;
 			points = new Vector.<Vector3D>;
@@ -196,7 +238,7 @@ package emap.map3d.finding
 							//若超过，获取直线上的点，并推入points
 							pushPointsLine(n1, n2, $dis, radius);
 							//并将距离v2为$dis的点推入bezier
-							ArrayUtil.push(bezier, getVector3DByDis(n2, n1, $dis));
+							ArrayUtil.push(bezier, getVector3DByDis(n2, n1, radius));
 						}
 						else
 						{
@@ -270,7 +312,7 @@ package emap.map3d.finding
 				const p:Number = speedTurn / Vector3DUtil.distance.apply(null, $bezier);
 				const start:Vector3D = ArrayUtil.shift($bezier);
 				const end:Vector3D = $bezier.pop();
-				ArrayUtil.unshift($bezier, start, end, p, true);
+				ArrayUtil.unshift($bezier, start, end, p, false);
 				points = points.concat(BezierUtil.getBezierVector3Ds.apply(null, $bezier));
 			}
 		}
@@ -330,7 +372,7 @@ package emap.map3d.finding
 		 */
 		private function handlerTimer($e:TimerEvent):void
 		{
-			
+			walk();
 		}
 		
 		
@@ -345,15 +387,20 @@ package emap.map3d.finding
 		private var points:Vector.<Vector3D>;
 		
 		/**
+		 * @private
+		 */
+		private var count:uint = 0;
+		
+		/**
 		 * 拐角处弧度
 		 * @private
 		 */
-		private var radius:Number = 10;
+		private var radius:Number = 20;
 		
 		/**
 		 * @private
 		 */
-		private var speedWalk:Number = 2;
+		private var speedWalk:Number = 5;
 		
 		/**
 		 * @private
@@ -363,7 +410,7 @@ package emap.map3d.finding
 		/**
 		 * @private
 		 */
-		private var speedCros:Number = 10;
+		private var speedCros:Number = 15;
 		
 		/**
 		 * @private
@@ -379,6 +426,11 @@ package emap.map3d.finding
 		 * @private
 		 */
 		private var wire:WireFrame;
+		
+		/**
+		 * @private
+		 */
+		private var arrow:Arrow;
 		
 		/**
 		 * @private
