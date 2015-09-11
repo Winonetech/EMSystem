@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.winonetech.core.Config;
+			
+			import editor.core.EDConfig;
+			
+			import emap.map2d.Node;
+			import emap.map2d.core.E2Config;
+			import emap.map2d.vos.E2VONode;
+			[Bindable]
+			private var _node:E2VONode = EDConfig.instance.selectedNode;
+			private var nodeView:Node;
+			public function set node($value:E2VONode):void
+			{
+				
+				 _node = $value;
+			}
+			public function get node():E2VONode
+			{
+				return _node;
+			}
+			protected function change($nodeProperty:String,$ui:*,$uiProperty:String):void
+			{
+				if(_node!=null)
+				{
+					node[$nodeProperty] = $ui[$uiProperty];
+				}
+			}
+			
+			protected function editor_clickHandler(event:MouseEvent):void
+			{
+				
+				// TODO Auto-generated method stub
+				if(_node)
+				{
+					nodeView = E2Config.instance.nodeViewMap[_node.id];
+					//nodeView.update();
+					
+				}
+					
+			}
+		
+			
+			protected function submit_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				if(_node)
+				{
+					nodeView = E2Config.instance.nodeViewMap[_node.id];
+					nodeView.endUpdate();
+					
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<s:Label x="72" y="47" text="名称：" />
+	<s:TextInput id="l" x="116" y="42" text="{EDConfig.instance.selectedNode.label}" change="change('label',l,'text')" />
+	
+	<s:Label x="74" y="76" text="X:"/>
+	
+	<s:TextInput id="nodeX" x="116" y="68" text="{EDConfig.instance.selectedNode.nodeX}" change="change('nodeX',nodeX,'text')"/>
+	<s:Label x="74" y="103" text="Y:"/>
+	<s:TextInput id="nodeY" x="116" y="95" text="{EDConfig.instance.selectedNode.nodeY}" change="change('nodeY',nodeY,'text')"/>
+	<s:Label x="74" y="128" text="楼层:"/>
+	<s:TextInput x="116" y="124" text="{EDConfig.instance.selectedNode.floorID}"/>
+	<s:Label x="74" y="158" text="序列号:"/>
+	<s:TextInput x="116" y="151" text="{EDConfig.instance.selectedNode.serial}"/> 
+	<s:Button x="74" y="202" label="编辑" click="editor_clickHandler(event)"/>
+</s:Group>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="10%">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:Button x="23" y="15" label="+" click="add_clickHandler(event)"/>
+	<s:Button x="105" y="15" label="-" click="sub_clickHandler(event)"/>
+	<fx:Script>
+		<![CDATA[
+
+			
+			import emap.vos.VOFloor;
+			
+			import spark.components.VGroup;
+			protected function add_clickHandler(event:MouseEvent):void
+			{
+//				var f:VOFloor = new VOFloor;
+//				f.order = 1;
+//				var fp:FloorPlate = new FloorPlate;
+//				fp.floor = f;
+//				MEConfig.instance.floorNC.addElement(fp);
+				
+				
+			}
+			
+			protected function sub_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+		]]>
+	</fx:Script>
+</s:BorderContainer>

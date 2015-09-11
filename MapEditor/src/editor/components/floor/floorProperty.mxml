@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:vos="emap.map2d.vos.*" width="400" height="300">
+	
+	<fx:Script>
+		<![CDATA[
+			import emap.core.em;
+			import emap.map2d.core.E2Config;
+			import emap.map2d.vos.E2VOFloor;
+			
+			import mx.events.ColorPickerEvent;
+			protected function submit_clickHandler(event:MouseEvent):void
+			{
+				if(_floor){
+					E2Config.instance.utilLayer.clear();
+					_floor.color = c.selectedColor;
+					_floor.label = t.text;
+					E2Config.instance.groundViewMap[floor.id].update();
+				}
+			}
+			
+			protected function editor_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				if(_floor)
+					E2Config.instance.utilLayer.ground = E2Config.instance.groundViewMap[_floor.id];
+				
+			}
+			
+			protected function c_changeHandler(event:ColorPickerEvent):void
+			{
+				if(_floor != null){
+					// TODO Auto-generated method stub
+					_floor.color = c.selectedColor;
+					E2Config.instance.groundViewMap[_floor.id].update();
+				}
+			}
+			public function set floor($value:E2VOFloor):void
+			{
+				_floor = $value;
+			}
+			public function get floor():E2VOFloor
+			{
+				return _floor;
+			}
+			[Bindable]
+			private var _floor:E2VOFloor;
+		]]>
+	</fx:Script>
+	
+	
+		
+	
+	<s:Label x="79" y="5" text="楼层"/>
+	
+	<s:Label  x="23" y="81" text="颜色："/>
+	<mx:ColorPicker id="c" x="67" y="76" width="26" selectedColor="{_floor.color}" change="c_changeHandler(event)"/>
+	<s:Label  x="23" y="50" text="名称："/>
+	<s:TextInput id="t" x="67" y="46" text="{_floor.label}"/>
+	<s:Button x="23" y="167" label="编辑" click="editor_clickHandler(event)"/>
+	<s:Button x="117" y="168" label="保存" click="submit_clickHandler(event)"/>
+	<s:Label x="23" y="111" text="顺序："/>
+	<s:TextInput x="67" y="106" text="{_floor.order}"/>
+	
+	<s:Button x="138" y="133" width="57" label="图片"/>
+	<s:TextInput x="23" y="132" width="107" text="{_floor.image}"/>
+</s:Group>

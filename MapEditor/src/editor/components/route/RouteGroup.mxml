@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"  click="vgroup1_clickHandler(event)">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import editor.core.EDConfig;
+			
+		
+			import emap.map2d.vos.E2VORoute;
+			
+			public function addRoute(route:E2VORoute):void
+			{
+				var routePlate:RoutePlate = new RoutePlate;
+				routePlate.route = route;
+				addElement(routePlate);
+				
+			}
+			protected function vgroup1_clickHandler(event:MouseEvent):void
+			{
+				if(event.target is RoutePlate)
+				{
+					var item :RoutePlate = event.target as RoutePlate;
+					if(item.selected)
+						item.selected = false;
+					else
+						item.selected = true;
+					EDConfig.instance.selectedRoute = item.route;
+					EDConfig.instance.propertyPanel.setCurrentState("route",true);
+					EDConfig.instance.propertyPanel.route.route = EDConfig.instance.selectedRoute;
+				}
+				
+			}
+			
+		]]>
+	</fx:Script>
+</s:VGroup>

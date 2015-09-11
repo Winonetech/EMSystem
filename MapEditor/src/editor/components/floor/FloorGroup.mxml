@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300" click="floor_clickHandler(event)" >
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import editor.core.EDConfig;
+			
+			import emap.map2d.Floor;
+			import emap.map2d.Ground;
+			import emap.map2d.core.E2Config;
+			import emap.map2d.core.E2Provider;
+		
+			import emap.map2d.vos.E2VOFloor;
+			
+			import mx.events.FlexEvent;
+			
+			public function addfloor(floor:E2VOFloor):void
+			{
+				var floorPlate:FloorPlate = new FloorPlate();
+				floorPlate.floor = floor;
+				addElement(floorPlate);
+			}
+			
+			protected function vgroup1_initializeHandler(event:FlexEvent):void
+			{
+				for each(var floor:E2VOFloor in E2Provider.instance.floorArr)
+				{
+					EDConfig.instance.floorGroup.addfloor(floor);
+				}
+			}
+			
+			protected function floor_clickHandler(event:MouseEvent):void
+			{
+				if(event.target is FloorPlate)
+				{
+					E2Config.instance.utilLayer.clear();
+					var item :FloorPlate = event.target as FloorPlate;
+					if(item.selected)
+						item.selected = false;
+					else
+						item.selected = true;
+					
+					
+					EDConfig.instance.selectedFloor = item.floor;
+					EDConfig.instance.propertyPanel.floor.floor = EDConfig.instance.selectedFloor;
+					EDConfig.instance.propertyPanel.setCurrentState("default",true);
+					for each(var f:Floor in E2Config.instance.floorMap)
+					{
+						f.visible = false;
+					}
+					E2Config.instance.floorViewMap[item.floor.id].visible = true;
+					
+				}
+			}
+			
+		]]>
+	</fx:Script>
+</s:VGroup>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import emap.map2d.vos.E2VORoute;
+			[Bindable]
+			private var _route:E2VORoute;
+			public function set route($value:E2VORoute):void
+			{
+				_route = $value;
+			}
+			public function get route():E2VORoute
+			{
+				return _route;
+			}
+		]]>
+	</fx:Script>
+	<s:Label x="39" y="36" text="名称："/>
+	
+	<s:TextInput x="105" y="32" text="{_route.label}"/>
+	<s:Label x="39" y="70" text="序列号1："/>
+	
+	<s:TextInput x="106" y="65" text="{_route.serial1}"/>
+	<s:Label x="39" y="96" text="序列号2："/>
+	<s:TextInput x="106" y="93" text="{_route.serial2}"/>
+	
+</s:Group>
+ 

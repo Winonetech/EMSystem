@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:s="library://ns.adobe.com/flex/spark" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:vos="emap.map2d.vos.*"
+				   mouseChildren="false" height="50" width="100%" borderVisible="true" >
+	
+	<fx:Script>
+		<![CDATA[
+			import emap.map2d.core.E2Provider;
+		
+			import emap.map2d.vos.E2VOFloor;
+			import emap.map2d.vos.E2VONode;
+			
+			import mx.collections.ArrayCollection;
+			
+//			protected function node_clickHandler(event:MouseEvent):void
+//			{
+//				// TODO Auto-generated method stub
+//				MEConfig.instance.selectedNode= node;
+//				MEConfig.instance.propertyPanel.setCurrentState("position",true);
+//				MEConfig.instance.propertyPanel.position.position = MEConfig.instance.selectedPosition;
+//				MEConfig.instance.propertyPanel.position.dataProvider = E2Provider.instance.positionTypeArr;
+//				
+//			}
+			public function get node():E2VONode
+			{
+				return _node;
+			}
+			public function set node($value:E2VONode):void
+			{
+				_node = $value;
+				
+			}
+			[Bindable]
+			private var _node:E2VONode;
+			[Bindable]
+			public var selected:Boolean;
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		
+	</fx:Declarations>
+	<s:CheckBox x="32" y="15" label="{_node.label}" selected="{selected}"/>
+</s:BorderContainer>

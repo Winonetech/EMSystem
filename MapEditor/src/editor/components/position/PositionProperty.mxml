@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:vos="emap.map2d.vos.*" width="100%" height="100%">
+	<fx:Declarations>
+		
+		<s:RadioButtonGroup id="iconVisible" selectedValue="{position.iconVisible}" change="change('iconVisible', iconVisible,  'selectedValue')"/>
+		<s:RadioButtonGroup id="textVisible" selectedValue="{position.labelVisible}" change="change('labelVisible',textVisible,'selectedValue')"/>
+		
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import emap.core.em;
+			import emap.map2d.core.E2Config;
+			import emap.map2d.core.E2Provider;
+			import emap.map2d.vos.E2VOPosition;
+			import emap.map2d.vos.E2VOPositionType;
+			
+			import mx.collections.ArrayCollection;
+			import mx.core.UIComponent;
+			
+			import spark.events.TextOperationEvent;
+			[Bindable]
+			
+			private var collection:ArrayCollection;
+			public  function set dataProvider($value:Object):void
+			{
+				trace($value);
+				collection = new ArrayCollection($value as Array);
+			}
+			//			private var positionType:E2VOPositionType;
+			//			private function set positionType($value:String):void
+			//			{
+			//				E2Provider.instance.positionTypeMap[$value]
+			//			}
+			[Bindable]
+			public function get position():E2VOPosition
+			{
+				return _position;
+			}
+			public function set position($value:E2VOPosition):void
+			{
+				_position = $value;
+				positionTypeVO = E2Provider.instance.positionTypeMap[_position.positionTypeID];
+			}
+			[Bindable]
+			private var positionTypeVO:E2VOPositionType;
+			
+			
+			private var _position:E2VOPosition;
+			
+			protected function submit_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+			protected function change($positionProperty:String, $ui:*,  $uiProperty:String):void
+			{
+				if(position!=null)
+				{
+					position[$positionProperty] = $ui[$uiProperty];
+//					switch($value)
+//					{
+//						case "c":  position.color = c.selectedColor;break;
+//						case "i":   position.icon = i.text;break;
+//						case "ix": position.iconOffsetX = Number(ix.text);break;
+//						case "iy": position.iconOffsetY = Number(iy.text);break;
+//						case "iconVisible": position.iconVisible = Boolean(iconVisible.selectedValue);break;
+//						case "textVisible": position.labelVisible = Boolean(textVisible.selectedValue);break;
+//						case "s": position.iconScale = Number(s.text);break;
+//						case "lr": position.labelRotation = Number(lr.text);break;
+//						case "ls": position.labelScale = Number(ls.text);break;
+//						case "lx": position.labelOffsetX = Number(lx.text);break;
+//						case "ly": position.labelOffsetY = Number(ly.text);break;
+//						case "n": position.number = n.text;break;
+//						case "t": position.thick = Number(t.text);break;
+//						case "f": position.floorID = f.text;break;
+//						case "positionType": 
+//							position.positionTypeID = (positionType.selectedItem as E2VOPositionType).id;
+//							break;
+//					}
+				}
+				
+			}
+			protected function changeType():void
+			{
+				if(position!=null)
+				{
+					position.positionTypeID = (positionType.selectedItem as E2VOPositionType).id;
+				}
+			}
+			protected function editor_clickHandler(event:MouseEvent):void
+			{
+				if(_position)
+					E2Config.instance.utilLayer.position = E2Config.instance.positionMap[_position.id];
+			}
+			
+		]]>
+	</fx:Script>
+	<s:Label x="98" y="20" text="位置"/>
+	<s:Label x="45" y="68" text="颜色："/>
+	<mx:ColorPicker id="c" x="97" y="59" width="25" height="22" selectedColor="{position.color}" change="change('color',c,'selectedColor')"/>
+	<s:Label x="45" y="100" text="图标:"/>
+	<s:TextInput id="i" x="95" y="91" width="84" text="{position.icon}" change="change('icon',i,'text')"/>
+	<s:Button x="200" y="91" label="浏览"/>
+	<s:Label x="42" y="128" text="图标X："/>
+	<s:TextInput id="ix" x="94" y="120" width="84" text="{position.iconOffsetX}" change="change('iconOffsetX',ix,'text')" restrict="0-9/."/>
+	<s:Label x="42" y="155" text="图标Y："/>
+	<s:TextInput id="iy" x="94" y="149" width="84" text="{position.iconOffsetY}" change="change('iconOffsetY',iy,'text')" restrict="0-9/."/>
+	<s:Label x="39" y="206" text="可见："/>
+	<s:RadioButton x="99" y="201" value="true" label="可见" groupName="iconVisible"/>
+	<s:RadioButton x="161" y="201" value="false" label="不可见" groupName="iconVisible" />
+	<s:Label x="42" y="181" text="图标缩放："/>
+	<s:TextInput id="s" x="99" y="178" width="84" text="{position.iconScale}" change="change('iconScale',s,'text')" restrict="0-9/."/>
+	<s:Label x="38" y="232" text="文本旋转："/>
+	<s:TextInput id="lr" x="99" y="227" width="84" text ="{position.labelRotation}" change="change('labelRotation',lr,'text')" restrict="0-9/."/>
+	<s:Label x="38" y="257" text="文本缩放："/>
+	<s:TextInput id="ls" x="99" y="254" width="84" text ="{position.labelScale}" change="change('labelScale',ls,'text')" restrict="0-9/."/>
+	<s:Label x="39" y="282" text="可见："/>
+	<s:RadioButton x="99" y="280" value="true" label="可见" groupName="textVisible"/>
+	<s:RadioButton x="161" y="282" value="false" label="不可见" groupName="textVisible" />
+	<s:Label x="39" y="310" text="文本X："/>
+	<s:TextInput id="lx" x="91" y="302" width="92" text="{position.labelOffsetX}" change="change('labelOffsetX',lx,'text')" restrict="0-9/."/>
+	<s:Label x="38" y="333" text="文本Y："/>
+	<s:TextInput id="ly" x="89" y="327" width="92" text="{position.labelOffsetY}" change="change('labelOffsetY',ly,'text')" restrict="0-9/."/>
+	<s:Label x="38" y="357" text="编号："/>
+	<s:TextInput id="n" x="89" y="350" width="92" text="{position.number}" change="change('number',n,'text')"/>
+	<s:Label x="38" y="381" text="高度："/>
+	<s:TextInput id="t" x="89" y="376" width="92" text="{position.thick}" change="change('thick',t,'text')" restrict="0-9/."/>
+	<s:Label x="38" y="408" text="楼层："/>
+	<s:TextInput id="f" x="89" y="403" width="92" text="{position.floorID}" change="change('floorID',f,'text')"/>
+	<s:Label x="36" y="434" text="位置类型："/>
+	
+	<s:ComboBox id="positionType" x="99" y="429" width="82" dataProvider="{collection}" selectedItem="{positionTypeVO}" change="changeType()"/>
+	<s:Button x="36" y="475" label="保存" click="submit_clickHandler(event)"/>
+	<s:Button x="135" y="475" label="编辑" click="editor_clickHandler(event)"/>
+	
+	
+	
+</s:Group>

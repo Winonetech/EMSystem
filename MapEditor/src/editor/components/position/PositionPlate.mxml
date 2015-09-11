@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:s="library://ns.adobe.com/flex/spark" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:vos="emap.map2d.vos.*"
+				   mouseChildren="false" height="50" width="100%" borderVisible="true" >
+	
+	<fx:Script>
+		<![CDATA[
+			import editor.core.EDConfig;
+			
+			import emap.map2d.core.E2Provider;
+		
+			import emap.map2d.vos.E2VOFloor;
+			
+			import mx.collections.ArrayCollection;
+			
+			protected function position_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				EDConfig.instance.selectedPosition= this.position;
+				EDConfig.instance.propertyPanel.setCurrentState("position",true);
+				EDConfig.instance.propertyPanel.position.position = EDConfig.instance.selectedPosition;
+				EDConfig.instance.propertyPanel.position.dataProvider = E2Provider.instance.positionTypeArr;
+				
+			}
+			[Bindable]
+			public var selected:Boolean;
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<vos:E2VOPosition id="position"/>
+	</fx:Declarations>
+	<s:CheckBox x="32" y="15" label="{position.label}" selected="{selected}"/>
+</s:BorderContainer>
