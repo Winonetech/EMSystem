@@ -19,6 +19,7 @@ package emap.map3d
 	
 	import emap.core.EMConfig;
 	import emap.core.em;
+	import emap.events.MapEvent;
 	import emap.interfaces.IEMap;
 	import emap.map3d.core.E3Config;
 	import emap.map3d.finding.Finder;
@@ -393,6 +394,7 @@ package emap.map3d
 			{
 				var position:Position = $e.target as Position;
 				position.selected = !position.selected;
+				dispatchEvent(new MapEvent(MapEvent.POSITION_CLICK, position.data.serial));
 			}
 		}
 		
@@ -463,7 +465,7 @@ package emap.map3d
 		{
 			hallsMap = $data;
 			
-			update();
+			if (hallEnabled) update();
 		}
 		
 		

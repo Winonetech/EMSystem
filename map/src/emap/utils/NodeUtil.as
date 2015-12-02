@@ -61,8 +61,13 @@ package emap.utils
 		
 		public static function generateSerial():String
 		{
-			return getRandom(12) + "-" + 
-				DateUtil.getDateFormat(new Date, true, 2, "", "", "") + "-" + getRandom();
+			var key:String;
+			while (key == null || SERIS[key])
+			{
+				key = getRandom(12) + "-" + DateUtil.getDateFormat(new Date, true, 2, "", "", "") + "-" + getRandom();
+			}
+			SERIS[key] = true;
+			return key;
 		}
 		
 		
@@ -109,6 +114,11 @@ package emap.utils
 		 * @private
 		 */
 		private static const CODES:Object = {lift:15, escalator:10, stairs:15};
+		
+		/**
+		 * @private
+		 */
+		private static const SERIS:Object = {};
 		
 	}
 }

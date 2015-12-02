@@ -17,6 +17,7 @@ package emap.map3d.utils
 	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import flash.geom.Matrix;
+	import flash.geom.Rectangle;
 	import flash.text.AntiAliasType;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
@@ -40,6 +41,30 @@ package emap.map3d.utils
 		
 		/**
 		 * 
+		 * 获取转换为二次方数且宽高不大于2048*2048的范围。
+		 * 
+		 * @param $w:Number 原始宽度。
+		 * @param $h:Number 原始高度。
+		 * 
+		 * @return Rectangle 限制后的矩形范围。
+		 * 
+		 */
+		
+		public static function getLimitedBitmapDataRect($w:Number, $h:Number):Rectangle
+		{
+			var w:Number = to2Square($w);
+			var h:Number = to2Square($h);
+			while (w * h > AREA_LIMIT)
+			{
+				w = to2Square(w >>> 1);
+				h = to2Square(h >>> 1);
+			}
+			return new Rectangle(0, 0, w, h);
+		}
+		
+		
+		/**
+		 * 
 		 * 根据形状和布局生成一个形状。
 		 * 
 		 */
@@ -48,8 +73,9 @@ package emap.map3d.utils
 		{
 			if ($shape && $layout)
 			{
-				var w:uint = to2Square($layout.width);
-				var h:uint = to2Square($layout.height);
+				var rect:Rectangle = getLimitedBitmapDataRect($layout.width, $layout.height);
+				var w:uint = rect.width;
+				var h:uint = rect.height;
 				var segW:uint = Math.max(1, w * 0.015625);
 				var segH:uint = Math.max(1, h * 0.015625);
 				if (w && h)
@@ -162,6 +188,12 @@ package emap.map3d.utils
 		 * @private
 		 */
 		private static var format:TextFormat;
+		
+		
+		/**
+		 * @private
+		 */
+		private static const AREA_LIMIT:uint = 2048 * 2048;
 		
 		
 		/**

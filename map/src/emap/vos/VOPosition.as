@@ -12,12 +12,11 @@ package emap.vos
 	
 	import com.winonetech.core.VO;
 	
+	import emap.consts.PositionCodeConsts;
 	import emap.core.em;
 	import emap.data.Layout;
 	import emap.interfaces.ILayout;
 	import emap.interfaces.INode;
-	
-	import versions.version1.a3d.A3D;
 	
 	
 	public class VOPosition extends VO implements ILayout, INode
@@ -264,6 +263,32 @@ package emap.vos
 		
 		/**
 		 * 
+		 * 中央偏移X
+		 * 
+		 */
+		
+		public function get offsetX():Number
+		{
+			var r:Number = getProperty("offsetX", Number);
+			return isNaN(r) ? 0 : r;
+		}
+		
+		
+		/**
+		 * 
+		 * 中央偏移Y
+		 * 
+		 */
+		
+		public function get offsetY():Number
+		{
+			var r:Number = getProperty("offsetY", Number);
+			return isNaN(r) ? 0 : r;
+		}
+		
+		
+		/**
+		 * 
 		 * 节点序列号
 		 * 
 		 */
@@ -310,13 +335,13 @@ package emap.vos
 		
 		/**
 		 * 
-		 * 位置编码
+		 * 位置编码，如没有位置类别，则默认为实体类别。
 		 * 
 		 */
 		
 		public function get typeCode():String
 		{
-			return positionType ? positionType.code : null;
+			return positionType ? positionType.code : PositionCodeConsts.ENTITY;
 		}
 		
 		

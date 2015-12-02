@@ -19,12 +19,14 @@
 	
 	<fx:Script>
 		<![CDATA[
+			
 			import caurina.transitions.Tweener;
 			
 			import cn.vision.collections.Map;
 			import cn.vision.system.VSFile;
 			import cn.vision.utils.ArrayUtil;
 			import cn.vision.utils.FileUtil;
+			import cn.vision.utils.MathUtil;
 			import cn.vision.utils.math.BezierUtil;
 			import cn.vision.utils.math.LineUtil;
 			
@@ -50,6 +52,9 @@
 			{
 				var container:UIComponent = new UIComponent;
 				addElementAt(container, 0);
+				
+				
+				//i = (x ^ (x >> 31)) - (x >> 31);
 				
 				/* var st:Point = new Point(100, 100);
 				var ed:Point = new Point(300, 100);
@@ -103,6 +108,11 @@
 				map.width = width;
 				map.height = height;
 				initializeData(map);
+			}
+			
+			private function abs($value:Number):Number
+			{
+				return ($value ^ ($value >> 31)) - ($value >> 31);
 			}
 			
 			private function initializeData(map:EMap3D):void
