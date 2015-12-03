@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vw:_InternalView xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				  xmlns:s ="library://ns.adobe.com/flex/spark" 
+				  xmlns:mx="library://ns.adobe.com/flex/mx"
+				  xmlns:vw="viewer.views.*"
+				  xmlns:em="emap.*">
+	
+	<em:EMapView id="emapView" width="100%" height="100%"
+				 positionClick="emapView_positionClickHandler(event)"/>
+	
+	<fx:Script>
+		<![CDATA[
+			
+			import cn.vision.collections.Map;
+			
+			import emap.core.em;
+			import emap.events.MapEvent;
+			import emap.map3d.core.E3Config;
+			import emap.vos.VOEMap;
+			
+			import viewer.commands.DisplayPositionClickCommand;
+			
+			
+			/**
+			 * 
+			 * 寻路。
+			 * 
+			 */
+			
+			public function find($serial:String, $tween:Boolean = false):void
+			{
+				emapView.find($serial, $tween);
+			}
+			
+			
+			/**
+			 * @private
+			 */
+			private function callbackConfig():Boolean
+			{
+				var result:Boolean = Boolean(emapView);
+				if (result) emapView.config = em::config;
+				return result;
+			}
+			
+			/**
+			 * @private
+			 */
+			private function callbackFloors():Boolean
+			{
+				var result:Boolean = Boolean(emapView);
+				if (result) emapView.floors = em::floors;
+				return result;
+			}
+			
+			/**
+			 * @private
+			 */
+			private function callbackHalls():Boolean
+			{
+				var result:Boolean = Boolean(emapView);
+				if (result) emapView.halls = em::halls;
+				return result;
+			}
+			
+			/**
+			 * @private
+			 */
+			private function callbackPositionTypes():Boolean
+			{
+				var result:Boolean = Boolean(emapView);
+				if (result) emapView.positionTypes = em::positionTypes;
+				return result;
+			}
+			
+			/**
+			 * @private
+			 */
+			private function callbackPositions():Boolean
+			{
+				var result:Boolean = Boolean(emapView);
+				if (result) emapView.positions = em::positions;
+				return result;
+			}
+			
+			/**
+			 * @private
+			 */
+			private function callbackInitializePosition():Boolean
+			{
+				var result:Boolean = Boolean(emapView);
+				if (result) emapView.initializePosition = em::initializePosition;
+				return result;
+			}
+			
+			/**
+			 * @private
+			 */
+			private function callbackNodes():Boolean
+			{
+				var result:Boolean = Boolean(emapView);
+				if (result) emapView.nodes = em::nodes;
+				return result;
+			}
+			
+			/**
+			 * @private
+			 */
+			private function callbackRoutes():Boolean
+			{
+				var result:Boolean = Boolean(emapView);
+				if (result) emapView.routes = em::routes;
+				return result;
+			}
+			
+			/**
+			 * @private
+			 */
+			private function emapView_positionClickHandler(event:MapEvent):void
+			{
+				presenter.execute(new DisplayPositionClickCommand(true, event.serial));
+			}
+			
+			
+			/**
+			 * 
+			 * 初始位置，寻路起点。
+			 * 
+			 */
+			
+			public function get initializePosition():String
+			{
+				return em::initializePosition;
+			}
+			
+			/**
+			 * @private
+			 */
+			public function set initializePosition($value:String):void
+			{
+				em::initializePosition = $value;
+				applyCallback(callbackInitializePosition, false);
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
+			public function set config($value:VOEMap):void
+			{
+				em::config = $value;
+				applyCallback(callbackConfig);
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
+			public function set floors($data:Map):void
+			{
+				em::floors = $data;
+				applyCallback(callbackFloors);
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
+			public function set halls($data:Map):void
+			{
+				em::halls = $data;
+				applyCallback(callbackHalls);
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
+			public function set positions($data:Array):void
+			{
+				em::positions = $data;
+				applyCallback(callbackPositions);
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
+			public function set positionTypes($data:Map):void
+			{
+				em::positionTypes = $data;
+				applyCallback(callbackPositionTypes);
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
+			public function set nodes($data:Map):void
+			{
+				em::nodes = $data;
+				applyCallback(callbackNodes, false);
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
+			public function set routes($data:Map):void
+			{
+				em::routes = $data;
+				applyCallback(callbackRoutes, false);
+			}
+			
+			
+			/**
+			 * @private
+			 */
+			em var initializePosition:String;
+			
+			/**
+			 * @private
+			 */
+			em var font:String;
+			
+			/**
+			 * @private
+			 */
+			em var config:E3Config;
+			
+			/**
+			 * @private
+			 */
+			em var floors:Map;
+			
+			/**
+			 * @private
+			 */
+			em var halls:Map;
+			
+			/**
+			 * @private
+			 */
+			em var positions:Array;
+			
+			/**
+			 * @private
+			 */
+			em var positionTypes:Map;
+			
+			/**
+			 * @private
+			 */
+			em var nodes:Map;
+			
+			/**
+			 * @private
+			 */
+			em var routes:Map;
+			
+		]]>
+	</fx:Script>
+</vw:_InternalView>

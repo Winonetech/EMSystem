@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vw:_InternalView xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				  xmlns:s ="library://ns.adobe.com/flex/spark" 
+				  xmlns:mx="library://ns.adobe.com/flex/mx"
+				  xmlns:vw="viewer.views.*"
+				  horizontalCenter="0" verticalCenter="0">
+	
+	<s:Panel width="300" height="100">
+		<s:HGroup verticalCenter="0" horizontalCenter="0">
+			<s:Button label="设为起点" click="setInitPos_clickHandler(event)"/>
+			<s:Button label="寻路" click="find_clickHandler(event)"/>
+		</s:HGroup>
+	</s:Panel>
+	<s:Button right="5" top="5" width="30" height="20" label="X" click="close_clickHandler(event)"/>
+	
+	<fx:Script>
+		<![CDATA[
+			
+			import viewer.commands.DisplayPositionClickCommand;
+			import viewer.commands.FindPathCommand;
+			import viewer.commands.SetInitializePositionCommand;
+			
+			
+			/**
+			 * @private
+			 */
+			private function setInitPos_clickHandler(event:MouseEvent):void
+			{
+				presenter.execute(new DisplayPositionClickCommand);
+				presenter.execute(new SetInitializePositionCommand(serial));
+			}
+			
+			/**
+			 * @private
+			 */
+			private function find_clickHandler(event:MouseEvent):void
+			{
+				presenter.execute(new DisplayPositionClickCommand);
+				presenter.execute(new FindPathCommand(serial));
+			}
+			
+			/**
+			 * @private
+			 */
+			private function close_clickHandler(event:MouseEvent):void
+			{
+				presenter.execute(new DisplayPositionClickCommand);
+			}
+			
+			
+			/**
+			 * 
+			 * 序列号。
+			 * 
+			 */
+			
+			public var serial:String;
+			
+		]]>
+	</fx:Script>
+</vw:_InternalView>
