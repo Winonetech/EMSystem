@@ -2,67 +2,211 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:vos="emap.map2d.vos.*" width="400" height="300">
-	
+	<fx:Declarations>
+		<s:RadioButtonGroup id="imageVisible" selectedValue="false" change="imageVisible_changeHandler(event)" />
+	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import editor.command.DataStoreCommand;
+			import editor.core.E2Presenter;
+			import editor.core.EDConfig;
+			import editor.managers.ImageManager;
+			
+			import emap.consts.StepStyleConsts;
 			import emap.core.em;
+			import emap.map2d.Ground;
 			import emap.map2d.core.E2Config;
 			import emap.map2d.vos.E2VOFloor;
+			
+			import flash.filesystem.File;
 			
 			import mx.events.ColorPickerEvent;
 			protected function submit_clickHandler(event:MouseEvent):void
 			{
 				if(_floor){
-					E2Config.instance.utilLayer.clear();
+					EDConfig.instance.e2Config.utilLayer.clear();
 					_floor.color = c.selectedColor;
 					_floor.label = t.text;
-					E2Config.instance.groundViewMap[floor.id].update();
+					
+					EDConfig.instance.e2Config.groundViewMap[_floor.id].update();
+					if(EDConfig.instance.e2Config.floorViewMap[_floor.id])
+						EDConfig.instance.e2Config.floorViewMap[_floor.id].childVisible = true;
+					EDConfig.instance.e2Config.groundViewMap[_floor.id].editSteps = false;
+				
 				}
-			}
 			
+			}
+		
 			protected function editor_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
-				if(_floor)
-					E2Config.instance.utilLayer.ground = E2Config.instance.groundViewMap[_floor.id];
+				
+				if(_floor && EDConfig.instance.e2Config.floorViewMap[_floor.id])
+				{
+					EDConfig.instance.e2Config.utilLayer.ground = EDConfig.instance.e2Config.groundViewMap[_floor.id];
+					EDConfig.instance.e2Config.floorViewMap[_floor.id].childVisible = false;
+					setEmpty.enabled = true;
+				}
 				
 			}
 			
 			protected function c_changeHandler(event:ColorPickerEvent):void
 			{
 				if(_floor != null){
-					// TODO Auto-generated method stub
 					_floor.color = c.selectedColor;
-					E2Config.instance.groundViewMap[_floor.id].update();
+					EDConfig.instance.e2Config.groundViewMap[_floor.id].update();
 				}
 			}
 			public function set floor($value:E2VOFloor):void
 			{
 				_floor = $value;
 			}
-			public function get floor():E2VOFloor
+			public function get floor():E2VOFloor 
 			{
 				return _floor;
 			}
 			[Bindable]
 			private var _floor:E2VOFloor;
+			
+			protected function empty_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				//new Ground().em::layout.steps.length\
+				if(_floor != null){
+					EDConfig.instance.e2Config.groundViewMap[_floor.id].em::layout.steps.length = 0;
+					EDConfig.instance.e2Config.groundViewMap[_floor.id].update();
+					EDConfig.instance.e2Config.utilLayer.clear();
+					EDConfig.instance.e2Config.setEditor = true;
+					EDConfig.instance.e2Config.groundViewMap[_floor.id].editSteps = true;
+					EDConfig.instance.e2Config.editorStyle = StepStyleConsts.MOVE_TO;
+				}
+			}
+			
+			protected function imageVisible_changeHandler(event:Event):void
+			{
+				if(_floor)
+				{
+
+					if(event.target.selected)
+					{
+						EDConfig.instance.e2Config.floorViewMap[_floor.id].imageVisible = true;	
+						
+					}
+					else
+					{
+						EDConfig.instance.e2Config.floorViewMap[_floor.id].imageVisible = false;	
+					}
+				}
+			}
+			protected function imageChangeClickHandle(event:Event):void
+			{
+				if(_floor)
+				{
+					var file:File = new File;
+					var fileFilter:FileFilter = new FileFilter("png,jpg","*.jpg;*.png");
+					file.addEventListener(Event.SELECT,changeImage);
+					file.browseForOpen("请选择楼层图片",[fileFilter]);
+				}
+			}
+			protected function changeImage(event:Event):void
+			{
+				ImageManager.removeImage(_floor.image);
+				var str:String = ImageManager.registImage(event.target.url,"cache/image");
+				_floor.image = str;
+				EDConfig.instance.e2Config.floorViewMap[_floor.id].changeImage();
+			}
+			
+			protected function positionVisible_changeHandler(event:Event):void
+			{
+				if(_floor)
+				{
+					
+					if(event.target.selected)
+					{
+						EDConfig.instance.e2Config.floorViewMap[_floor.id].positionVisible = true;	
+						
+					}
+					else
+					{
+						EDConfig.instance.e2Config.floorViewMap[_floor.id].positionVisible = false;	
+					}
+				}
+			}
+			
+			protected function routeVisible_changeHandler(event:Event):void
+			{
+				if(_floor)
+				{
+					
+					if(event.target.selected)
+					{
+						EDConfig.instance.e2Config.floorViewMap[_floor.id].routeVisible = true;	
+						
+					}
+					else
+					{
+						EDConfig.instance.e2Config.floorViewMap[_floor.id].routeVisible = false;	
+					}
+				}
+			}
+			
+			protected function nodeVisible_changeHandler(event:Event):void
+			{
+				if(_floor)
+				{
+					
+					if(event.target.selected)
+					{
+						EDConfig.instance.e2Config.floorViewMap[_floor.id].nodeVisible = true;	
+						
+					}
+					else
+					{
+						EDConfig.instance.e2Config.floorViewMap[_floor.id].nodeVisible = false;	
+					}
+				}
+			}
+			
 		]]>
 	</fx:Script>
 	
 	
 		
 	
-	<s:Label x="79" y="5" text="楼层"/>
+	<s:Label x="12" y="5" text="楼层"/>
 	
-	<s:Label  x="23" y="81" text="颜色："/>
-	<mx:ColorPicker id="c" x="67" y="76" width="26" selectedColor="{_floor.color}" change="c_changeHandler(event)"/>
-	<s:Label  x="23" y="50" text="名称："/>
-	<s:TextInput id="t" x="67" y="46" text="{_floor.label}"/>
-	<s:Button x="23" y="167" label="编辑" click="editor_clickHandler(event)"/>
-	<s:Button x="117" y="168" label="保存" click="submit_clickHandler(event)"/>
-	<s:Label x="23" y="111" text="顺序："/>
-	<s:TextInput x="67" y="106" text="{_floor.order}"/>
+	<s:Label  x="20" y="69" text="颜色："/>
+	<mx:ColorPicker id="c" x="91" y="65" width="26" selectedColor="{_floor.color}" change="c_changeHandler(event)"/>
+	<s:Label  x="20" y="42" text="名称："/>
+	<s:TextInput id="t" x="91" y="36" text="{_floor.label}"/>
+	<s:Button x="20" y="261"  label="编辑" click="editor_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
+	<s:Button id="setEmpty" x="81" y="261"  label="重绘" click="empty_clickHandler(event)" enabled="false" skinClass="editor.skin.PropertyButtonSkin"/>
+	<s:Button x="138" y="260"  label="保存" click="submit_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
+	<s:Label x="20" y="93" text="顺序："/>
+	<s:Label x="20" y="126" text="图片："/>
+	<s:TextInput x="90" y="93" text="{_floor.order}"/>
 	
-	<s:Button x="138" y="133" width="57" label="图片"/>
-	<s:TextInput x="23" y="132" width="107" text="{_floor.image}"/>
+	<s:Button x="204" y="123"  label="浏览" click="imageChangeClickHandle(event)" skinClass="editor.skin.PropertyButtonSkin"/>
+	<s:TextInput x="89" y="122" width="107"  text="{_floor.image}" editable="false"/>
+	<s:Label x="20" y="155" text="背景图："/>
+	<s:CheckBox x="90" y="151" label="可见" selected="true" change="imageVisible_changeHandler(event)"  />
+	<s:Label x="20" y="180" text="位置层："/>
+	<s:CheckBox x="90" y="176" label="可见"  selected="true" change="positionVisible_changeHandler(event)"/>
+	<s:Label x="20" y="204" text="路径层："/>
+	<s:CheckBox x="90" y="200" label="可见"  selected="true" change="routeVisible_changeHandler(event)"/>
+	<s:Label x="20" y="231" text="节点层："/>
+	<s:CheckBox x="89" y="227" label="可见" selected="true" change="nodeVisible_changeHandler(event)"/>
+	<mx:HRule x="0" y="32" width="100%"/>
+	<mx:HRule x="0" y="61" width="100%"/>
+	<mx:HRule x="0" y="89" width="100%"/>
+	<mx:HRule x="0" y="118" width="100%"/>
+	<mx:HRule x="0" y="147" width="100%"/>
+	<mx:HRule x="0" y="173" width="100%"/>
+	<mx:HRule x="0" y="198" width="100%"/>
+	<mx:HRule x="0" y="221" width="100%"/>
+	<mx:HRule x="0" y="246" width="100%"/>
+	<mx:VRule x="78" y="34" width="3" height="214"/>
+	
+	
+	
+	
 </s:Group>

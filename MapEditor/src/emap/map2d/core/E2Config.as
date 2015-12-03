@@ -2,10 +2,13 @@ package emap.map2d.core
 {
 	import cn.vision.collections.Map;
 	
+	import editor.consts.ToolStateStyleConsts;
+	
 	import emap.core.EMConfig;
+	import emap.map2d.EMap2D;
 	import emap.map2d.UtilLayer;
 	
-	
+	[Bindable]
 	public final class E2Config extends EMConfig
 	{
 		
@@ -91,13 +94,27 @@ package emap.map2d.core
 		{
 			setProperty("thickHollow", $value);
 		}
-		public static const instance:E2Config = new E2Config;
+		public function set eMap($value:EMap2D):void
+		{
+			_eMap = $value;
+			utilLayer.clickEffect();
+		}
+		public function get eMap():EMap2D
+		{
+			return _eMap;
+		}
+		private var _eMap:EMap2D;
+		public var serialViewMap:Map = new Map;
+		public var INodeNameMap:Map = new Map;
 		public var floorViewMap:Map = new Map;
 		public var groundViewMap:Map = new Map;
 		public var nodeViewMap:Map = new Map;
 		public var routeViewMap:Map = new Map;
-		public var positionMap:Map = new Map;
-		public var utilLayer:UtilLayer = new UtilLayer;
-		
+		public var positionViewMap:Map = new Map;
+		public var utilLayer:UtilLayer;
+		public var subNode:Boolean = false;
+		public var setEditor:Boolean = false;
+		public var editorStyle:String;
+		public var toolStyle:String = ToolStateStyleConsts.NO_STATE;
 	}
 }

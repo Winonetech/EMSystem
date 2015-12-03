@@ -13,14 +13,15 @@ package emap.map2d
 	import alternativa.engine3d.primitives.Plane;
 	import alternativa.engine3d.resources.BitmapTextureResource;
 	
-	import emap.map2d.core.E2Config;
+	import editor.core.EDConfig;
 	
+	import emap.consts.StepStyleConsts;
 	import emap.core.em;
 	import emap.data.Layout;
 	import emap.data.Step;
 	import emap.interfaces.IGround;
+	import emap.map2d.core.E2Config;
 	import emap.map2d.core.E2Provider;
-
 	import emap.map2d.vos.E2VOPosition;
 	import emap.map3d.utils.Map3DUtil;
 	import emap.utils.StepUtil;
@@ -29,7 +30,10 @@ package emap.map2d
 	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
+	
+	import mx.core.mx_internal;
 	
 	
 	public final class Ground extends Sprite implements IGround
@@ -41,11 +45,11 @@ package emap.map2d
 		 * 
 		 */
 		
-		public function Ground($data:VOFloor = null)
+		public function Ground(e2Config:E2Config,$data:VOFloor = null)
 		{
 			super();
 			
-			initialize($data);
+			initialize(e2Config,$data);
 		}
 		
 		
@@ -72,22 +76,16 @@ package emap.map2d
 			
 			graphics.endFill();
 			
-			
-			
-			//addChild(plane = Map3DUtil.getPlaneByShape(shape, em::layout));
-			
-			
-			
 		}
 		
 		
 		/**
 		 * @private
 		 */
-		private function initialize($data:VOFloor):void
+		private function initialize(e2Config:E2Config,$data:VOFloor):void
 		{
 			this.mouseEnabled = this.mouseChildren = false;
-			
+			config = e2Config;
 			data = $data;
 		}
 		
@@ -117,20 +115,8 @@ package emap.map2d
 				
 				graphics.clear();
 				graphics.beginFill(em::color);
-				
-				//StepUtil.drawSteps(graphics, em::layout.steps, true);
-//				pointArr = new Array;
-//				addChild(pointLayer = new Sprite);
-//				for each (var step:Step in em::layout.steps)
-//				{
-//					var drawStep:DrawStep = new DrawStep(step);
-//					
-//					pointArr.push(drawStep);
-//					pointLayer.addChild(drawStep);
-//				}
+
 				StepUtil.drawSteps(graphics, em::layout.steps);
-				
-			//	addPositionByFloor(data);
 			}
 		}
 		protected function addPositionByFloor($value:VOFloor):void
@@ -156,8 +142,119 @@ package emap.map2d
 			graphics.beginFill(em::color);
 			StepUtil.drawSteps(graphics, em::layout.steps);
 		}
+		//楼层图形进入编辑模式:1.新增楼层  2.清空的情况下
+		public function set editSteps($value:Boolean):void
+		{
+			if ($value)
+			{
+				while(numChildren) removeChildAt(0);
+				this.mouseEnabled = this.mouseChildren =true;
+				//进入编辑模式
+				editorLayer = new Sprite;
+				editorLayer.graphics.beginFill(0x00BFFF,0.2);
+				editorLayer.graphics.drawRect(0,0,5000,5000);
+				editorLayer.graphics.endFill();
+				addChild(editorLayer);
+				
+				editorLayer.addEventListener(MouseEvent.MOUSE_DOWN,mouseDown_Handler);
+				points = new Vector.<DrawStep>;
+				//创建矩形
+				
+				//针对背景添加鼠标监听
+			}else
+			{
+				if(editorLayer && this.contains(editorLayer))
+				{
+					editorLayer.removeEventListener(MouseEvent.MOUSE_DOWN,mouseDown_Handler);
+					removeChild(editorLayer);
+					
+				}
+				EDConfig.instance.e2Config.utilLayer.clear();
+				
+				
+//				if(EDConfig.instance.selectedFloor)
+//				{
+//					EDConfig.instance.e2Config.floorViewMap[EDConfig.instance.selectedFloor.id].childVisible = true;
+//					EDConfig.instance.e2Config.groundViewMap[EDConfig.instance.selectedFloor.id].editSteps = false;
+//				}
+				
+				update();
+				EDConfig.instance.e2Config.setEditor = false;
+			}
+			
+		}
+		protected function mouseDown_Handler(event:MouseEvent):void
+		{	
+			//在编辑状态的情况下 如果点击的是点 就使点可以移动  如果是空白那么就新产生点
+			if(event.target is AimPoint )
+			{
+				d = event.target.parent as DrawStep;
+				editorLayer.addEventListener(MouseEvent.MOUSE_MOVE,mouseMove_Handler);
+				editorLayer.addEventListener(MouseEvent.MOUSE_UP,mouseUp_Handler)
+			}
+			else
+			{
+				if(config.editorStyle== StepStyleConsts.MOVE_TO||(em::layout.steps.length==0))
+				{
+				
+					var firtStep:Step = new Step;
+					var lastStep:Step = new Step;
+					firtStep.style = config.editorStyle;
+					config.editorStyle = StepStyleConsts.LINE_TO;
+					lastStep.style = config.editorStyle;
+					lastStep.aim.x=firtStep.aim.x = parent.mouseX;
+					lastStep.aim.y=firtStep.aim.y = parent.mouseY;
+					em::layout.steps.push(firtStep);
+					em::layout.steps.push(lastStep);
+				}
+				else if(config.editorStyle== StepStyleConsts.LINE_TO)
+				{
+					var lStep:Step = new Step;
+					lStep.style = config.editorStyle;
+					lStep.aim.x = parent.mouseX;
+					lStep.aim.y = parent.mouseY;
+					em::layout.steps.splice(em::layout.steps.length-1,0,lStep)
+				}
+				else if(config.editorStyle== StepStyleConsts.CURVE_TO)
+				{
+					if(em::layout.steps.length>0)
+					{
+						var cStep:Step = new Step;
+						cStep.style = config.editorStyle;
+						cStep.aim.x = parent.mouseX;
+						cStep.aim.y = parent.mouseY;
+						var steps:Vector.<Step> = em::layout.steps;
+						
+							var sStep:Step = steps[steps.length-2];
+							cStep.ctr.x = (cStep.aim.x+sStep.aim.x)/2;
+							cStep.ctr.y = (cStep.aim.y+sStep.aim.y)/2;
+						em::layout.steps.splice(em::layout.steps.length-1,0,cStep)
+					}
+				}
+
+				config.utilLayer.ground =this;
+			
+				
+				update();
+			}
+		}
+		protected function mouseUp_Handler(event:MouseEvent):void
+		{
+			editorLayer.removeEventListener(MouseEvent.MOUSE_MOVE,mouseMove_Handler);
+			editorLayer.removeEventListener(MouseEvent.MOUSE_UP,mouseUp_Handler);
+			
+		}
 		
-		
+		protected function mouseMove_Handler(event:MouseEvent):void
+		{
+			
+			if(d)
+			{
+				event.stopImmediatePropagation();
+				d.update(this.mouseX, this.mouseY,event.target);
+				update();
+			}
+		}
 		/**
 		 * 
 		 * 颜色
@@ -189,13 +286,10 @@ package emap.map2d
 		{
 			if(value==scale) return;
 			__scale = value;
-			
-			//	floorLayer.scale = scale;
-			
-			//			for each (var place:Place in placesArr) {
-			//				place.scale = scale;
-			//			}
-			
+			for each(var drawStep:DrawStep in points)
+			{
+				drawStep.scale = value;
+			}
 			
 		}
 	
@@ -235,6 +329,8 @@ package emap.map2d
 		 * @private
 		 */
 		em var data:VOFloor;
-		
+		private var editorLayer:Sprite;
+		private var d:DrawStep;
+		private var config:E2Config;
 	}
 }

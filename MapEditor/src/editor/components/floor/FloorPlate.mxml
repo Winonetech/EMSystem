@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx"  xmlns:vos="emap.map2d.vos.*"  width="100%" height="30" mouseChildren="false"    >
+		 xmlns:mx="library://ns.adobe.com/flex/mx"  xmlns:vos="emap.map2d.vos.*"  width="60%" height="44" mouseChildren="false" borderVisible="false" backgroundImage="@Embed('images/Item.png')"   >
 	<fx:Declarations>
 		<vos:E2VOFloor id="floor"/>
 			
@@ -27,6 +27,6 @@
 			public var selected:Boolean;
 		]]>
 	</fx:Script>
-	<s:CheckBox x="19" y="4" label="{floor.label}" selected="{selected}"/>
+	<s:CheckBox x="32" y="10" label="{floor.label}" selected="{selected }"/>
 </s:BorderContainer>
 

@@ -55,6 +55,10 @@ package emap.map2d.vos
 		{
 			setProperty("label",$value);
 		}
+		public function set serial($value:String):void
+		{
+			setProperty("serial",$value);
+		}
 		public function get label():String
 		{
 			return getProperty("label");

@@ -35,7 +35,7 @@ package emap.vos
 		 * 
 		 */
 		
-		public function get direction():int
+		public function get direction():int 
 		{
 			return getProperty("direction", int);
 		}

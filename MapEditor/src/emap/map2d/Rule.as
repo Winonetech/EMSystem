@@ -53,9 +53,9 @@ package emap.map2d
 				clear();
 				beginFill(0xFFFFFF);
 				if (__direction=="horizontal") {
-					drawRect(-15, -15, 5015, 15);
+					drawRect(-20, -20, 5015, 20);
 				} else {
-					drawRect(-15, -15, 15, 5015);
+					drawRect(-20, -20, 20, 5015);
 				}
 				endFill();
 			}
@@ -71,7 +71,7 @@ package emap.map2d
 					for (i=0;i<MapContainer.MAX_W;i+=(d*.2)) {  
 						moveTo(i, (i%d==0)?-10:-5); 
 						lineTo(i, 0);
-					}
+					}  
 				} else {
 					for (i=0;i<MapContainer.MAX_H;i+=(d*.2)) {
 						moveTo((i%d==0)?-10:-5, i);
@@ -89,7 +89,7 @@ package emap.map2d
 					sprite.addChild(temp = new TextField);
 					temp.autoSize = "left";
 					temp.selectable = false;
-					temp.text = String(i*.1);
+					temp.text = String(i*.1*10);
 					temp.setTextFormat(F);
 					temp.x = i;
 					temp.y = -20;
@@ -100,9 +100,9 @@ package emap.map2d
 					sprite.addChild(temp = new TextField);
 					temp.autoSize = "left";
 					temp.selectable = false;
-					temp.text = String(i*.1);
+					temp.text = String(i*.1*10);
 					temp.setTextFormat(F);
-					temp.x = -17;
+					temp.x = -22;
 					temp.y = i;
 					temp.cacheAsBitmap = true;
 				}

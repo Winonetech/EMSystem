@@ -23,7 +23,7 @@ package emap.vos
 	[Bindable]
 	public class VOPosition extends VO implements ILayout, INode
 	{
-		
+		 
 		/**
 		 * 
 		 * 构造函数

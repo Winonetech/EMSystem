@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300">
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300" backgroundColor="0xdce1e8" borderVisible="false">
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
-	<s:ComboBox id="cb" x="5" y="10" width="96" dataProvider="{collection}" change="cb_changeHandler(event)"/>
-	<s:Button x="121" y="11" label="+" click="addPosition_clickHandler(event)"/>
-	<s:Button x="210" y="11" label="-" click="subPosition_clickHandler(event)"/>
+	
+	<s:ComboBox id="cb" x="38" y="17" width="96" height="28" change="cb_changeHandler(event)"
+				dataProvider="{collection}" labelField="label"
+				selectedItem="{EDConfig.instance.selectedFloor}"/>
+	<s:Button x="166" y="11"  click="addPosition_clickHandler(event)" skinClass="editor.skin.AddButtonSkin"/>
+	<s:Button x="228" y="11" click="subPosition_clickHandler(event)" skinClass="editor.skin.DeleteButtonSkin"/>
 	<fx:Script>
 		<![CDATA[
+			import editor.command.AddPositionCommand;
+			import editor.command.SubPositionCommand;
+			import editor.core.E2Presenter;
 			import editor.core.EDConfig;
 			
 			import emap.map2d.Floor;
@@ -18,44 +24,60 @@
 			import emap.map2d.vos.E2VOPosition;
 			
 			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
 			
 			import spark.events.IndexChangeEvent;
 			public function set dataProvider($value:Object):void
 			{
 				collection = new ArrayCollection($value as Array);
-				
+				trace("length",collection.length);
 				
 			}
 			[Bindable]
 			private var collection:ArrayCollection;
 			
 			private var voFloor:E2VOFloor;
-
+			
 			protected function cb_changeHandler(event:IndexChangeEvent):void
 			{
-				trace(cb.selectedItem.label);
+			//	trace(cb.selectedItem.label);
 				// TODO Auto-generated method stub
 				voFloor = cb.selectedItem as E2VOFloor;
+				EDConfig.instance.selectedFloor = voFloor;
 				EDConfig.instance.positionGroup.addPositionByFloor(voFloor);
-				for each(var f:Floor in E2Config.instance.floorMap)
-				{
-					f.visible = false;
-				}
-				E2Config.instance.floorViewMap[voFloor.id].visible = true;
+				EDConfig.instance.e2Config.eMap.viewFloor(voFloor.id);
+				EDConfig.instance.propertyPanel.setCurrentState("position",true);
 			}
 			
 			protected function addPosition_clickHandler(event:MouseEvent):void
 			{
 				// TODO Auto-generated method stub
-				
+				E2Presenter.instance.execute(new AddPositionCommand);
 			}
 			
 			protected function subPosition_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
+				if(EDConfig.instance.selectedPosition )
+				{
+					var alert:Alert = Alert.show("是否删除该位置?","确认删除",Alert.YES|Alert.NO,null,deletePosition);
 				
+				}
+			}
+			
+				
+			
+			private function deletePosition(event:CloseEvent):void
+			{
+				if(Alert.YES == event.detail)
+				{
+					E2Presenter.instance.execute(new SubPositionCommand);
+				}else
+				{
+					return
+				}
 			}
 		
 		]]>
 	</fx:Script>
-</s:Group>
+</s:BorderContainer>

@@ -162,13 +162,13 @@
 		<id>7</id>
 		<color>0x0000FF</color>
 		<coordinate>m|300-100,l|500-100,l|500-300,l|300-300,l|300-100,m|350-150,l|450-150,l|450-250,l|350-250,l|350-150</coordinate>
-		<icon></icon>
+		<icon>r.jpg</icon>
 		<iconOffsetX></iconOffsetX>
 		<iconOffsetY></iconOffsetY>
 		<iconRotation></iconRotation>
 		<iconScale></iconScale>
 		<iconSuspend></iconSuspend>
-		<iconVisible></iconVisible>
+		<iconVisible>true</iconVisible>
 		<label>位置2</label>
 		<labelColor>0xFFFFFF</labelColor>
 		<labelOffsetX></labelOffsetX>

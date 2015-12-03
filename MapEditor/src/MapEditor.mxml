@@ -7,98 +7,107 @@
 		 xmlns:node="editor.components.node.*"
 		 xmlns:route="editor.components.route.*"
 		 xmlns:components="editor.components.*"
-		 creationComplete="init()" width="100%" height="100%">
+		 creationComplete="init()"  xmlns:positionType="editor.components.positionType.*" resize="group1_resizeHandler(event)" fontSize="12" fontWeight="bold" fontFamily="微软雅黑">
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
-	<s:HGroup width="100%" height="100%">
-		
-		
-		
-		
-		<s:BorderContainer x="0" y="0" width="290" height="100%" borderVisible="true">
-			
-			
-			<s:TabBar id="tabs" x="0" y="0" chromeColor="#9CABB1" cornerRadius="4" dataProvider="{vs}"
-					  focusAlpha="0.5" focusColor="#70B2EE" width="100%" />   
-			
-			<mx:ViewStack id="vs" y="23" left="0" width="100%" height="100%" chromeColor="#F4F6F7" borderVisible="true" creationPolicy="all">  
-				<s:NavigatorContent label="楼层"  
-									width="100%" height="100%"  id= "vf"> 
-					<s:VGroup  width="100%" height="100%">
-						<floor:Toolone x="0" y="0" height="66">
-						</floor:Toolone>
-						<floor:FloorGroup id="floorGroup" width="100%" height="100%">
-						</floor:FloorGroup>
-						
-					</s:VGroup>
-				</s:NavigatorContent>
-				<s:NavigatorContent label="位置"  
-									width="100%" height="100%" id="vp" >  
-					<s:VGroup  width="100%" height="100%">
-						<position:ToolTwo id="positionTool" width="100%" height="50">
-						</position:ToolTwo>
-						<position:PositionGroup id="pg" width="100%" height="100%">
-						</position:PositionGroup>
-						
-						<!--	<position2:ToolTwo id="positionTool" width="100%" height="50">
-						</position2:ToolTwo>
-						
-						
-						<position2:PositionGroup  id="pg" width="100%" height="100%">
-						</position2:PositionGroup>-->
-						
-					</s:VGroup>
-					
-					
-				</s:NavigatorContent>
+	
+	
+	
+	<s:HGroup x="350" width="100%" height="100%" gap="0">
+				<s:VGroup width="100%" height="100%" gap="0">
+				<components:LineTool height="45" width="100%">	</components:LineTool>
 				
-				<s:NavigatorContent label="节点"  
-									width="100%" height="100%"  id="vn">  
-					
-					
-					<s:VGroup  width="100%" height="100%">
-						<node:ToolThree id="nodeTool" width="100%">
-						</node:ToolThree>
-						<node:NodeGroup id="ng" width="100%" height="100%">
-						</node:NodeGroup>
-						
-					</s:VGroup>
-					
-				</s:NavigatorContent>
-				<s:NavigatorContent label="路径"  
-									width="100%" height="100%" id = "vr">  
-					<s:VGroup  width="100%" height="100%">
-						<floor:Toolone width="100%" height="59">
-						</floor:Toolone>
-						<route:RouteGroup id="rg" width="100%" height="100%">
-						</route:RouteGroup>
-						
-						<!--<floor:Toolone  width="100%" height="59">
-						</floor:Toolone>
-						<route:RouteGroup id="rg" width="100%" height="100%">
-						</route:RouteGroup>-->
-					</s:VGroup>	
-				</s:NavigatorContent>
-			</mx:ViewStack>
+					<mx:UIComponent id="container"  width="100%" height="100%" />
 			
-		</s:BorderContainer>
+				<s:Panel  title="Debugger" width="100%" height="20%" skinClass="editor.skin.PanelSkin">
+					<s:Rect  left="1" top="1" right="1" bottom="1">
+						 <s:fill>
+							 <s:LinearGradient rotation="90">  
+								 <s:GradientEntry alpha=".75" color="0xdce1e8" ratio="0" />  
+								 <s:GradientEntry alpha=".75" color="0xd8dee5" ratio="1" />  
+							 </s:LinearGradient>  
+						 </s:fill>
+					 </s:Rect>
+				</s:Panel>
+			</s:VGroup>
 		
-		<s:VGroup width="90%" height="100%">
-			
-			<mx:UIComponent id="container"  width="100%" height="100%"/>
-			<components:Debugger width="100%" height="150">
-			</components:Debugger>
-			
-			
-		</s:VGroup>
-		<!--<components2:PropertyPanel id="property" x="781" y="0" width="249" height="100%">
-		</components2:PropertyPanel>-->
-		<components:PropertyPanel id="property" x="781" y="0" width="249" height="100%">
+		<components:PropertyPanel id="property" x="781" y="0" width="267" height="100%">
 		</components:PropertyPanel>
 	</s:HGroup>
 	
-	
+	<s:Group id="bc" x="0" y="0" width="350" height="100%"  >
+		
+		
+		<s:TabBar id="tabs" x="0" y="0" width="100%" height="37.5" chromeColor="#b3b0b0" cornerRadius="4"
+				  dataProvider="{vs}" focusAlpha="0.5" focusColor="#70B2EE"
+				  skinClass="editor.skin.TabBarSkin" />   
+		
+		<mx:ViewStack id="vs" y="37.5" left="0" width="100%" height="100%" chromeColor="#F4F6F7" borderVisible="true" creationPolicy="all">  
+			<s:NavigatorContent label="  楼层"  
+								width="100%" height="100%"  id= "vf" textAlign="center"> 
+				<s:VGroup  width="100%" height="100%" gap="0">
+					<floor:Toolone x="0" y="0" height="50" width="100%">
+					</floor:Toolone>
+					<floor:FloorGroup id="floorGroup" width="100%" height="100%">
+					</floor:FloorGroup>
+				</s:VGroup>
+			</s:NavigatorContent>
+			<s:NavigatorContent label="  位置"  
+								width="100%" height="100%" id="vp" >  
+				<s:VGroup  width="100%" height="100%">
+					<position:ToolTwo id="positionTool" width="100%" height="50">
+					</position:ToolTwo>
+					<position:PositionGroup id="pg" width="100%" height="100%">
+					</position:PositionGroup>
+				
+				</s:VGroup>
+				
+				
+			</s:NavigatorContent>
+			
+			<s:NavigatorContent label="  节点"  
+								width="100%" height="100%"  id="vn">  
+				
+				
+				<s:VGroup  width="100%" height="100%">
+					<node:ToolThree id="nodeTool" width="100%" height="50">
+					</node:ToolThree>
+					<node:NodeGroup id="ng" width="100%" height="100%">
+					</node:NodeGroup>
+				</s:VGroup>
+				
+			</s:NavigatorContent>
+			<s:NavigatorContent label="  路径"  
+								width="100%" height="100%" id = "vr">  
+				<s:VGroup  width="100%" height="100%">
+					<route:ToolFour id="routeTool" width="100%" height="50">
+					</route:ToolFour>
+					
+					<route:RouteGroup id="rg" width="100%" height="100%">
+					</route:RouteGroup>
+					
+					<!--<floor:Toolone  width="100%" height="59">
+					</floor:Toolone>
+					<route:RouteGroup id="rg" width="100%" height="100%">
+					</route:RouteGroup>-->
+				</s:VGroup>	
+			</s:NavigatorContent>
+			<s:NavigatorContent label="位置类别"  width="500"  >  
+				<s:VGroup width="100%" height="100%">
+					<positionType:ToolFive id="positionTypeTool" width="100%" height="50">
+					</positionType:ToolFive>
+					
+					<positionType:PositionTypeGroup id="ptg" width="100%" height="100%">
+						
+					</positionType:PositionTypeGroup>
+				</s:VGroup>
+				
+				
+			</s:NavigatorContent>
+		</mx:ViewStack>
+		
+	</s:Group>
 	
 	
 	<fx:Script>
@@ -109,16 +118,18 @@
 			import editor.command.InitDataCommand;
 			import editor.components.position.ToolTwo;
 			import editor.core.E2Presenter;
+			import editor.core.EDConfig;
 			
 			import emap.core.em;
 			import emap.map2d.EMap2D;
 			import emap.map2d.MapContainer;
+			import emap.map2d.core.E2Config;
 			import emap.map2d.core.E2Provider;
-		
 			import emap.vos.VOFloor;
 			import emap.vos.VOPosition;
 			
 			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
 			import mx.preloaders.Preloader;
 			
 			protected function checkbox_clickHandler(event:MouseEvent):void
@@ -127,47 +138,46 @@
 				property.setCurrentState("node",true);
 			}  
 			
-			protected function checkbox1_clickHandler(event:MouseEvent):void
-			{
-				// TODO Auto-generated method stub
-				
-			}
 			
-			//			protected function init(event:FlexEvent):void
-			//			{
-			//				MEConfig.instance.propertyPanel = property;
-			//				MEConfig.instance.floorGroup = floorGroup;
-			//				trace(MEConfig.instance.floorGroup==null)
-			//				MEConfig.instance.nodeNC = vn;
-			//				MEConfig.instance.positionNC = vp;
-			//				MEConfig.instance.routeNC = vr;
-			//				MEConfig.instance.positionGroup = pg;
-			//				MEConfig.instance.nodeGroup = ng;
-			//				MEConfig.instance.routeGroup = rg;
-			//				map = new MapContainer;
-			//				new InitDataCommand().execute();
-			//				var temp:EMap2D = new EMap2D;
-			//				temp.y = 20;
-			//				temp.x = 20;
-			//				temp.width = container.width;
-			//				temp.height = container.height;
-			//				container.addChild(temp);
-			//				
-			//				//	trace(E2Provider.instance.floorArr);
-			//				positionTool.dataProvider = E2Provider.instance.floorArr;
-			//				nodeTool.dataProvider = E2Provider.instance.floorArr;			//emap2d.map = mapcontainer
-			//			}
+			
+			
 			
 			
 			private function init():void
 			{
 				E2Presenter.instance.start(this);
+				//地图适配
+				var handlerEnterFrame:Function = function($e:Event):void
+				{
+					if(EDConfig.instance.e2Config&&EDConfig.instance.e2Config.eMap)
+					{
+						if (EDConfig.instance.e2Config.eMap.width != container.width ||
+							EDConfig.instance.e2Config.eMap.height != container.height)
+						{
+							
+							EDConfig.instance.e2Config.eMap.width = container.width+50;
+							EDConfig.instance.e2Config.eMap.height = container.height+50;
+						}
+						
+					}
+				};
+				addEventListener(Event.ENTER_FRAME, handlerEnterFrame);
 			}
 			
 			
 			
 			private var map:MapContainer;
 			
+			
+			protected function group1_resizeHandler(event:ResizeEvent):void
+			{
+				if(EDConfig.instance.e2Config&&EDConfig.instance.e2Config.eMap)
+				{
+					EDConfig.instance.e2Config.eMap.width = container.width;
+					EDConfig.instance.e2Config.eMap.height = container.height;
+					
+				}
+			}
 			
 		]]>
 	</fx:Script>

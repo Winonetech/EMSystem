@@ -28,7 +28,7 @@ package emap.map2d.vos
 		{
 			setProperty("color", $value);
 		}
-		
+		 
 		
 		/**
 		 * 

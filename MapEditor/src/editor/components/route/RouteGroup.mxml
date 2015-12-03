@@ -1,29 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:Scroller xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx"  click="vgroup1_clickHandler(event)">
+		 xmlns:mx="library://ns.adobe.com/flex/mx"  >
+	<s:VGroup id="group" width="100%" height="100%" click="vgroup1_clickHandler(event)" gap ="20" horizontalAlign="center">
+		
+	</s:VGroup>
+	
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import cn.vision.collections.Map;
+			
 			import editor.core.EDConfig;
 			
-		
+			import emap.map2d.core.E2Config;
+			import emap.map2d.core.E2Provider;
+			import emap.map2d.vos.E2VOFloor;
 			import emap.map2d.vos.E2VORoute;
-			
+			private var lastPlate:RoutePlate;
+			public function addAllRoute(map:Map):void
+			{
+				 group.removeAllElements();
+				 for each(var voRoute:E2VORoute in map)
+				 {
+					addRoute(voRoute);
+				 }
+			}
+			public function addRouteByFloorId($value:String):void
+			{
+				group.removeAllElements();
+				for each(var r:E2VORoute in E2Provider.instance.routeMap)
+				{
+					if(!r.cross && r.node1.floorID == $value)
+					{
+						addRoute(r);
+					}
+				}
+			}
+			public function addRouteDifferentFloor():void
+			{
+				group.removeAllElements();
+				for each(var r:E2VORoute in E2Provider.instance.routeMap)
+				{
+					if(r.cross)
+					{
+						addRoute(r);
+					}
+				}
+			}
 			public function addRoute(route:E2VORoute):void
 			{
 				var routePlate:RoutePlate = new RoutePlate;
 				routePlate.route = route;
-				addElement(routePlate);
+				if(EDConfig.instance.selectedRoute == route)
+				{
+					routePlate.selected = true;
+					lastPlate = routePlate;
+				}
+				group.addElement(routePlate);
 				
 			}
 			protected function vgroup1_clickHandler(event:MouseEvent):void
 			{
-				if(event.target is RoutePlate)
+				if(event.target is RoutePlate )
 				{
 					var item :RoutePlate = event.target as RoutePlate;
+					if(lastPlate)
+					{
+						lastPlate.selected = false;
+						lastPlate = item;
+					}
+					else lastPlate = item;
 					if(item.selected)
 						item.selected = false;
 					else
@@ -31,10 +80,12 @@
 					EDConfig.instance.selectedRoute = item.route;
 					EDConfig.instance.propertyPanel.setCurrentState("route",true);
 					EDConfig.instance.propertyPanel.route.route = EDConfig.instance.selectedRoute;
+					if(!item.route.cross)
+						EDConfig.instance.e2Config.utilLayer.routeSelected(EDConfig.instance.e2Config.routeViewMap[item.route.id]);
 				}
 				
 			}
 			
 		]]>
 	</fx:Script>
-</s:VGroup>
+</s:Scroller>

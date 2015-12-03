@@ -12,38 +12,17 @@ package emap.map2d
 			super();
 			initialize();
 		}
-		public function createAidLine(style:String, value:Number):void
-		{
-			
-			if (style=="x") {
-				hLine.graphics.clear();
-				hLine.graphics.lineStyle(.1, 0x33FF00);
-				hLine.graphics.moveTo(value, 0);
-				hLine.graphics.lineTo(value, MAX_H);
-			} else {
-				vLine.graphics.clear();
-				vLine.graphics.lineStyle(.1, 0x33FF00);
-				vLine.graphics.moveTo(0    , value);
-				vLine.graphics.lineTo(MAX_W, value);
-			}
-		}
-		
-		public function clearAidLine (style:String=null):void
-		{
-			if (style=="x") {
-				hLine.graphics.clear();
-			} else if (style=="y") {
-				vLine.graphics.clear();
-			} else {
-				hLine.graphics.clear();
-				vLine.graphics.clear();
-			}
-		}
+
 		
 		private function initialize():void
 		{
+			graphics.beginFill(0x000000)
+			graphics.drawRect(0,0,MAX_W,MAX_H);
+			graphics.endFill();
+			addChild(grid  = new Grid);
 			addChild(floorLayer = new Sprite);
 			addChild(toolLayer = new Sprite);
+			
 			
 			//new InitDataCommand().execute();
 			
@@ -68,6 +47,7 @@ package emap.map2d
 	private var vRule:Rule;
 	private var hLine :Shape;
 	private var vLine :Shape; 
+	private var grid : Grid ;
 	}
 	
 }

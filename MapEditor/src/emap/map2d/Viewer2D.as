@@ -12,8 +12,10 @@ package emap.map2d
 	
 	import cn.vision.core.UI;
 	import cn.vision.utils.MathUtil;
-	  
-	import flash.display.DisplayObject;  
+	
+	import com.winonetech.controls.MainApplication;
+	
+	import flash.display.DisplayObject;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -38,7 +40,7 @@ package emap.map2d
 		public function reset($tween:Boolean = false):void
 		{
 			Tweener.removeTweens(this);
-			aimScale = mapScale = minScale;
+			aimScale = mapScale = minScale*4;
 			aimX = isNaN(resetX)
 				?(viewWidth - mapWidth) * .5
 				:-resetX * aimScale + viewWidth * .5;

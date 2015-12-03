@@ -14,28 +14,32 @@ package emap.map2d
 	
 	import cn.vision.utils.StringUtil;
 	
-
+	import editor.core.EDConfig;
 	
 	import emap.consts.PositionCodeConsts;
+	import emap.consts.StepStyleConsts;
 	import emap.core.EMConfig;
 	import emap.core.em;
 	import emap.data.Layout;
 	import emap.data.Step;
+	import emap.interfaces.INode;
 	import emap.interfaces.IPosition;
 	import emap.map2d.controls.Logo;
 	import emap.map2d.core.E2Config;
 	import emap.map2d.tools.Map2DTool;
-	import emap.map3d.comman.LogoPlane;
+	import emap.map2d.vos.E2VOPosition;
 	import emap.utils.PositionUtil;
 	import emap.utils.StepUtil;
 	import emap.vos.VOPosition;
 	
 	import flash.display.Sprite;
+	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
+	import flash.filesystem.File;
+	import flash.sampler.Sample;
 	import flash.text.TextField;
 	import flash.utils.Timer;
-	
-	
+
 	public final class Position extends Sprite implements IPosition
 	{
 		
@@ -47,7 +51,8 @@ package emap.map2d
 		
 		public function Position($config:E2Config, $data:VOPosition = null)
 		{
-			super();
+			
+			super();                            
 			
 			initialize($config, $data);
 		}
@@ -58,7 +63,7 @@ package emap.map2d
 		 */
 		private function initialize($config:E2Config, $data:VOPosition):void
 		{
-			mouseEnabled = mouseChildren = false;
+			mouseChildren = false;
 			
 			config = $config;
 			data = $data;
@@ -67,9 +72,10 @@ package emap.map2d
 		/**
 		 * @private
 		 */
-		private function update():void
+		public function update():void
 		{
-			if (steps && steps.length > 2)
+			
+			if (steps)
 			{
 				//updateMesh();
 				updatePlane();
@@ -80,156 +86,132 @@ package emap.map2d
 			
 			updateLabel();
 			updateLabelLayout();
+			layout.update();
+			
 		}
 		
 		/**
 		 * @private
 		 */
-//		private function updateMesh():void
-//		{
-//			Map3DUtil.destroyObject3D(mesh);
-//			//判断是否需要创建侧面。
-//			var side:Boolean = (code == PositionCodeConsts.HOLLOW || code == PositionCodeConsts.ENTITY);
-//			if (side)
-//			{
-//				var bottom:Number = code == PositionCodeConsts.HOLLOW ? 0 : -selectH;
-//				//获取所有面
-//				var faces:Array = [], l:uint = steps.length - 1, num:uint = 0, step:Step, next:Step;
-//				var cret:Function = function($start:Point, $end:Point):void
-//				{
-//					faces[faces.length] = [
-//						new Vector3D($start.x, -$start.y, bottom),
-//						new Vector3D($end  .x, -$end  .y, bottom),
-//						new Vector3D($start.x, -$start.y, thick),
-//						new Vector3D($end  .x, -$end  .y, thick),
-//					];
-//				};
-//				for (var i:uint = 0; i < l; i++)
-//				{
-//					step = steps[i];
-//					next = steps[i + 1];
-//					switch(next.style)
-//					{
-//						case StepStyleConsts.LINE_TO:
-//							cret(step.aim, next.aim);
-//							break;
-//						case StepStyleConsts.CURVE_TO:
-//							var points:Vector.<Point> = next.getPoints(step.aim);
-//							var o:uint = points.length - 1;
-//							cret(step.aim, points[0]);
-//							var end:Point = points[points.length - 1];
-//							if (end.x != next.aim.x || end.y != next.aim.y)
-//								cret(points[points.length - 1], next.aim);
-//							for (var j:uint = 0; j < o; j++)
-//								cret(points[j], points[j + 1]);
-//							break;
-//					}
-//				}
-//				
-//				var vxs:Vector.<Number> = new Vector.<Number>;
-//				var uvs:Vector.<Number> = new Vector.<Number>;
-//				var nms:Vector.<Number> = new Vector.<Number>;
-//				var fci:Vector.<uint>   = new Vector.<uint>;
-//				
-//				//创建侧面
-//				var crfe:Function = function($face:Array, $index:uint, $array:Array):void
-//				{
-//					var v1:Vector3D = new Vector3D($face[0].x - $face[1].x, $face[0].y - $face[1].y);
-//					var v2:Vector3D = new Vector3D($face[2].x - $face[1].x, $face[2].y - $face[1].y);
-//					var v3:Vector3D = v1.crossProduct(v2);
-//					v3.normalize();
-//					for (var i:uint = 0; i < 4; i++)
-//					{
-//						var face:Vector3D = $face[i];
-//						ArrayUtil.push(vxs, face.x, face.y, face.z);
-//						ArrayUtil.push(uvs, face.x * .001, face.y * .001);
-//						ArrayUtil.push(nms, v3.x, v3.y, v3.z);
-//					}
-//					//uv 矩阵
-//					ArrayUtil.push(fci, num, num + 1, num + 3);
-//					ArrayUtil.push(fci, num, num + 3, num + 1);
-//					ArrayUtil.push(fci, num, num + 3, num + 2);
-//					ArrayUtil.push(fci, num, num + 2, num + 3);
-//					num += 4;
-//				};
-//				faces.forEach(crfe);
-//				
-//				//创建Mesh
-//				var gem:Geometry = new Geometry(num);
-//				gem.addVertexStream(SourceManager.ATTRIBUTES);
-//				gem.setAttributeValues(VertexAttributes.POSITION, vxs);
-//				gem.setAttributeValues(VertexAttributes.TEXCOORDS[0], uvs);
-//				gem.setAttributeValues(VertexAttributes.NORMAL, nms);
-//				gem.indices = fci;
-//				
-//				addChild(mesh = new Mesh);
-//				mesh.geometry = gem;
-//				mesh.addSurface(SourceManager.getColorMaterial(color), 0, num);
-//				mesh.calculateBoundBox();
-//			}
-//		}
-//		
+
 		/**
 		 * @private
 		 */
 		public function updatePlane():void
 		{
-		//	Map3DUtil.destroyObject3D(plane);
-			//判断是否需要创建顶面
-//			var top:Boolean = (code == PositionCodeConsts.TERRAIN || code == PositionCodeConsts.ENTITY);
-//			if (top)
-//			{
-				//var shape:Shape = new Shape;
+			if(data.typeCode == PositionCodeConsts.LIFT || data.typeCode == PositionCodeConsts.ESCALATOR)
+			{
+				
+				graphics.clear();
+				graphics.beginFill(color,1);
+				graphics.drawCircle(layout.cenX, layout.cenY,50);
+				for each(var route:Route in routeMap)
+				{
+					route.updateLineTo();
+					updateIconLayout();
+				}
+			}
+			else
+			{
 				graphics.clear();
 				graphics.beginFill(color);
 				StepUtil.drawSteps(graphics, steps);
-				//graphics.endFill();
-				
-				//addChild(plane = Map3DUtil.getPlaneByShape(shape, layout)).z = thick;
-			//}
-		}
-		
-		/**
-		 * @private
-		 */
-		private function updateIcon():void
-		{
-		//	Map3DUtil.destroyObject3D(iconLayer);
-			if (iconVisible && !StringUtil.isEmpty(icon) &&
-				PositionUtil.displayIcon(code))
-			{
-				iconLayer = new Logo(config.iconWidth, config.iconHeight);
-					
-				addChild(iconLayer);
-				iconLayer.source = icon;
+				for each(var route1:Route in routeMap)
+				{
+					route1.updateLineTo();
+					updateIconLayout();
+				}
 			}
 		}
 		
 		/**
 		 * @private
 		 */
-		private function updateIconLayout():void
+		
+		private function updateIcon():void
+		{
+			if (iconVisible && !StringUtil.isEmpty(icon) &&
+				PositionUtil.displayIcon(code))
+			{
+				if(iconLayer != null)
+					this.removeChild(iconLayer);
+				iconLayer = new Logo(config.iconWidth, config.iconHeight);
+				iconLayer.alpha = 0.7;
+				addChild(iconLayer);
+				iconLayer.source = File.applicationDirectory.resolvePath(icon).nativePath;
+			}
+		}
+		public function changeIcon():void
+		{
+			if(iconLayer)
+				iconLayer.source =  File.applicationDirectory.resolvePath(icon).nativePath;
+			else
+			{
+				iconLayer = new Logo(config.iconWidth, config.iconHeight);
+				iconLayer.alpha = 0.7;
+				addChild(iconLayer);
+				iconLayer.source =  File.applicationDirectory.resolvePath(icon).nativePath;
+				
+				updateIconLayout();
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		public function updateIconLayout():void
 		{
 			if (iconLayer)
 			{
 				iconLayer.x = cenX + iconOffsetX;
-				iconLayer.y =-cenY - iconOffsetY;
-				iconLayer.rotationZ = iconRotation;
+				iconLayer.y = cenY + iconOffsetY;
 				iconLayer.scaleX = iconLayer.scaleY = iconScale;
+				iconLayer.rotation = iconRotation;
+				this.numChildren - 1
 			}
 		}
-		
+		/**
+		 * 设置iconvisib
+		 * */
+		public function iconChange($value:Boolean):void
+		{
+			if(iconLayer)
+				iconLayer.visible = $value;
+		}
+		public function iconScaleChange($value:Number):void
+		{
+			if(iconLayer)
+				iconLayer.scaleX = iconLayer.scaleY = $value;
+		}
+		/**
+		 *设置label visib 
+		 */
+		public function labelChange($value:Boolean):void
+		{
+			if(textLayer)
+				textLayer.visible = $value;
+		}
+		/**
+		 * 设置label scale
+		 */
+		  public function labelScaleChange($value:Number):void
+		  {
+			  if(textLayer)
+				  textLayer.scaleX = textLayer.scaleY = $value;
+		  }
 		/**
 		 * @private
 		 */
-		private function updateLabel():void
+		public function updateLabel():void
 		{
 			textLayer = destroyObject(textLayer);
-			if (labelVisible && !StringUtil.isEmpty(label) &&
+			if ( !StringUtil.isEmpty(label) &&
 				PositionUtil.displayLabel(code))
 			{
 				addChild(textLayer = Map2DTool.getText(label, 
 					config.font, labelColor));
+				if(!labelVisible)
+					textLayer.visible = false;
 			}
 		}
 		public static function destroyObject($object:Object):*
@@ -247,8 +229,7 @@ package emap.map2d
 			if (textLayer)
 			{
 				textLayer.x = cenX + labelOffsetX;
-				textLayer.y =-cenY - labelOffsetY;
-				textLayer.rotationZ = labelRotation;
+				textLayer.y = cenY + labelOffsetY;
 				textLayer.scaleX = textLayer.scaleY = labelScale;
 			}
 		}
@@ -334,24 +315,161 @@ package emap.map2d
 		 * 
 		 */
 		
-		public function get selected():Boolean
-		{
-			return em::selected as Boolean;
-		}
-		
 		/**
 		 * @private
 		 */
 		public function set selected($value:Boolean):void
 		{
-			if (selected!= $value)
+			if($value)
 			{
-				em::selected = $value;
-				Tweener.removeTweens(this);
-				Tweener.addTween(this, {z:selected ? selectH : 0, time:1});
+				if (!selected)
+				{
+					
+					positionSelected();
+					//属性面板切换到楼层
+					EDConfig.instance.propertyPanel.setCurrentState("position",true);
+					EDConfig.instance.tabBar.selectedItem = EDConfig.instance.positionNC;
+					EDConfig.instance.selectedPosition = data as E2VOPosition;
+					EDConfig.instance.propertyPanel.position.position = EDConfig.instance.selectedPosition;
+					EDConfig.instance.positionGroup.addPositionByFloor(EDConfig.instance.selectedFloor);
+				}
+			}else
+			{
+				if(cPosition && contains(cPosition))
+				{
+					removeChild(cPosition);
+					
+				}
+				_selected = false;
 			}
 		}
+		//位置选中 效果
+		private function positionSelected():void
+		{
+			//防止上个楼层还在编辑
+			
+				cPosition = new Sprite;
+				cPosition.graphics.clear();
+				cPosition.graphics.lineStyle(10,0x000000);
+				//cPosition.graphics.beginFill(color);
+				StepUtil.drawSteps(cPosition.graphics, steps);
+				cPosition.graphics.lineStyle(5,0xFFFFFF);
+				//cPosition.graphics.beginFill(color);
+				StepUtil.drawSteps(cPosition.graphics, steps);
+				addChildAt(cPosition,0);
+				config.utilLayer.oposition = this;
+				_selected = true;
+			
+		}
+		public function get selected():Boolean
+		{
+			return _selected;
+		}
+		/**
+		 * 
+		 * 清空编辑接口
+		 **/
+		public function set editStep($value:Boolean):void
+		{
+			//当重绘传入true 
+			if($value)
+			{
+				
+				steps.length = 0;
+				update();
+				editFloor= config.floorViewMap[em::data.floorID];
+				if(positionEditLayer==null ||!editFloor.contains(positionEditLayer))
+				{
+					positionEditLayer = new Sprite;
+					positionEditLayer.graphics.beginFill(0x00BFFF,0.1);
+					positionEditLayer.graphics.drawRect(0,0,5000,5000);
+					positionEditLayer.graphics.endFill();
+					editFloor.addChild(positionEditLayer);
+					positionEditLayer.addEventListener(MouseEvent.MOUSE_DOWN,mouseDown_Handler);
+					
+				}
+			}
+			//保存传入值为false
+			else
+			{
+				if(editFloor&&editFloor.contains(positionEditLayer))
+				{
+					positionEditLayer.removeEventListener(MouseEvent.MOUSE_DOWN,mouseDown_Handler);
+					 editFloor.removeChild(positionEditLayer);
+				}
+				update();
+				EDConfig.instance.e2Config.setEditor = false;
+			}
+		}
+		public function mouseDown_Handler(event:MouseEvent):void
+		{
+			if(event.target is AimPoint  )
+			{
+				d = event.target.parent as DrawStep;
+				positionEditLayer.addEventListener(MouseEvent.MOUSE_MOVE,mouseMove_Handler);
+				positionEditLayer.addEventListener(MouseEvent.MOUSE_UP,mouseUp_Handler);
+			}
+			else
+			{
+				if(config.editorStyle== StepStyleConsts.MOVE_TO||(steps.length==0))
+				{
+					if(EDConfig.instance.e2Config.positionViewMap.contains(this))
+					{
+						var firtStep:Step = new Step;
+						var lastStep:Step = new Step;
+						firtStep.style = config.editorStyle;
+						config.editorStyle = StepStyleConsts.LINE_TO;
+						lastStep.style = config.editorStyle;
+						lastStep.aim.x=firtStep.aim.x = parent.mouseX;
+						lastStep.aim.y=firtStep.aim.y = parent.mouseY;
+						steps.push(firtStep);
+						steps.push(lastStep);
+					}
+				}
+				
+				
+				
+				else if(config.editorStyle== StepStyleConsts.LINE_TO)
+				{ 
+					var step:Step = new Step;
+					step.style = config.editorStyle;
+					step.aim.x = parent.mouseX;
+					step.aim.y = parent.mouseY;
+					var sStep:Step = steps[steps.length-2];
+					steps.splice(steps.length-1,0,step);
+				}else if(config.editorStyle== StepStyleConsts.CURVE_TO)
+				{
+					var step1:Step = new Step;
+					step1.style = config.editorStyle;
+					step1.aim.x = parent.mouseX;
+					step1.aim.y = parent.mouseY;
+					var sStep1:Step = steps[steps.length-2];
+					step1.ctr.x = (step1.aim.x+sStep1.aim.x)/2;
+					step1.ctr.y = (step1.aim.y+sStep1.aim.y)/2;
+					steps.splice(steps.length-1,0,step1);
+				}
+				config.utilLayer.position =this;
+				update();
+			}
+		}
+		protected function mouseUp_Handler(event:MouseEvent):void
+		{
+			positionEditLayer.removeEventListener(MouseEvent.MOUSE_MOVE,mouseMove_Handler);
+			positionEditLayer.removeEventListener(MouseEvent.MOUSE_UP,mouseUp_Handler);
+			
+		}
 		
+		protected function mouseMove_Handler(event:MouseEvent):void
+		{
+			
+			if(d&&(event.target is PointBase))
+			{
+				event.stopImmediatePropagation();
+				d.update(this.mouseX, this.mouseY,event.target);
+				update();
+			}
+			
+		}
 		
 		/**
 		 * 
@@ -617,7 +735,10 @@ package emap.map2d
 			return data ? data.layout : null;
 		}
 		
-		
+		public function updata():void
+		{
+			layout.update();
+		}
 		/**
 		 * 
 		 * 绘制步骤
@@ -628,8 +749,25 @@ package emap.map2d
 		{
 			return layout ? layout.steps : null;
 		}
+		public function addRoute($value:Route):void
+		{
+			routeMap.push($value);
+		}
+		public function removeRoute($value:Route):void
+		{
+			var i:Number = routeMap.indexOf($value);
+			if(i>=0)
+			{
+				routeMap.splice(i,1);
+			}
+		}
+
+		public function getRouteMap():Array
+		{
+			return routeMap;
+		}
 		
-		
+		private var routeMap:Array=[];
 		/**
 		 * @private
 		 */
@@ -638,7 +776,7 @@ package emap.map2d
 		/**
 		 * @private
 		 */
-		private var textLayer:TextField;
+		private var textLayer:Sprite;
 		
 		/**
 		 * @private
@@ -691,6 +829,22 @@ package emap.map2d
 		 * @private
 		 */
 		em var thick:Number;
+		/**
+		 * @private 
+		 **/
+		private var positionEditLayer:Sprite;
 		
+		/**
+		 * @private 
+		 **/
+		private var d:DrawStep;
+		
+		/**
+		 * @private 
+		 **/
+		private var points:Vector.<DrawStep>;
+		private var editFloor:Floor;
+		private var cPosition:Sprite;
+		private var _selected:Boolean;
 	}
 }

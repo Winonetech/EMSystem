@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" >
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="100%" height="50" backgroundColor="0xdce1e8" borderVisible="false">
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
-	<s:ComboBox id="cb" x="5" y="10" width="96" dataProvider="{collection}" change="cb_changeHandler(event)"/>
-	<s:Button x="121" y="11" label="+" click="addPosition_clickHandler(event)"/>
-	<s:Button x="210" y="11" label="-" click="subPosition_clickHandler(event)"/>
+	
+	<s:ComboBox id="cb" x="76" y="10" width="128" height="28" selectedItem="{EDConfig.instance.selectedFloor}" dataProvider="{collection}" change="cb_changeHandler(event)" horizontalCenter=""/>
 	<fx:Script>
 		<![CDATA[
 			import editor.core.EDConfig;
@@ -23,8 +23,7 @@
 			public function set dataProvider($value:Object):void
 			{
 				collection = new ArrayCollection($value as Array);
-				
-				
+			
 			}
 			[Bindable]
 			private var collection:ArrayCollection;
@@ -32,28 +31,28 @@
 			
 			protected function cb_changeHandler(event:IndexChangeEvent):void
 			{
-				trace(cb.selectedItem.label);
+				
 				// TODO Auto-generated method stub
 				voFloor = cb.selectedItem as E2VOFloor;
+				EDConfig.instance.selectedFloor = voFloor;
 				EDConfig.instance.nodeGroup.addNodeByFloor(voFloor);
-				for each(var f:Floor in E2Config.instance.floorViewMap)
-				{
-					f.visible = false;
-				}
-				E2Config.instance.floorViewMap[voFloor.id].visible = true;
-			}
-			
-			protected function addPosition_clickHandler(event:MouseEvent):void
-			{
-				// TODO Auto-generated method stub
+				EDConfig.instance.e2Config.eMap.viewFloor(voFloor.id);
+				EDConfig.instance.propertyPanel.setCurrentState("node",true);
 				
 			}
 			
-			protected function subPosition_clickHandler(event:MouseEvent):void
-			{
-				// TODO Auto-generated method stub
-				
-			}
+//			protected function addPosition_clickHandler(event:MouseEvent):void
+//			{
+//				// TODO Auto-generated method stub
+//				sub.selected = false;
+//				trace("add",add.selected)
+//			}
+			
+//			protected function subPosition_clickHandler(event:MouseEvent):void
+//			{
+//				// TODO Auto-generated method stub
+//				add.selected = false;
+//			}
 			
 		]]>
 	</fx:Script>

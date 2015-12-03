@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:Scroller xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		  xmlns:s="library://ns.adobe.com/flex/spark" 
-		  xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300" click="vgroup1_clickHandler(event)">
+		  xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300" >
+	
+	<s:VGroup id="group" width="100%" height="100%" click="vgroup1_clickHandler(event)" gap ="20" horizontalAlign="center" >
+		
+	</s:VGroup>
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
@@ -9,14 +13,15 @@
 		<![CDATA[
 			import editor.core.EDConfig;
 			
+			import emap.map2d.core.E2Config;
 			import emap.map2d.core.E2Provider;
-		
 			import emap.map2d.vos.E2VOFloor;
 			import emap.map2d.vos.E2VONode;
 			import emap.map2d.vos.E2VOPosition;
+			private var lastPlate:NodePlate;
 			public function addNodeByFloor($value:E2VOFloor):void
 			{
-				this.removeAllElements();
+				group.removeAllElements();
 				for each (var n:E2VONode in E2Provider.instance.nodeArr)
 				{
 					if(n.floorID==$value.id)
@@ -24,8 +29,12 @@
 						var nodePlate:NodePlate = new NodePlate;
 						trace("label:",n.label)
 						nodePlate.node = n;
-						
-						addElement(nodePlate);
+						if(EDConfig.instance.selectedNode == n)
+						{
+							nodePlate.selected = true;
+							lastPlate = nodePlate;
+						}
+						group.addElement(nodePlate);
 					}
 				}
 			}
@@ -35,16 +44,22 @@
 				if (event.target is NodePlate)
 				{
 					var item:NodePlate = event.target as NodePlate;
+					if(lastPlate)
+					{
+						lastPlate.selected = false;
+						lastPlate = item;
+					}
+					else
+						lastPlate = item;
 					if(item.selected)
 						item.selected = false;
 					else
 						item.selected = true;
 					EDConfig.instance.selectedNode= item.node;
 					EDConfig.instance.propertyPanel.setCurrentState("node",true);
-				//	EDConfig.instance.propertyPanel.node.node = EDConfig.instance.selectedNode;
-				
+					EDConfig.instance.e2Config.nodeViewMap[item.node.id].nodeSelected();
 				}
 			}
 		]]>
 	</fx:Script>
-</s:VGroup>
+</s:Scroller>

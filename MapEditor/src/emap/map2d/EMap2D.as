@@ -3,6 +3,9 @@ package emap.map2d
 	import cn.vision.collections.Map;
 	import cn.vision.utils.MathUtil;
 	
+	import editor.core.E2Presenter;
+	import editor.core.EDConfig;
+	
 	import emap.core.em;
 	import emap.interfaces.IEMap;
 	import emap.map2d.core.E2Config;
@@ -19,16 +22,18 @@ package emap.map2d
 	
 	public class EMap2D extends Viewer2D implements IEMap
 	{
-		public function EMap2D()
+		public function EMap2D(e2Config:E2Config)
 		{
-			super();
+			super(); 
 			initialize();
 			content = new MapContainer;
 			//addFloor();
-			utilLayer = E2Config.instance.utilLayer;
+			_config = e2Config;
+			_config.utilLayer = new UtilLayer(e2Config);
+			utilLayer = _config.utilLayer;
 			content.addChild(utilLayer);
 			map = content;
-			//map = new Map
+			
 		}
 		
 		
@@ -37,7 +42,7 @@ package emap.map2d
 			floorsViewMap = new Map;
 			floorsViewArr.length = 0;
 			positionsViewMap = new Map;
-		//	content.clear();
+		
 		}
 		
 		public function viewPosition($data:*, $tween:Boolean=false):void
@@ -47,23 +52,60 @@ package emap.map2d
 		
 		public function viewFloor($data:*, $tween:Boolean=false):void
 		{
+			viewFloorUpdate();
 			if ($data is Floor)
 				var floor:Floor = $data;
 			else if ($data is VOFloor)
 				floor = floorsViewMap[$data.id];
 			else if ($data is String)
+			{
 				floor = floorsViewMap[$data];
+			//	trace("length",floorsViewMap[floorsViewMap.length+""].id);
+			}
 			else if ($data is uint)
 				floor = floorsViewArr[MathUtil.clamp($data - 1, 0, floorsViewArr.length - 1)];
 			
 			if (floor && floor!= floorNext)
 			{
 				floorPrev = floorNext;
+				if(floorPrev)
+					floorPrev.visible = false;
 				floorNext = floor;
 				floorNext.visible = true;
 			
-			}
+			} 
 		
+		}
+		//切换楼层的需要对 楼层 节点  位置三个不同属性板切换
+		public function viewFloorUpdate():void
+		{
+			//对楼层floorGroup更新
+		//	EDConfig.instance.floorGroup.addAllFloor();
+			//对节点nodeGroup更新
+			if(EDConfig.instance.selectedFloor)
+			{
+				EDConfig.instance.nodeGroup.addNodeByFloor(EDConfig.instance.selectedFloor);
+				//对位置positionGroup 更新
+				EDConfig.instance.positionGroup.addPositionByFloor(EDConfig.instance.selectedFloor);
+				//将楼层进行保存 防止楼层还在编辑
+				EDConfig.instance.routeGroup.addRouteByFloorId(EDConfig.instance.selectedFloor.id);
+				var map:Map = EDConfig.instance.e2Config.groundViewMap;
+				
+				EDConfig.instance.e2Config.groundViewMap[EDConfig.instance.selectedFloor.id].editSteps = false;
+				if(EDConfig.instance.e2Config.floorViewMap[EDConfig.instance.selectedFloor.id])
+					EDConfig.instance.e2Config.floorViewMap[EDConfig.instance.selectedFloor.id].childVisible = true;
+				//反正位置还在编辑状态
+				if(EDConfig.instance.selectedPosition)
+				{
+					EDConfig.instance.e2Config.utilLayer.clear();
+					//防止在刚刚删除时候就切换到其他的 
+					if(EDConfig.instance.e2Config.positionViewMap[EDConfig.instance.selectedPosition.id])
+					{
+						EDConfig.instance.e2Config.positionViewMap[EDConfig.instance.selectedPosition.id].update(); 
+						EDConfig.instance.e2Config.positionViewMap[EDConfig.instance.selectedPosition.id].editStep = false;
+					}
+				}
+			}
 		}
 		public function update():void
 		{
@@ -78,28 +120,59 @@ package emap.map2d
 				map = content;
 			}
 		}
+		//更新路径
 		protected function updateRoute():void
 		{
 			for each(var voRoute:E2VORoute in E2Provider.instance.routeMap)
 			{
-				if (!voRoute.cross)
+				if ( !voRoute.cross )
 				{
 					var route:Route = new Route(voRoute);
-					var floor:Floor = floorsViewMap[route.floorID]
-					floor.addChild(route);
+					EDConfig.instance.e2Config.routeViewMap[voRoute.id] = route;
+					if(_config.serialViewMap[voRoute.serial1]&&_config.serialViewMap[voRoute.serial2])
+					{
+						_config.serialViewMap[voRoute.serial1].addRoute(route);
+						_config.serialViewMap[voRoute.serial2].addRoute(route);
+						storeINodeName(voRoute.node1);
+						storeINodeName(voRoute.node2);
+						var floor:Floor = floorsViewMap[route.floorID]
+						floor.addRoute(route);
+						
+					}else
+					{
+						delete E2Provider.instance.routeMap[voRoute.id];
+					}
+					
 				}
 				//E2Config.instance.routeViewMap[voRoute.id] = route; 
+				
+			}
+		}
+		/**
+		 * 存入INode的名称
+		 * 
+		 * */ 
+		private function storeINodeName($value:Object):void
+		{
+			if($value is E2VONode)
+			{
+				EDConfig.instance.e2Config.INodeNameMap[$value.serial] = "节点"+$value.id;
+			}
+			else
+			{
+				EDConfig.instance.e2Config.INodeNameMap[$value.serial] = $value.label;
 			}
 		}
 		protected function updateNode():void
 		{
 			for each(var voNode:E2VONode in E2Provider.instance.nodeMap)
 			{
-				var node:Node = new Node(voNode);
+				var node:Node = new Node(voNode,_config);
 				
 				var floor:Floor = floorsViewMap[voNode.floorID]
-				floor.addChild(node);
-				E2Config.instance.nodeViewMap[voNode.id] = node;
+				floor.addNode(node);
+				_config.nodeViewMap[voNode.id] = node;
+				_config.serialViewMap[voNode.serial] = node;
 				//content.addChild(node);
 			}
 		}
@@ -108,22 +181,31 @@ package emap.map2d
 			
 			for each(var voFloor:E2VOFloor in E2Provider.instance.floorArr)
 			{
-				var floor:Floor = new Floor(voFloor);
+				var floor:Floor = new Floor(voFloor,_config);
 				floor.visible = false;
 				floorsViewMap[voFloor.id] = floor;
 				content.addFloor(floor);
 				
 			}
 		}
+		public function addViewFloor(s:String,floor:Floor):void
+		{
+			content.addFloor(floor);
+		  
+			floorsViewMap[s] = floor;	
+		}
 		protected function updatePosition():void
 		{
 			for each(var voPosition:E2VOPosition in positionArr )
 			{
-				trace(voPosition.label)
 				var position:Position = new Position(_config,voPosition);
 				var floor:Floor = floorsViewMap[voPosition.floorID]
-				floor.addChild(position);
-				E2Config.instance.positionMap[voPosition.id] = position;
+				if(floor)
+				{
+					floor.addPosition(position);
+					_config.positionViewMap[voPosition.id] = position;
+					_config.serialViewMap[voPosition.serial] = position;
+				}
 			}
 		}
 	
@@ -198,7 +280,7 @@ package emap.map2d
 		override protected function caculateScale():void
 		{
 			super.caculateScale();
-			//maxScale = (maxScale<4) ? 4 : maxScale;
+			maxScale = (maxScale<8) ? 8 : maxScale;
 		}
 		
 
@@ -211,14 +293,14 @@ package emap.map2d
 			//content.scale = value;
 			utilLayer.scale = value;
 			hRule.scale = vRule.scale = value;
-			for each(var node:Node in E2Config.instance.nodeViewMap)
+			for each(var node:Node in _config.nodeViewMap)
 			{
 				node.scale = value;
 			}
-			for each (var route:Route in E2Config.instance.routeViewMap)
-			{
-				route.scale = value;	
-			}
+//			for each (var route:Route in _config.routeViewMap)
+//			{
+//				route.scale = value;	
+//			}
 		}
 		override public function set mapX(value:Number):void
 		{
@@ -230,36 +312,11 @@ package emap.map2d
 			super.mapY = value;
 			vRule.y = mapY;
 		}
-		public function createAidLine(style:String, value:Number):void
-		{
-			
-			if (style=="x") {
-				hLine.graphics.clear();
-				hLine.graphics.lineStyle(.1, 0x33FF00);
-				hLine.graphics.moveTo(value, 0);
-				hLine.graphics.lineTo(value, MAX_H);
-			} else {
-				vLine.graphics.clear();
-				vLine.graphics.lineStyle(.1, 0x33FF00);
-				vLine.graphics.moveTo(0    , value);
-				vLine.graphics.lineTo(MAX_W, value);
-			}
-		}
 		
-		public function clearAidLine (style:String=null):void
-		{
-			if (style=="x") {
-				hLine.graphics.clear();
-			} else if (style=="y") {
-				vLine.graphics.clear();
-			} else {
-				hLine.graphics.clear();
-				vLine.graphics.clear();
-			}
-		}
-		
+		//数字加刻度线
 		private function initialize():void
 		{
+			
 			addChild(ruleLayer = new Sprite);
 			ruleLayer.addChild(hRule = new Rule);
 			hRule.direction = "horizontal";
@@ -268,8 +325,10 @@ package emap.map2d
 			
 			var shape:Sprite = new Sprite;
 			ruleLayer.addChild(shape);
-			shape.graphics.beginFill(0xFFFFFF);
-			shape.graphics.drawRect(-15,-15,15,15)
+			shape.graphics.beginFill(0xdce1e8);
+			shape.graphics.drawRect(-20,-70,20,50);
+			shape.graphics.beginFill(0xffffff);
+			shape.graphics.drawRect(-20,-20,20,20);
 			shape.graphics.endFill();
 			
 		} 

@@ -2,7 +2,7 @@ package emap.map2d.vos
 {
 	import emap.vos.VOPositionType;
 	
-	
+	[Bindable]
 	public final class E2VOPositionType extends VOPositionType
 	{
 		

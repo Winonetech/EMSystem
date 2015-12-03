@@ -11,6 +11,7 @@ package emap.data
 	import cn.vision.core.VSObject;
 	import cn.vision.utils.math.BezierUtil;
 	
+	import emap.consts.StepStyleConsts;
 	import emap.core.em;
 	
 	import flash.geom.Point;
@@ -108,6 +109,11 @@ package emap.data
 				}
 				
 			}
+			else
+			{
+				em::style = "lineTo";
+				em::aim = new Point;
+			}
 		}
 		
 		
@@ -121,7 +127,18 @@ package emap.data
 		{
 			return em::style;
 		}
-		
+		public function set style($value:String):void
+		{
+			em::style = $value;
+			if ($value == StepStyleConsts.CURVE_TO)
+			{
+				if (!ctr) em::ctr = new Point;
+			}
+			else
+			{
+				if(ctr) em::ctr = null;
+			}
+		}
 		
 		/**
 		 * 

@@ -13,7 +13,10 @@ package emap.map2d
 	import flash.geom.Rectangle;
 	
 	
-	
+	/**
+	 * 画楼层 位置的节点
+	 * 
+	 * */
 	
 	
 	[Bindable]
@@ -21,6 +24,7 @@ package emap.map2d
 	{
 		public function DrawStep($step:Step)
 		{
+			
 			super();
 			initialize($step);
 		}
@@ -30,9 +34,11 @@ package emap.map2d
 			step = $step;
 			__style = "0";
 			//this.graphics.color = 0xFFFF00;
+			//节点至少包含一个基本点
 			aimPoint = new AimPoint(step.aim);
 			__scale = 1
 			aimPoint.color = 0xff0000;
+			//如果该点为曲线点  就会多一个控制点
 			if (step.style == StepStyleConsts.CURVE_TO)
 			{
 				ctrPoint = new CtrPoint(step.ctr);
@@ -41,55 +47,33 @@ package emap.map2d
 			}
 	
 			addChild(aimPoint);
-			aimPoint.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+		
 		}
-		public function updateAim(x:Number,y:Number):void
+		public function update(x:Number,y:Number, a:Object):void
 		{
+			
 			if(x<0) x=0;
 			if(y<0) y=0;
-			step.aim.x = x;
-			step.aim.y = y;
-			aimPoint.x = x;
-			aimPoint.y = y;
+			if(a is AimPoint){
+				step.aim.x = aimPoint.x = x;
+				step.aim.y = aimPoint.y = y;
+				
+			}
+			else
+			{
+				step.ctr.x = ctrPoint.x = x;
+				step.ctr.y = ctrPoint.y = y;
+				
+			}
+			//图形为闭合 最后一个点与第一个点保持重合
+			if(lastStep)
+			{
+				lastStep.aim.x = x;
+				lastStep.aim.y = y;
+				
+			}
+			
 		}
-		protected function mouseDownHandler(event:MouseEvent):void
-		{
-			stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-			//stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
-			//config.component = this;
-			//event.stopImmediatePropagation();
-		}
-		
-		protected function mouseMoveHandler(event:MouseEvent):void
-		{
-//			var tempX:Number = parent.mouseX;
-//			var tempY:Number = parent.mouseY;
-//			if (config.font == "integer") {
-//				var dx:Number = tempX%10;
-//				if (dx<2.5/scale||dx>7.5/scale) {
-//					tempX = (tempX-dx)+(10*Math.round(dx*.1));
-//					config.map.createAidLine("x", tempX);
-//				} else {
-//					config.map.clearAidLine ("x");
-//				}
-//				var dy:Number = tempY%10;
-//				if (dy<2.5/scale||dy>7.5/scale) {
-//					tempY = (tempY-dy)+(10*Math.round(dy*.1));
-//					config.map.createAidLine("y", tempY);
-//				} else {
-//					config.map.clearAidLine ("y");
-//				}
-//			}
-//			x = MathUtil.clamp(tempX, 0, MapContainer.MAX_W);
-//			y = MathUtil.clamp(tempY, 0, MapContainer.MAX_H);
-		}
-		
-//		protected function mouseUpHandler(event:MouseEvent):void
-//		{
-//			stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-//			stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
-//			config.map.clearAidLine ();
-//		}
 		
 		public function get style():String
 		{
@@ -116,7 +100,6 @@ package emap.map2d
 			
 			if(ctrPoint)
 				ctrPoint.scaleX = ctrPoint.scaleY = 1/scale;
-			
 		}
 		private var __scale:Number;
 		private var __style:String;
@@ -125,5 +108,6 @@ package emap.map2d
 		private var aimPoint:AimPoint;
 		private var ctrPoint:CtrPoint;
 		private var step:Step;
+		public var lastStep:Step;
 	}
 }

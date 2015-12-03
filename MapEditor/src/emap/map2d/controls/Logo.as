@@ -97,8 +97,8 @@ package emap.map2d.controls
 		 */
 		private function resolveMaterial($rect:Transform, $data:IBitmapDrawable):void
 		{
-			offsetX = .5 * $rect.width;
-			offsetY = .5 * $rect.height;
+			offsetX =-.5 * $rect.width;
+			offsetY =-.5 * $rect.height;
 			//var w:uint = Map3DUtil.to2Square($rect.width);
 			//var h:uint = Map3DUtil.to2Square($rect.height);
 			if ($data)

@@ -1,7 +1,7 @@
 package emap.map2d.vos
 {
-	import emap.vos.VOPosition;
 	import emap.core.em;
+	import emap.vos.VOPosition;
 	
 	[Bindable]
 	public final class E2VOPosition extends VOPosition
@@ -69,7 +69,7 @@ package emap.map2d.vos
 		
 		/**
 		 * 
-		 * 文本旋转
+		 * 图标旋转
 		 * 
 		 */
 		
@@ -233,7 +233,10 @@ package emap.map2d.vos
 		{
 			setProperty("floor_id", $value);
 		}
-		
+		public function set serial($value:String):void
+		{
+			setProperty("serial",$value);
+		}
 		
 		/**
 		 * 
@@ -249,6 +252,12 @@ package emap.map2d.vos
 		public function get typeName():String
 		{
 			return em::positionType ? em::positionType.label : null;
+		}
+		override public function toXML():String
+		{
+			if (layout) setProperty("coordinate", layout.build());
+			
+			return super.toXML();
 		}
 		
 	}

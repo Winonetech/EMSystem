@@ -6,7 +6,7 @@ package emap.map2d
 	{
 		public function CtrPoint(point:Point)
 		{
-			super(point);
+			super(point,5);
 		}
 	}
 }

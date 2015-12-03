@@ -1,23 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
-					   xmlns:s="library://ns.adobe.com/flex/spark"
-					   xmlns:mx="library://ns.adobe.com/flex/mx"
-					   xmlns:mp="mp.*"
-					   xmlns:components="editor.components.*"
-					   xmlns:floor="editor.components.floor.*"
-					   xmlns:position="editor.components.position.*"
-					   xmlns:node="editor.components.node.*"
-					   xmlns:route="editor.components.route.*" xmlns:local="*" width="1200" height="630"
-					   click="windowedapplication1_clickHandler(event)" >
+<ct:MainApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					xmlns:s="library://ns.adobe.com/flex/spark"
+					xmlns:mx="library://ns.adobe.com/flex/mx"
+					xmlns:mp="mp.*"
+					xmlns:components="editor.components.*"
+					xmlns:floor="editor.components.floor.*"
+					xmlns:position="editor.components.position.*"
+					xmlns:node="editor.components.node.*"
+					xmlns:route="editor.components.route.*"
+					xmlns:local="*"
+					xmlns:ct="com.winonetech.controls.*"
+					width="1230" height="640" 
+					preloaderChromeColor="#CCCCCC" >
 	
 	<fx:Script>
 		<![CDATA[
-			protected function windowedapplication1_clickHandler(event:MouseEvent):void
+			import mx.events.ResizeEvent;
+			
+			protected function mainapplication1_resizeHandler(event:ResizeEvent):void
 			{
-				trace(event.target)
+				if (mapEditor)
+				{
+					mapEditor.width  = width;
+					mapEditor.height = height;
+				}
 			}
+			
 		]]>
 	</fx:Script>
-	
-	<local:MapEditor/>
-</s:WindowedApplication>
+	<s:Graphic x="0" width="100%" height="100%">
+		<s:Rect width="1200" height="630"  >
+			<s:fill>
+				<s:SolidColor color="0xdce1e8"/>
+				<!--<s:LinearGradient rotation="90">  
+					<s:GradientEntry alpha=".75" color="0xdce1e8" ratio="0" />  
+					<s:GradientEntry alpha=".75" color="0xd8dee5" ratio="1" />  
+				</s:LinearGradient>  -->
+			</s:fill>
+		</s:Rect>
+	</s:Graphic>
+	<local:MapEditor id="mapEditor" height="100%" width="100%"/>
+</ct:MainApplication>

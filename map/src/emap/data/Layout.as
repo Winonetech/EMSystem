@@ -36,6 +36,71 @@ package emap.data
 		
 		/**
 		 * 
+		 * 更新Layout。
+		 * 
+		 */
+		
+		public function update():void
+		{
+			var temp:Vector.<Step> = em::steps;
+			var repl:Vector.<Point> = new Vector.<Point>;
+			var last:Step, step:Step;
+			var xvec:Array = [], yvec:Array = [];
+			var sumX:Number = 0, sumY:Number = 0, count:uint = 0;
+			var addo:Function = function($point:Point, $index:uint = 0, $array:Vector.<Point> = null):void
+			{
+				count++;
+				sumX += $point.x;
+				sumY += $point.y;
+				xvec[xvec.length] = $point.x;
+				yvec[yvec.length] = $point.y;
+				repl[repl.length] = $point;
+			};
+			
+			if (temp.length < 2)
+			{
+				addo(temp.length > 0 ? temp[0].aim: new Point);
+			}
+			else
+			{
+				for each(step in temp)
+				{
+					switch (step.style)
+					{
+						case StepStyleConsts.LINE_TO:
+							addo(step.aim);
+							break;
+						case StepStyleConsts.CURVE_TO:
+							if (last) 
+							{
+								var cache:Vector.<Point> = step.getPoints(last.aim);
+								cache.forEach(addo);
+								var end:Point = cache[cache.length - 1];
+								if (end.x != step.aim.x || end.y != step.aim.y) addo(step.aim);
+							}
+							break;
+					}
+					last = step;
+				}
+			}
+			
+			em::minX = Math.min.apply(null, xvec);
+			em::maxX = Math.max.apply(null, xvec);
+			em::minY = Math.min.apply(null, yvec);
+			em::maxY = Math.max.apply(null, yvec);
+			
+			em::cenX = .5 *(.5 * (minX + maxX) + sumX / count);
+			em::cenY = .5 *(.5 * (minY + maxY) + sumY / count);
+			
+			em::width  = maxX - minX;
+			em::height = maxY - minY;
+			
+			em::points = repl;
+		}
+		
+		
+		/**
+		 * 
 		 * 解析数据。
 		 * 
 		 */
@@ -44,64 +109,13 @@ package emap.data
 		{
 			if ($data)
 			{
-				var temp:Vector.<Step> = StepUtil.resolveSteps($data);
-				var resl:Vector.<Step>  = new Vector.<Step>;
-				var repl:Vector.<Point> = new Vector.<Point>;
-				var last:Step, step:Step;
-				var xvec:Array = [], yvec:Array = [];
-				var sumX:Number = 0, sumY:Number = 0, count:uint = 0;
-				var addo:Function = function($point:Point, $index:uint = 0, $array:Vector.<Point> = null):void
-				{
-					count++;
-					sumX += $point.x;
-					sumY += $point.y;
-					xvec[xvec.length] = $point.x;
-					yvec[yvec.length] = $point.y;
-					repl[repl.length] = $point;
-				};
+				em::steps = StepUtil.resolveSteps($data);
 				
-				if (temp.length < 2)
-				{
-					addo(temp.length > 0 ? temp[0].aim: new Point);
-				}
-				else
-				{
-					for each(step in temp)
-					{
-						switch (step.style)
-						{
-							case StepStyleConsts.LINE_TO:
-								addo(step.aim);
-								break;
-							case StepStyleConsts.CURVE_TO:
-								if (last) 
-								{
-									var cache:Vector.<Point> = step.getPoints(last.aim);
-									cache.forEach(addo);
-									var end:Point = cache[cache.length - 1];
-									if (end.x != step.aim.x || end.y != step.aim.y) addo(step.aim);
-								}
-								break;
-						}
-						resl[resl.length] = step;
-						last = step;
-					}
-				}
-				
-				
-				em::minX = Math.min.apply(null, xvec);
-				em::maxX = Math.max.apply(null, xvec);
-				em::minY = Math.min.apply(null, yvec);
-				em::maxY = Math.max.apply(null, yvec);
-				
-				em::cenX = .5 *(.5 * (minX + maxX) + sumX / count);
-				em::cenY = .5 *(.5 * (minY + maxY) + sumY / count);
-				
-				em::width  = maxX - minX;
-				em::height = maxY - minY;
-				
-				em::steps = resl;
-				em::points = repl;
+				update();
+			}
+			else
+			{
+				em::steps = new Vector.<Step>
 			}
 		}
 		

@@ -7,27 +7,52 @@
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import editor.core.EDConfig;
+			
 			import emap.map2d.vos.E2VORoute;
+			
+			import mx.collections.ArrayCollection;
+			
+			import spark.events.IndexChangeEvent;
 			[Bindable]
 			private var _route:E2VORoute;
 			public function set route($value:E2VORoute):void
 			{
+			
 				_route = $value;
 			}
 			public function get route():E2VORoute
 			{
 				return _route;
 			}
+			[Bindable]
+			private var ary:ArrayCollection = new ArrayCollection(["双向","节点一到节点二","节点二到节点一"]);
+			
+			protected function cb_changeHandler(event:IndexChangeEvent):void
+			{
+				
+				route.direction =ary.getItemIndex(cb.selectedItem)
+			}
+			
 		]]>
 	</fx:Script>
-	<s:Label x="39" y="36" text="名称："/>
+	<s:Label x="20" y="46" text="名称："/>
+	<s:Label x="9" y="14" text="路径："/>
 	
-	<s:TextInput x="105" y="32" text="{_route.label}"/>
-	<s:Label x="39" y="70" text="序列号1："/>
+	<s:TextInput x="105" y="42" text="路径{_route.id}" editable="false"/>
+	<s:Label x="20" y="81" text="节点一："/>
+	<mx:VRule x="91" y="38" width="2" height="123"/>
 	
-	<s:TextInput x="106" y="65" text="{_route.serial1}"/>
-	<s:Label x="39" y="96" text="序列号2："/>
-	<s:TextInput x="106" y="93" text="{_route.serial2}"/>
+	<s:TextInput x="106" y="75" text="{EDConfig.instance.e2Config.INodeNameMap[_route.serial1]}" editable="false"/>
+	<s:Label x="20" y="109" text="节点二："/>
+	<s:Label x="20" y="140" text="方向："/>
+	<s:TextInput x="106" y="103" text="{EDConfig.instance.e2Config.INodeNameMap[_route.serial2]}" editable="false"/>
+	<s:ComboBox id="cb" x="106" y="133" width="128"  selectedItem="{ary[_route.direction]}" dataProvider="{ary}" change="cb_changeHandler(event)"/>
+	<mx:HRule x="0" y="99" width="100%"/>
+	<mx:HRule x="0" y="161" width="100%"/>
+	<mx:HRule x="0" y="128" width="100%"/>
+	<mx:HRule x="0" y="37" width="100%"/>
+	<mx:HRule x="0" y="68" width="100%"/>
 	
 </s:Group>
  

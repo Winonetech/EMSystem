@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		  xmlns:s="library://ns.adobe.com/flex/spark" 
-		  xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300" click="floor_clickHandler(event)" >
+<s:Scroller xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  	xmlns:s="library://ns.adobe.com/flex/spark" 
+		  	xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300" >
+	<s:VGroup id="group" height="100%" width="100%" click="floor_clickHandler(event)" gap ="20" horizontalAlign="center" >
+		
+	</s:VGroup>
+	
+	
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
@@ -13,50 +18,69 @@
 			import emap.map2d.Ground;
 			import emap.map2d.core.E2Config;
 			import emap.map2d.core.E2Provider;
-		
 			import emap.map2d.vos.E2VOFloor;
 			
 			import mx.events.FlexEvent;
-			
-			public function addfloor(floor:E2VOFloor):void
+			private var lastPlate:FloorPlate;
+			//数据更新 重新加载楼层栏目
+			public function addAllFloor():void
+			{
+				group.removeAllElements();
+				for each(var floor:E2VOFloor in E2Provider.instance.floorMap)
+				{
+					var floorPlate:FloorPlate = new FloorPlate();
+					floorPlate.floor = floor;
+					group.addElement(floorPlate);
+					if(EDConfig.instance.selectedFloor == floor)
+					{
+						floorPlate.selected = true;
+						lastPlate = floorPlate;
+					}
+					
+				}
+			}
+			public function addFloor(floor:E2VOFloor):void
 			{
 				var floorPlate:FloorPlate = new FloorPlate();
 				floorPlate.floor = floor;
-				addElement(floorPlate);
-			}
-			
-			protected function vgroup1_initializeHandler(event:FlexEvent):void
-			{
-				for each(var floor:E2VOFloor in E2Provider.instance.floorArr)
+				group.addElement(floorPlate);
+				if(lastPlate ) 
 				{
-					EDConfig.instance.floorGroup.addfloor(floor);
-				}
+					lastPlate.selected =false;
+					lastPlate = floorPlate;
+				}else lastPlate = floorPlate;
+				lastPlate.selected = true;
 			}
+			public function subFloor():void
+			{
+				if(lastPlate)
+					group.removeElement(lastPlate);
+			}
+
 			
 			protected function floor_clickHandler(event:MouseEvent):void
 			{
 				if(event.target is FloorPlate)
 				{
-					E2Config.instance.utilLayer.clear();
+					EDConfig.instance.e2Config.utilLayer.clear();
 					var item :FloorPlate = event.target as FloorPlate;
+					if(lastPlate ) 
+					{
+						lastPlate.selected =false;
+						lastPlate = item;
+					}else lastPlate = item;
 					if(item.selected)
 						item.selected = false;
 					else
 						item.selected = true;
-					
-					
 					EDConfig.instance.selectedFloor = item.floor;
 					EDConfig.instance.propertyPanel.floor.floor = EDConfig.instance.selectedFloor;
 					EDConfig.instance.propertyPanel.setCurrentState("default",true);
-					for each(var f:Floor in E2Config.instance.floorMap)
-					{
-						f.visible = false;
-					}
-					E2Config.instance.floorViewMap[item.floor.id].visible = true;
+					EDConfig.instance.e2Config.eMap.viewFloor(item.floor.id);
 					
 				}
 			}
 			
 		]]>
 	</fx:Script>
-</s:VGroup>
+</s:Scroller>

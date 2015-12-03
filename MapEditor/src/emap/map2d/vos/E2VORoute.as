@@ -6,10 +6,11 @@ package emap.map2d.vos
 	 * 路径。
 	 * 
 	 */
-	
+	  
 	
 	import emap.consts.RouteTypeConsts;
 	import emap.core.em;
+	import emap.interfaces.INode;
 	import emap.vos.VONode;
 	import emap.vos.VORoute;
 	
@@ -67,9 +68,26 @@ package emap.map2d.vos
 		/**
 		 * private
 		 * */
+		public function set direction($value:int):void
+		{
+			setProperty("direction",$value)
+		}
+		
+		/**
+		 * private
+		 * */
 		public function get label():String
 		{
 			return getProperty("label");
 		}
+		override public function toXML():String
+		{
+			if(node1) setProperty("serial1",node1.serial);
+			if(node2) setProperty("serial2",node2.serial);
+			return super.toXML();  
+		}
+		
+		
+		
 	}
 }

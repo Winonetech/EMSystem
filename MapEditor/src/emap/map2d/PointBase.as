@@ -2,7 +2,7 @@ package emap.map2d
 {
 	import emap.core.EMConfig;
 	import emap.data.Step;
-	//import emap.map2d.core.MapConfig;
+	import emap.map2d.vos.E2VONode;
 	
 	import flash.display.Sprite;
 	import flash.geom.Point;
@@ -12,17 +12,17 @@ package emap.map2d
 	[Bindable]
 	public class PointBase extends Base
 	{
-		public function PointBase(point:Point)
+		public function PointBase(point:Point,$value:Number)
 		{
 			super();
+			radiu = $value;
 			initialize(point);
 		}
 		
 		private function initialize(point:Point):void
 		{
 			mouseChildren = false;
-			
-			//config = mapConfig;
+ 			//config = mapConfig;
 			this.x = point.x;
 			this.y = point.y;
 			__scale = 1;
@@ -35,7 +35,7 @@ package emap.map2d
 				lineStyle(1, 0);
 				beginFill(color);
 				
-				drawCircle(0,0,5);
+				drawCircle(0,0,radiu);
 				endFill();
 			}
 			
@@ -73,7 +73,7 @@ package emap.map2d
 				clear();
 				lineStyle(1, 0);
 				beginFill(color);
-				drawCircle(0,0,5);
+				drawCircle(0,0,radiu);
 				endFill();
 			}
 		}
@@ -96,5 +96,6 @@ package emap.map2d
 		
 		private var textLayer:Sprite;
 		private var textField:TextField;
+		private var radiu:Number;
 	}
 }

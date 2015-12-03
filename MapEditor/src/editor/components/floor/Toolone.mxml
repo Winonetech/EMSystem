@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="10%">
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="10%" backgroundColor="0xdce1e8" borderVisible="false">
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
-	<s:Button x="23" y="15" label="+" click="add_clickHandler(event)"/>
-	<s:Button x="105" y="15" label="-" click="sub_clickHandler(event)"/>
+	
+	<s:Button x="92" y="5" click="add_clickHandler(event)" skinClass="editor.skin.AddButtonSkin"/>
+	<s:Button x="182" y="5"  click="sub_clickHandler(event)" skinClass="editor.skin.DeleteButtonSkin"/>
 	<fx:Script>
 		<![CDATA[
-
+			import editor.command.AddFloorCommand;
+			import editor.command.SubFloorCommand;
+			import editor.core.E2Presenter;
+			import editor.core.EDConfig;
 			
+			import emap.map2d.core.E2Provider;
+			import emap.map2d.vos.E2VOFloor;
 			import emap.vos.VOFloor;
+			
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
 			
 			import spark.components.VGroup;
 			protected function add_clickHandler(event:MouseEvent):void
@@ -21,14 +30,26 @@
 //				var fp:FloorPlate = new FloorPlate;
 //				fp.floor = f;
 //				MEConfig.instance.floorNC.addElement(fp);
-				
-				
+				E2Presenter.instance.execute(new AddFloorCommand);
+
 			}
 			
 			protected function sub_clickHandler(event:MouseEvent):void
 			{
 				// TODO Auto-generated method stub
-				
+				if(EDConfig.instance.selectedFloor)
+					Alert.show("是否删除该楼层?","确认删除",Alert.YES|Alert.NO,null,deleteFloor);
+					
+			}
+			private function deleteFloor(event:CloseEvent):void
+			{
+				if(Alert.YES == event.detail)
+				{
+					E2Presenter.instance.execute(new SubFloorCommand);
+				}else
+				{
+					return
+				}
 			}
 			
 		]]>

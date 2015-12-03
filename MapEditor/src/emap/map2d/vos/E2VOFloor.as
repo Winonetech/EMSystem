@@ -64,5 +64,12 @@ package emap.map2d.vos
 			setProperty("label", $value);
 		}
 		
+		override public function toXML():String
+		{
+			if (layout) setProperty("coordinate", layout.build());
+			
+			return super.toXML();
+		}
+		
 	}
 }
