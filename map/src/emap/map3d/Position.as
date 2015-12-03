@@ -25,11 +25,9 @@ package emap.map3d
 	import emap.data.Layout;
 	import emap.data.Step;
 	import emap.interfaces.IPosition;
-	import emap.map3d.comman.Logo;
-	import emap.map3d.comman.LogoPlane;
-	import emap.map3d.comman.LogoSprite;
-	import emap.map3d.utils.Map3DUtil;
+	import emap.map3d.comman.logo.*;
 	import emap.map3d.tools.SourceEmap3D;
+	import emap.map3d.utils.Map3DUtil;
 	import emap.utils.PositionUtil;
 	import emap.utils.StepUtil;
 	import emap.vos.VOPosition;
@@ -198,6 +196,10 @@ package emap.map3d
 		 */
 		private function updateIcon():void
 		{
+			if (data.label == "时尚生活百货")
+			{
+				trace("display");
+			}
 			Map3DUtil.destroyObject3D(iconLayer);
 			if (iconVisible && !StringUtil.isEmpty(icon) &&
 				PositionUtil.displayIcon(code))
@@ -351,7 +353,7 @@ package emap.map3d
 		
 		internal function get cenX():Number
 		{
-			return layout ? layout.cenX : 0;
+			return (layout ? layout.cenX + data.offsetX : 0);
 		}
 		
 		
@@ -363,7 +365,7 @@ package emap.map3d
 		
 		internal function get cenY():Number
 		{
-			return layout ? layout.cenY : 0;
+			return (layout ? layout.cenY + data.offsetY : 0);
 		}
 		
 		

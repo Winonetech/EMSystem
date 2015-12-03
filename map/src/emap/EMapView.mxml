@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wt:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s ="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:wt="com.winonetech.core.*"
+		 implements="emap.interfaces.IEMap"
+		 width="800" height="450"
+		 resize="view_resizeHandler(event)">
+	
+	<fx:Declarations>
+		<s:RadioButtonGroup id="modeRadio" change="modeRadio_changeHandler(event)"/>
+		<s:RadioButtonGroup id="floorRadio" change="floorRadio_changeHandler(event)"/>
+	</fx:Declarations>
+	
+	<fx:Metadata>
+		[Event(name="positionClick", type="emap.events.MapEvent")]
+	</fx:Metadata>
+	
+	<mx:UIComponent id="container"/>
+	<s:HGroup left="10" top="10" gap="30">
+		<s:HGroup>
+			<s:RadioButton label="平移" value="move" group="{modeRadio}" color="0xFFFFFF" selected="true"/>
+			<s:RadioButton label="旋转" value="rotate" group="{modeRadio}" color="0xFFFFFF"/>
+		</s:HGroup>
+		<s:HGroup id="floorsMenu"/>
+	</s:HGroup>
+	
+	<fx:Script>
+		<![CDATA[
+			
+			import cn.vision.collections.Map;
+			
+			import emap.core.em;
+			import emap.events.MapEvent;
+			import emap.map3d.EMap3D;
+			import emap.map3d.core.E3Config;
+			import emap.vos.VOEMap;
+			import emap.vos.VOFloor;
+			
+			import mx.events.ResizeEvent;
+			
+			
+			/**
+			 * 
+			 * 寻路。
+			 * 
+			 */
+			
+			public function find($serial:String, $tween:Boolean = false):void
+			{
+				if (map) map.find(initializePosition, $serial, $tween);
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
+			public function viewPosition($data:*, $tween:Boolean = false):void
+			{
+				if (map) map.viewPosition($data, $tween);
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
+			public function viewFloor($data:*, $tween:Boolean = false):void
+			{
+				if (map) map.viewFloor($data, $tween);
+			}
+			
+			/**
+			 * @private
+			 */
+			private function checkUpdatable():Boolean
+			{
+				return container && em::config && em::floors && em::positions && 
+					em::positionTypes && (!hallEnabled || (hallEnabled && em::halls));
+			}
+			
+			/**
+			 * @private
+			 */
+			private function callbackData():Boolean
+			{
+				var result:Boolean = checkUpdatable();
+				if (result)
+				{
+					if (map)
+					{
+						if (container.contains(map))
+							container.removeChild(map);
+						map.removeEventListener(MapEvent.POSITION_CLICK, map_positionClickHandler);
+						map = null;
+					}
+					map = new EMap3D(em::config);
+					map.width  = width;
+					map.height = height;
+					map.floors = em::floors;
+					map.halls  = em::halls;
+					map.positions     = em::positions;
+					map.positionTypes = em::positionTypes;
+					map.addEventListener(MapEvent.POSITION_CLICK, map_positionClickHandler);
+					container.addChild(map);
+					
+					for each (var voFloor:VOFloor in em::floors)
+					{
+						var radio:RadioButton = new RadioButton;
+						radio.label = voFloor.label;
+						radio.value = voFloor.id;
+						radio.setStyle("color", 0xFFFFFF);
+						radio.group = floorRadio;
+						floorsMenu.addElement(radio);
+					}
+				}
+				return result;
+			}
+			
+			/**
+			 * @private
+			 */
+			private function callbackInitializePosition():Boolean
+			{
+				var result:Boolean = Boolean(map);
+				if (result) map.initializePosition = initializePosition;
+				return result;
+			}
+			
+			/**
+			 * @private
+			 */
+			private function callbackNodes():Boolean
+			{
+				var result:Boolean = Boolean(map);
+				if (result) map.nodes = em::nodes;
+				return result;
+			}
+			
+			/**
+			 * @private
+			 */
+			private function callbackRoutes():Boolean
+			{
+				var result:Boolean = Boolean(map);
+				if (result) map.routes = em::routes;
+				return result;
+			}
+			
+			
+			/**
+			 * @private
+			 */
+			private function view_resizeHandler(event:ResizeEvent):void
+			{
+				if (map)
+				{
+					map.width  = width;
+					map.height = height;
+				}
+			}
+			
+			/**
+			 * @private
+			 */
+			private function modeRadio_changeHandler(event:Event):void
+			{
+				if (map)
+				{
+					map.mode = modeRadio.selectedValue as String;
+				}
+			}
+			
+			/**
+			 * @private
+			 */
+			private function floorRadio_changeHandler(event:Event):void
+			{
+				viewFloor(floorRadio.selectedValue, true);
+			}
+			
+			/**
+			 * @private
+			 */
+			private function map_positionClickHandler(event:MapEvent):void
+			{
+				dispatchEvent(event.clone());
+			}
+			
+			
+			/**
+			 * 
+			 * 初始位置，寻路起点。
+			 * 
+			 */
+			
+			public function get initializePosition():String
+			{
+				return em::initializePosition;
+			}
+			
+			/**
+			 * @private
+			 */
+			public function set initializePosition($value:String):void
+			{
+				em::initializePosition = $value;
+				applyCallback(callbackInitializePosition, false);
+			}
+			
+			
+			/**
+			 * 
+			 * 字体只能在初始化时设置，设置数据后不可实时更改。
+			 * 
+			 */
+			
+			public function get font():String
+			{
+				return em::font;
+			}
+			
+			/**
+			 * @private
+			 */
+			public function set font($value:String):void
+			{
+				em::font = $value;
+				
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
+			public function get hallEnabled():Boolean
+			{
+				return em::config ? em::config.hallEnabled : false;
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
+			public function set config($value:VOEMap):void
+			{
+				em::config = $value;
+				applyCallback(callbackData);
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
+			public function set floors($data:Map):void
+			{
+				em::floors = $data;
+				applyCallback(callbackData);
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
+			public function set halls($data:Map):void
+			{
+				em::halls = $data;
+				applyCallback(callbackData);
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
+			public function set positions($data:Array):void
+			{
+				em::positions = $data;
+				applyCallback(callbackData);
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
+			public function set positionTypes($data:Map):void
+			{
+				em::positionTypes = $data;
+				applyCallback(callbackData);
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
+			public function set nodes($data:Map):void
+			{
+				em::nodes = $data;
+				applyCallback(callbackNodes, false);
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
+			public function set routes($data:Map):void
+			{
+				em::routes = $data;
+				applyCallback(callbackRoutes, false);
+			}
+			
+			
+			/**
+			 * @private
+			 */
+			private var map:EMap3D;
+			
+			
+			/**
+			 * @private
+			 */
+			em var initializePosition:String;
+			
+			/**
+			 * @private
+			 */
+			em var font:String;
+			
+			/**
+			 * @private
+			 */
+			em var config:E3Config;
+			
+			/**
+			 * @private
+			 */
+			em var floors:Map;
+			
+			/**
+			 * @private
+			 */
+			em var halls:Map;
+			
+			/**
+			 * @private
+			 */
+			em var positions:Array;
+			
+			/**
+			 * @private
+			 */
+			em var positionTypes:Map;
+			
+			/**
+			 * @private
+			 */
+			em var nodes:Map;
+			
+			/**
+			 * @private
+			 */
+			em var routes:Map;
+			
+		]]>
+	</fx:Script>
+</wt:View>

@@ -108,6 +108,7 @@ package emap.map3d.finding
 		private function initialize($emap3d:EMap3D, $container:Object3D):void
 		{
 			shower = new Shower($emap3d, $container);
+			shower.toEnd = false;
 		}
 		
 		/**

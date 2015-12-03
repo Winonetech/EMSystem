@@ -34,6 +34,12 @@
 		<labelScale>1.5</labelScale>
 		<!-- 标签是否可见 -->
 		<labelVisible>true</labelVisible>
+		<!-- 门牌号 -->
+		<number></number>
+		<!-- 中央偏移X -->
+		<offsetX></offsetX>
+		<!-- 中央偏移Y -->
+		<offsetY></offsetY>
 		<!-- 节点编号，程序自动生成 -->
 		<serial>192168001016-20150802142503-4A3C0DRW</serial>
 		<!-- 厚度 -->
@@ -61,6 +67,9 @@
 		<labelRotation></labelRotation>
 		<labelScale>1.5</labelScale>
 		<labelVisible>true</labelVisible>
+		<number></number>
+		<offsetX></offsetX>
+		<offsetY></offsetY>
 		<serial>192168001016-20150802142503-BS84JT6Q</serial>
 		<thick>50</thick>
 		<floor_id>2</floor_id>
@@ -84,6 +93,9 @@
 		<labelRotation></labelRotation>
 		<labelScale>1.5</labelScale>
 		<labelVisible>true</labelVisible>
+		<number></number>
+		<offsetX></offsetX>
+		<offsetY></offsetY>
 		<serial>192168001016-20150802142503-S823J4HD</serial>
 		<thick>50</thick>
 		<floor_id>2</floor_id>
@@ -107,6 +119,9 @@
 		<labelRotation></labelRotation>
 		<labelScale>1.5</labelScale>
 		<labelVisible>true</labelVisible>
+		<number></number>
+		<offsetX></offsetX>
+		<offsetY></offsetY>
 		<serial>192168001016-20150802142503-AD3R5T7Y</serial>
 		<thick>25</thick>
 		<floor_id>2</floor_id>
@@ -130,6 +145,9 @@
 		<labelRotation></labelRotation>
 		<labelScale>1.5</labelScale>
 		<labelVisible>true</labelVisible>
+		<number></number>
+		<offsetX></offsetX>
+		<offsetY></offsetY>
 		<serial>192168001016-20150802142503-R4E3WQS2</serial>
 		<thick>25</thick>
 		<floor_id>2</floor_id>
@@ -153,6 +171,9 @@
 		<labelRotation></labelRotation>
 		<labelScale>1.5</labelScale>
 		<labelVisible>true</labelVisible>
+		<number></number>
+		<offsetX></offsetX>
+		<offsetY></offsetY>
 		<serial>192168001016-20150802142503-7TFG4HBC</serial>
 		<thick></thick>
 		<floor_id>1</floor_id>
@@ -176,6 +197,9 @@
 		<labelRotation></labelRotation>
 		<labelScale>1.5</labelScale>
 		<labelVisible>true</labelVisible>
+		<number></number>
+		<offsetX></offsetX>
+		<offsetY></offsetY>
 		<serial>192168001016-20150802142503-WF2X45TH</serial>
 		<thick>50</thick>
 		<floor_id>1</floor_id>

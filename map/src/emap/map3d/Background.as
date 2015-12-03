@@ -59,13 +59,9 @@ package emap.map3d
 			if (widthSegments <= 0 || lengthSegments <= 0)
 				throw new ArgumentError("Parameter widthSegments and lengthSegments must > 0");
 			
+			var x:int, y:int, t:Number, s:Number, wEdges:int = widthSegments + 1, lEdges:int = lengthSegments + 1;
 			var indices:Vector.<uint> = new Vector.<uint>;
-			var x:int;
-			var y:int;
-			var wEdges:int = widthSegments + 1;
-			var lEdges:int = lengthSegments + 1;
-			var halfWidth:Number = width * 0.5;
-			var halfLength:Number = length * 0.5;
+			var halfWidth:Number = width * 0.5, halfLength:Number = length * 0.5;
 			
 			var segmentUSize:Number = usize / widthSegments;
 			var segmentVSize:Number = vsize / lengthSegments;
@@ -95,7 +91,11 @@ package emap.map3d
 				for (y = 0; y < lEdges; y++)
 				{
 					if (x < widthSegments && y < lengthSegments) 
-						createFace(indices, vertices, x * lEdges + y, (x + 1) * lEdges + y, (x + 1) * lEdges + y + 1, x * lEdges + y + 1, 0, 0, 1, 1, 0, 0, -1, reverse);
+					{
+						t = (x + 1) * lEdges + y;
+						s = x * lEdges + y;
+						createFace(indices, vertices, s, t, t + 1, s + 1, 0, 0, 1, 1, 0, 0, -1, reverse);
+					}
 				}
 			}
 			
@@ -121,7 +121,11 @@ package emap.map3d
 					for (y = 0; y < lEdges; y++)
 					{
 						if (x < widthSegments && y < lengthSegments)
-							createFace(indices, vertices, baseIndex + (x + 1) * lEdges + y + 1, baseIndex + (x + 1) * lEdges + y, baseIndex + x * lEdges + y, baseIndex + x * lEdges + y + 1, 0, 0, -1, -1, 0, 0, -1, reverse);
+						{
+							t = baseIndex + (x + 1) * lEdges + y;
+							s = baseIndex + x * lEdges + y;
+							createFace(indices, vertices, t + 1, t, s, s + 1, 0, 0, -1, -1, 0, 0, -1, reverse);
+						}
 					}
 				}
 			}
@@ -129,21 +133,8 @@ package emap.map3d
 			// Set bounds
 			geometry = new Geometry;
 			geometry.indices = indices;
-			var attributes:Array = new Array;
-			attributes[0] = VertexAttributes.POSITION;
-			attributes[1] = VertexAttributes.POSITION;
-			attributes[2] = VertexAttributes.POSITION;
-			attributes[3] = VertexAttributes.TEXCOORDS[0];
-			attributes[4] = VertexAttributes.TEXCOORDS[0];
-			attributes[5] = VertexAttributes.NORMAL;
-			attributes[6] = VertexAttributes.NORMAL;
-			attributes[7] = VertexAttributes.NORMAL;
-			attributes[8] = VertexAttributes.TANGENT4;
-			attributes[9] = VertexAttributes.TANGENT4;
-			attributes[10] = VertexAttributes.TANGENT4;
-			attributes[11] = VertexAttributes.TANGENT4;
 			
-			geometry.addVertexStream(attributes);
+			geometry.addVertexStream(SourceEmap3D.ATTRIBUTES);
 			geometry.alternativa3d::_vertexStreams[0].data = vertices;
 			geometry.alternativa3d::_numVertices = vertices.length / 48;
 			if(!twoSided)
@@ -340,11 +331,6 @@ package emap.map3d
 			}
 		}
 		
-		
-		/**
-		 * @private
-		 */
-		private var scene:Stage3D;
 		
 		/**
 		 * @private

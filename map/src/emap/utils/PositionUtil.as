@@ -146,10 +146,11 @@ package emap.utils
 			
 			var lw:Number = $ristrictWidth;
 			var lh:Number = $ristrictHeight;
+			var s:Number = 1;
 			
 			if (iw > lw || ih > lh)
 			{
-				var s:Number = (iw / ih < lw / lh) ? lh / ih : lw / iw;
+				s = (iw / ih > lw / lh) ? lh / ih : lw / iw;
 				iw *= s;
 				ih *= s;
 			}

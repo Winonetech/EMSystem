@@ -1,4 +1,4 @@
-package emap.map3d.comman
+package emap.map3d.comman.logo
 {
 	
 	/**
@@ -26,7 +26,9 @@ package emap.map3d.comman
 	import flash.geom.Matrix;
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
-	  
+
+	import emap.map3d.comman.PixelTextureMaterial;
+
 	
 	public class Logo extends Object3D
 	{

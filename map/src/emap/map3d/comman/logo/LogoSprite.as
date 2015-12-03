@@ -1,4 +1,4 @@
-package emap.map3d.comman
+package emap.map3d.comman.logo
 {
 	
 	/**
@@ -14,6 +14,7 @@ package emap.map3d.comman
 	
 	import emap.core.em;
 	import emap.map3d.utils.Map3DUtil;
+	import emap.map3d.comman.PixelTextureMaterial;
 	
 	
 	public final class LogoSprite extends Logo

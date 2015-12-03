@@ -10,31 +10,23 @@ package emap.map3d.finding
 	
 	import alternativa.engine3d.alternativa3d;
 	import alternativa.engine3d.core.Object3D;
-	import alternativa.engine3d.materials.FillMaterial;
 	import alternativa.engine3d.objects.WireFrame;
-	import alternativa.engine3d.primitives.Box;
 	import alternativa.engine3d.resources.WireGeometry;
 	
-	import cn.vision.collections.Map;
-	import cn.vision.core.VSObject;
 	import cn.vision.utils.ArrayUtil;
+	import cn.vision.utils.MathUtil;
 	import cn.vision.utils.TimerUtil;
 	import cn.vision.utils.Vector3DUtil;
 	import cn.vision.utils.math.BezierUtil;
 	import cn.vision.utils.math.LineUtil;
 	
 	import emap.core.em;
+	import emap.interfaces.INode;
 	import emap.map3d.EMap3D;
 	import emap.map3d.comman.Arrow;
-	import emap.map3d.data.Axis3D;
 	import emap.map3d.interfaces.IE3Node;
 	import emap.map3d.tools.SourceEmap3D;
-	import emap.map3d.vos.E3VOPosition;
-	import emap.utils.NodeUtil;
-	import emap.utils.RouteUtil;
-	import emap.vos.VONode;
 	import emap.vos.VOPosition;
-	import emap.vos.VORoute;
 	
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
@@ -91,13 +83,11 @@ package emap.map3d.finding
 				
 				resolvePointsByPath();
 				
-				resolveVector3Ds2Axis();
-				
 				if ($tween)
 				{
 					count = 0;
 					wire = new WireFrame(0xFF0000, 1, 1);
-					TimerUtil.callLater(1000, timer.start);
+					TimerUtil.callLater(1 * 1000, timer.start);
 				}
 				else
 				{
@@ -123,19 +113,15 @@ package emap.map3d.finding
 				var p1:Vector3D = points[count + 1];
 				geometry.alternativa3d::addLine(p0.x, p0.y, p0.z, p1.x, p1.y, p1.z);
 				wire.calculateBoundBox();
+				var v:Vector3D = p1.subtract(p0);
+				v.normalize();
 				arrow.x = p1.x;
 				arrow.y = p1.y;
 				arrow.z = p1.z;
-				var v:Vector3D = p1.subtract(p0);
-				v.normalize();
-				var rx:Number = Math.atan2(v.z, v.y);
-				var ry:Number = Math.atan2(Math.abs(v.z), Math.abs(v.x));
-				var rz:Number = Math.atan2(v.y, v.x);
-				arrow.rotationX = rx;
-				arrow.rotationY = ry;
-				arrow.rotationZ = rz;
+				arrow.rotationX = Math.atan2(v.z, v.y);
+				arrow.rotationY = Math.atan2(MathUtil.abs(v.z), MathUtil.abs(v.x));
+				arrow.rotationZ = Math.atan2(v.y, v.x);
 				
-				trace(v, arrow.rotationX, arrow.rotationY, arrow.rotationZ);
 				count ++;
 				SourceEmap3D.uploadAllSources(wire);
 			}
@@ -156,27 +142,10 @@ package emap.map3d.finding
 			arrow = new Arrow;
 			arrow.visible = false;
 			
-			axis3d = new Vector.<Axis3D>;
 			points = new Vector.<Vector3D>;
 			
 			timer = new Timer(33);
 			timer.addEventListener(TimerEvent.TIMER, handlerTimer);
-		}
-		
-		/**
-		 * @private
-		 */
-		private function resolveVector3Ds2Axis():void
-		{
-			var l:uint = points.length;
-			var i:uint = 0;
-			while (i < l)
-			{
-				var p:Vector3D = points[i];
-				p.y = -p.y;
-				axis3d[i] = new Axis3D(p.x, p.y, p.z, 0, 0, 0);
-				i++;
-			}
 		}
 		
 		/**
@@ -188,15 +157,15 @@ package emap.map3d.finding
 			{
 				if (path.shows && path.shows.length)
 				{
-					axis3d.length = 0;
 					points.length = 0;
-					var shows:Vector.<IE3Node> = path.shows;
+					var shows:Vector.<IE3Node> = path.shows.concat();
+					if(!toEnd && shows.length > 2) shows.pop();
 					var i:uint = 0;
-					var l:int = shows.length;
+					var l:uint = shows.length;
 					//遍历所有需要显示的节点
 					while (i < l)
 					{
-						var p:Number  = i == 0 ? 0 : radius;
+						var p:Number = i == 0 ? 0 : radius;
 						i = resolvePointsByRoute(shows, i, p);
 					}
 				}
@@ -285,10 +254,58 @@ package emap.map3d.finding
 					//第三个节点不存在，路径至n2已经结束
 					//获取n1与n2连接线上从$dis开始的点集合，并存入points
 					pushPointsLine(n1, n2, $dis, 0);
-					//更新标记
 				}
 			}
 			return $flag;
+		}
+		
+		/**
+		 * @private
+		 */
+		private function checkTipNode($flag:uint, $nodes:Vector.<IE3Node>):String
+		{
+			var l:uint = $nodes.length;
+			if (l)
+			{
+				var result:String;
+				if ($flag == 0)
+				{
+					if ($flag + 1 < l)
+					{
+						result = "从当前位置出发，沿" + getDirection($nodes[$flag], $nodes[$flag + 1]) + "方向行走，至" + getNearestPositionName($nodes[$flag + 1]);
+					}
+				}
+				else if ($flag == $nodes.length - 1)
+				{
+					
+				}
+				else
+				{
+					
+				}
+			}
+			return result;
+		}
+		
+		/**
+		 * @private
+		 */
+		private function getDirection($node1:IE3Node, $node2:IE3Node):String
+		{
+			var v1:Point = new Point($node1.nodeX, -$node1.nodeY);
+			var v2:Point = new Point($node2.nodeX, -$node2.nodeY);
+			var v3:Point = v2.subtract(v1);
+			var ag:Number = MathUtil.moduloAngle(MathUtil.radianToAngle(Math.atan2(v3.y, v3.x)));
+			var it:uint = ag / 45;
+			return DIRECTIONS[it];
+		}
+		
+		/**
+		 * @private
+		 */
+		private function getNearestPositionName($node:IE3Node):String
+		{
+			return null;
 		}
 		
 		/**
@@ -333,7 +350,7 @@ package emap.map3d.finding
 		{
 			const v1:Vector3D = getVector3DByNode($node1);
 			const v2:Vector3D = getVector3DByNode($node2);
-			return Vector3DUtil.interpolate(v2, v1, $dis /  Vector3D.distance(v1, v2));
+			return Vector3DUtil.interpolate(v2, v1, $dis / Vector3D.distance(v1, v2));
 		}
 		
 		/**
@@ -341,7 +358,7 @@ package emap.map3d.finding
 		 */
 		private function getVector3DByNode($node:IE3Node):Vector3D
 		{
-			return new Vector3D($node.nodeX, $node.nodeY, getZByFloorID($node.floorID));
+			return new Vector3D($node.nodeX, -$node.nodeY, getZByFloorID($node.floorID));
 		}
 		
 		/**
@@ -377,9 +394,13 @@ package emap.map3d.finding
 		
 		
 		/**
-		 * @private
+		 * 
+		 * 演示终点。
+		 * 
 		 */
-		private var axis3d:Vector.<Axis3D>;
+		
+		public var toEnd:Boolean = true;
+		
 		
 		/**
 		 * @private
@@ -446,6 +467,12 @@ package emap.map3d.finding
 		 * @private
 		 */
 		private var zawp:Object;
+		
+		
+		/**
+		 * @private
+		 */
+		private const DIRECTIONS:Object = {1:"北", 2:"东北", 3:"东", 4:"东南", 5:"南", 6:"西南", 7:"西", 8:"西北"};
 		
 	}
 }

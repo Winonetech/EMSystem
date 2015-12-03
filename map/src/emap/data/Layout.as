@@ -271,42 +271,42 @@ package emap.data
 		/**
 		 * @private
 		 */
-		em var cenX:Number;
+		em var cenX:Number = 0;
 		
 		/**
 		 * @private
 		 */
-		em var cenY:Number;
+		em var cenY:Number = 0;
 		
 		/**
 		 * @private
 		 */
-		em var minX:Number;
+		em var minX:Number = 0;
 		
 		/**
 		 * @private
 		 */
-		em var minY:Number;
+		em var minY:Number = 0;
 		
 		/**
 		 * @private
 		 */
-		em var maxX:Number;
+		em var maxX:Number = 0;
 		
 		/**
 		 * @private
 		 */
-		em var maxY:Number;
+		em var maxY:Number = 0;
 		
 		/**
 		 * @private
 		 */
-		em var width:Number;
+		em var width:Number = 0;
 		
 		/**
 		 * @private
 		 */
-		em var height:Number;
+		em var height:Number = 0;
 		
 		/**
 		 * @private

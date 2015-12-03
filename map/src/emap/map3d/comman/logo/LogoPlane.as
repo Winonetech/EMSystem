@@ -1,4 +1,4 @@
-package emap.map3d.comman
+package emap.map3d.comman.logo
 {
 	
 	/**
@@ -11,6 +11,7 @@ package emap.map3d.comman
 	import alternativa.engine3d.primitives.Plane;
 	
 	import emap.map3d.utils.Map3DUtil;
+	import emap.map3d.comman.PixelTextureMaterial;
 	
 	
 	public final class LogoPlane extends Logo
