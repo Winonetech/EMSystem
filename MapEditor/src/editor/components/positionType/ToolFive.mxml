@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300" backgroundColor="0xdce1e8" borderVisible="false">
+	
+	<fx:Script>
+		<![CDATA[
+			import editor.core.EDConfig;
+			
+			import emap.map2d.core.E2Config;
+			import emap.map2d.core.E2Provider;
+			import emap.map2d.util.CountUtil;
+			import emap.map2d.vos.E2VOPositionType;
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				var positionType :E2VOPositionType = new E2VOPositionType();
+				positionType.id = String(CountUtil.instance.positionTypeCount);
+				positionType.label = "店铺";
+				positionType.code = "entity";
+				positionType.order = 1;
+				positionType.visible = false;
+				E2Provider.instance.positionTypeMap[positionType.id] = positionType;
+				EDConfig.instance.positionTypeGroup.addPositionType(positionType);
+				EDConfig.instance.selectedPositionType = positionType;
+				
+				EDConfig.instance.propertyPanel.setCurrentState("positionType",true);
+			}
+			
+			protected function button2_clickHandler(event:MouseEvent):void
+			{
+				
+				if(EDConfig.instance.selectedPositionType)
+				{
+				  delete	E2Provider.instance.positionTypeMap[EDConfig.instance.selectedPositionType.id];
+				   var i:int = E2Provider.instance.positionTypeArr.indexOf(EDConfig.instance.selectedPositionType.id);
+				   E2Provider.instance.positionTypeArr.splice(i,1);
+				   EDConfig.instance.positionTypeGroup.subPositionType();
+				   
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<s:Button x="92" y="5"  click="button1_clickHandler(event)" skinClass="editor.skin.AddButtonSkin"/>
+	<s:Button x="182" y="5"  click="button2_clickHandler(event)" skinClass="editor.skin.DeleteButtonSkin"/>
+</s:BorderContainer>

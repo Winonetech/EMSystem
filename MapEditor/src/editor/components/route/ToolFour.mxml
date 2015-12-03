@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:s="library://ns.adobe.com/flex/spark" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="50" backgroundColor="0xdce1e8" borderVisible="false">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<s:ComboBox id="cb" x="76" y="10" width="128"  height="28" selectedItem="{EDConfig.instance.selectedFloor}" dataProvider="{collection}" change="cb_changeHandler(event)"/>
+	<fx:Script>
+		<![CDATA[
+			import editor.core.EDConfig;
+			
+			import emap.map2d.core.E2Config;
+			import emap.map2d.vos.E2VOFloor;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.IndexChangedEvent;
+			public function set dataProvider($value:Object):void
+			{
+				var ary:Array = $value as Array;
+				var cAry:Array = ary.concat();
+				cAry.push("不同楼层");
+				collection = new ArrayCollection(cAry);
+			}
+			protected function cb_changeHandler(event:Event):void
+			{
+				if(cb.selectedItem == "不同楼层")
+				{
+					EDConfig.instance.routeGroup.addRouteDifferentFloor();
+				}else
+				{
+					voFloor = cb.selectedItem as E2VOFloor;
+					EDConfig.instance.selectedFloor = voFloor;
+					EDConfig.instance.routeGroup.addRouteByFloorId(voFloor.id);
+					EDConfig.instance.e2Config.eMap.viewFloor(voFloor.id);
+				}
+			}
+			
+			[Bindable]
+			private var collection:ArrayCollection;
+			private var voFloor:E2VOFloor;
+			
+			
+		]]>
+	</fx:Script>
+</s:BorderContainer>

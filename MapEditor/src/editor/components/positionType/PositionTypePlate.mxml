@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:s="library://ns.adobe.com/flex/spark" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   xmlns:vos="emap.map2d.vos.*" width="60%" height="44" borderVisible="false" mouseChildren="false" backgroundImage="@Embed('images/Item.png')">
+	<fx:Declarations>
+		<vos:E2VOPositionType id = "positionType"/>
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			[Bindable]
+			public var selected:Boolean;
+		]]>
+	</fx:Script>
+	<s:CheckBox x="32" y="10" label="{positionType.label}" selected="{selected}" />
+</s:BorderContainer>

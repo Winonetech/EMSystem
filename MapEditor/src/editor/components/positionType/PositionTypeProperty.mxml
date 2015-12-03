@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="240" height="100%">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import editor.core.EDConfig;
+			import editor.managers.ImageManager;
+			
+			import emap.map2d.core.E2Provider;
+			
+			import flash.filesystem.File;
+			protected function change($ptp:String,$ui:*,$uiProperty:String):void
+			{
+				if(EDConfig.instance.selectedPositionType)
+				{
+					EDConfig.instance.selectedPositionType[$ptp] = $ui[$uiProperty];
+					EDConfig.instance.selectedPositionType.label;
+					
+				}
+			}
+			
+			protected function icon_clickHandler(event:MouseEvent):void
+			{
+				if(EDConfig.instance.selectedPositionType)
+				{
+					var file:File = new File;
+					var fileFilter:FileFilter = new FileFilter("png,jpg","*.jpg;*.png");
+					file.addEventListener(Event.SELECT,changeImage);
+					file.browseForOpen("请选择楼层图片",[fileFilter]);
+				}
+				
+			}
+			protected function changeImage(event:Event):void
+			{
+				ImageManager.removeImage(EDConfig.instance.selectedPositionType.icon);
+				EDConfig.instance.selectedPositionType.icon = ImageManager.registImage(event.target.url,"cache/image");
+				
+			}
+		]]>
+	</fx:Script>
+	<s:Label x="13" y="11" text="节点" />
+	<mx:HRule x="0" y="32" width="100%"/>
+	<s:Label x="20" y="41" text="ID：" />
+	<s:TextInput  x="92" y="36" width="117" 
+				 text="{EDConfig.instance.selectedPositionType.id}" editable="false" />
+	<mx:HRule x="0" y="61" width="100%"/>
+	<s:Label x="20" y="73" text="名称："/>
+	<s:TextInput id="l" x="92" y="65" width="117" 
+				 text="{EDConfig.instance.selectedPositionType.label}" change="change('label',l,'text')"/>
+	<mx:HRule x="0" y="89" width="100%"/>
+	<s:Label x="20" y="102" text="编码："/>
+	<s:ComboBox id="c" x="91" y="94" width="118" dataProvider="{E2Provider.instance.positionCode}"
+				 selectedItem="{EDConfig.instance.selectedPositionType.code}" change="change('code',c,'selectedItem')"/>
+	<mx:HRule x="0" y="118" width="100%"/>
+	<s:Label x="20" y="126" text="可见："/>
+	<s:CheckBox id="s" x="90" y="124" selected="{EDConfig.instance.selectedPositionType.visible}" change="change('visible',s,'selected')"/>
+	<mx:HRule x="0" y="146" width="100%"/>
+	<s:Label x="20" y="158" text="图标："/>
+	<s:TextInput x="90" y="151" width="74" text="{EDConfig.instance.selectedPositionType.icon}" editable="false"/>
+	<mx:HRule x="0" y="179" width="100%"/>
+	<mx:VRule x="81" y="34" width="1" height="146"/>
+	<s:Button x="172" y="153" width="47" label="浏览" click="icon_clickHandler(event)"/>
+	
+</s:Group>

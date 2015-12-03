@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Scroller xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			xmlns:s="library://ns.adobe.com/flex/spark" 
+			xmlns:mx="library://ns.adobe.com/flex/mx" >
+	
+	<fx:Script>
+	
+	</fx:Script>
+	
+	<s:VGroup id="group" height="100%" width="100%" click="group_clickHandler(event)" gap="20" horizontalAlign="center">
+		
+	</s:VGroup>
+	
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import emap.map2d.core.E2Provider;
+			import emap.map2d.vos.E2VOPositionType;
+			private var lastPlate:PositionTypePlate;
+			import editor.core.EDConfig;
+			public function addAllPositionType():void
+			{
+				group.removeAllElements();
+				for each(var positionType:E2VOPositionType in E2Provider.instance.positionTypeMap)
+				{
+					var positionTypePlate:PositionTypePlate = new PositionTypePlate();
+					positionTypePlate.positionType = positionType;
+					group.addElement(positionTypePlate);
+					
+				}
+			}
+			public function addPositionType(positionType:E2VOPositionType):void
+			{
+				var positionTypePlate:PositionTypePlate = new PositionTypePlate();
+				positionTypePlate.positionType = positionType;
+				group.addElement(positionTypePlate);
+				if(lastPlate)
+				{
+					lastPlate.selected = false;
+					lastPlate = positionTypePlate;
+					lastPlate.selected = true;
+				}
+				else 
+				{
+					lastPlate = positionTypePlate ;
+					lastPlate.selected = true;
+				}
+				
+			}
+			//删除选中的
+			public function subPositionType():void
+			{
+				if(lastPlate)
+					group.removeElement(lastPlate);
+			}
+			protected function group_clickHandler(event:MouseEvent):void
+			{
+				if(event.target is PositionTypePlate)
+				{
+					var item:PositionTypePlate = event.target as PositionTypePlate;
+					if(lastPlate)
+					{
+						lastPlate.selected = false;
+						lastPlate = item;
+					}
+					else lastPlate = item;
+					if(item.selected)
+						item.selected = false;
+					else
+						item.selected = true ;
+					EDConfig.instance.selectedPositionType = item.positionType;
+					
+					EDConfig.instance.propertyPanel.setCurrentState("positionType",true);
+				}
+				
+			}
+			
+			
+		]]>
+	</fx:Script>
+</s:Scroller>

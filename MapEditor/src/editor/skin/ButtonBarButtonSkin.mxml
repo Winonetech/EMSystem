@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+    ADOBE SYSTEMS INCORPORATED
+    Copyright 2008 Adobe Systems Incorporated
+    All Rights Reserved.
+
+    NOTICE: Adobe permits you to use, modify, and distribute this file
+    in accordance with the terms of the license agreement accompanying it.
+
+-->
+
+<!--- The default skin class for a Spark ToggleButton component.  
+
+     @see spark.components.ToggleButton
+        
+      @langversion 3.0
+      @playerversion Flash 10
+      @playerversion AIR 1.5
+      @productversion Flex 4
+-->
+<s:SparkButtonSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
+				   xmlns:s="library://ns.adobe.com/flex/spark"
+				   xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
+				   width="62" height="37.5"
+				   alpha.disabledStates="0.5">
+	<fx:Metadata>[HostComponent("spark.components.ButtonBarButton")]</fx:Metadata>
+   
+    <!-- states -->
+    <s:states>
+        <s:State name="up" />
+        <s:State name="over" stateGroups="overStates" />
+        <s:State name="down" stateGroups="downStates" />
+        <s:State name="disabled" stateGroups="disabledStates" />
+        <s:State name="upAndSelected" stateGroups="selectedStates, selectedUpStates" />
+        <s:State name="overAndSelected" stateGroups="overStates, selectedStates" />
+        <s:State name="downAndSelected" stateGroups="downStates, selectedStates" />
+        <s:State name="disabledAndSelected" stateGroups="selectedUpStates, disabledStates, selectedStates" />
+    </s:states>
+  
+	<s:Image visible="true" visible.selectedStates="false" source="@Embed('images/TabButtonNomal.png')" fillMode="scale" scaleMode="stretch" horizontalCenter="0" width="62" height="37.5" alpha.over=".5" alpha.down=".1">
+		
+	</s:Image>
+	<s:Image  source="@Embed('images/TabButtonSelected.png')" horizontalCenter="0"  fillMode="scale" scaleMode="stretch"  visible = "false" visible.selectedStates="true"  width="62" height="37.5">
+		
+	</s:Image>
+	
+    <!-- layer 1: shadow -->
+    <!--- @private -->
+        <!-- layer 8: text -->
+    <!--- @copy spark.components.supportClasses.ButtonBase#labelDisplay -->
+    <s:Label id="labelDisplay"  horizontalCenter="0" verticalCenter="0"
+			 maxDisplayedLines="1" textAlign="center" verticalAlign="middle" >
+    </s:Label>
+    
+</s:SparkButtonSkin>

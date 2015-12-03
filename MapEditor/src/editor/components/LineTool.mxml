@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="646" height="100%">
+	<fx:Script>
+		<![CDATA[
+			import editor.command.AddNodeCommand;
+			import editor.command.AddRouteCommand;
+			import editor.command.DataStoreCommand;
+			import editor.command.SubNodeCommand;
+			import editor.command.SubRouteCommand;
+			import editor.consts.ToolStateStyleConsts;
+			import editor.core.E2Presenter;
+			import editor.core.EDConfig;
+			
+			import emap.consts.StepStyleConsts;
+			import emap.map2d.core.E2Config;
+			
+			protected function moveTo_clickHandler(event:MouseEvent):void
+			{
+				if(m.selected)
+					EDConfig.instance.e2Config.editorStyle = StepStyleConsts.MOVE_TO;
+				else
+					EDConfig.instance.e2Config.editorStyle = "nostate";
+			}
+			
+			protected function lineTo_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				if(l.selected)
+					EDConfig.instance.e2Config.editorStyle = StepStyleConsts.LINE_TO;
+				else
+					EDConfig.instance.e2Config.editorStyle = "nostate";
+			}
+			protected function curveTo_clickHandler(event:MouseEvent):void
+			{
+				if(c.selected)
+					EDConfig.instance.e2Config.editorStyle = StepStyleConsts.CURVE_TO;
+				else
+					EDConfig.instance.e2Config.editorStyle = "nostate";
+			}
+			protected function addRoute_clickHandler(event:Event):void
+			{
+				// TODO Auto-generated method stub
+				if(EDConfig.instance.e2Config.toolStyle == ToolStateStyleConsts.NO_STATE)
+				{
+					EDConfig.instance.e2Config.toolStyle =ToolStateStyleConsts.ADD_ROUTE;
+					E2Presenter.instance.execute(new AddRouteCommand(true));
+				}
+				else 
+				{
+					EDConfig.instance.e2Config.toolStyle = ToolStateStyleConsts.NO_STATE;
+					E2Presenter.instance.execute(new AddRouteCommand(false));
+				}
+			}
+			
+			protected function addNode_clickHandler(event:Event):void
+			{
+				// TODO Auto-generated method stub
+				if(EDConfig.instance.e2Config.toolStyle == ToolStateStyleConsts.NO_STATE)
+				{
+					EDConfig.instance.e2Config.toolStyle =ToolStateStyleConsts.ADD_NODE;
+					E2Presenter.instance.execute(new AddNodeCommand(true));
+				}
+				else 
+				{
+					EDConfig.instance.e2Config.toolStyle = ToolStateStyleConsts.NO_STATE;
+					E2Presenter.instance.execute(new AddNodeCommand(false));
+				}
+				
+			}
+			protected function subNode_clickHandler(event:Event):void
+			{
+				if(EDConfig.instance.e2Config.toolStyle == ToolStateStyleConsts.NO_STATE)
+				{
+					EDConfig.instance.e2Config.toolStyle =ToolStateStyleConsts.DEL_NODE;
+					
+				}
+				else 
+					EDConfig.instance.e2Config.toolStyle = ToolStateStyleConsts.NO_STATE;
+				E2Presenter.instance.execute(new SubNodeCommand);
+				
+			}
+			protected function subRoute_clickHandler(event:Event):void
+			{
+				if(EDConfig.instance.e2Config.toolStyle == ToolStateStyleConsts.NO_STATE)
+				{
+					EDConfig.instance.e2Config.toolStyle =ToolStateStyleConsts.DEL_ROUTE;
+					E2Presenter.instance.execute(new SubRouteCommand(true));
+				}
+				else 
+				{
+					EDConfig.instance.e2Config.toolStyle = ToolStateStyleConsts.NO_STATE;
+					E2Presenter.instance.execute(new SubRouteCommand(false));
+			
+				}
+			
+			}
+			protected function dataStore_clickHandler(event:MouseEvent):void
+			{
+				E2Presenter.instance.execute(new DataStoreCommand);
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:ToggleButton skinClass="editor.skin.ToggleButtonSkin"  x="23" y="2" id="m" label="移动至" selected="{EDConfig.instance.e2Config.editorStyle==StepStyleConsts.MOVE_TO}" enabled="{EDConfig.instance.e2Config.setEditor}" click="moveTo_clickHandler(event)"  />
+	<s:ToggleButton skinClass="editor.skin.ToggleButtonSkin" x="100" y="2" id="l" label="画直线" selected="{EDConfig.instance.e2Config.editorStyle==StepStyleConsts.LINE_TO}" enabled="{EDConfig.instance.e2Config.setEditor}" click="lineTo_clickHandler(event)"  />
+	<s:ToggleButton skinClass="editor.skin.ToggleButtonSkin" x="177" y="2" id="c" label="画曲线" selected="{EDConfig.instance.e2Config.editorStyle==StepStyleConsts.CURVE_TO}" enabled="{EDConfig.instance.e2Config.setEditor}" click="curveTo_clickHandler(event)"  />
+	<s:ToggleButton skinClass="editor.skin.ToggleButtonSkin" x="255" y="2" label="增加节点" enabled="{(EDConfig.instance.e2Config.toolStyle==ToolStateStyleConsts.NO_STATE || (EDConfig.instance.e2Config.toolStyle==ToolStateStyleConsts.ADD_NODE)) &amp;&amp; !EDConfig.instance.e2Config.setEditor }" selected="{EDConfig.instance.e2Config.toolStyle==ToolStateStyleConsts.ADD_NODE}"   click="addNode_clickHandler(event)"   />
+	<s:ToggleButton skinClass="editor.skin.ToggleButtonSkin" x="336" y="2" label="删除节点" enabled="{(EDConfig.instance.e2Config.toolStyle==ToolStateStyleConsts.NO_STATE || (EDConfig.instance.e2Config.toolStyle==ToolStateStyleConsts.DEL_NODE)) &amp;&amp; !EDConfig.instance.e2Config.setEditor }" selected="{EDConfig.instance.e2Config.toolStyle==ToolStateStyleConsts.DEL_NODE}"  change="subNode_clickHandler(event)"  />
+	<s:ToggleButton skinClass="editor.skin.ToggleButtonSkin" x="411" y="2" label="增加路径" enabled="{(EDConfig.instance.e2Config.toolStyle==ToolStateStyleConsts.NO_STATE || EDConfig.instance.e2Config.toolStyle==ToolStateStyleConsts.ADD_ROUTE) &amp;&amp; !EDConfig.instance.e2Config.setEditor }" selected="{EDConfig.instance.e2Config.toolStyle==ToolStateStyleConsts.ADD_ROUTE}"  change="addRoute_clickHandler(event)"  />
+	<s:ToggleButton skinClass="editor.skin.ToggleButtonSkin" x="488" y="2" label="删除路径" enabled="{(EDConfig.instance.e2Config.toolStyle==ToolStateStyleConsts.NO_STATE || EDConfig.instance.e2Config.toolStyle==ToolStateStyleConsts.DEL_ROUTE) &amp;&amp; !EDConfig.instance.e2Config.setEditor }" selected="{EDConfig.instance.e2Config.toolStyle==ToolStateStyleConsts.DEL_ROUTE}"  change="subRoute_clickHandler(event)" />
+	<s:Button x="560" y="2" label="保存数据"   click="dataStore_clickHandler(event)" skinClass="editor.skin.ButtonSkin" />
+	
+</s:Group>
