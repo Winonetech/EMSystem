@@ -71,7 +71,6 @@
 					else
 						item.selected = true ;
 					EDConfig.instance.selectedPositionType = item.positionType;
-					
 					EDConfig.instance.propertyPanel.setCurrentState("positionType",true);
 				}
 				

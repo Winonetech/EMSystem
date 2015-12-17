@@ -82,7 +82,8 @@
 								width="100%" height="100%" id = "vr">  
 				<s:VGroup  width="100%" height="100%">
 					<route:ToolFour id="routeTool" width="100%" height="50">
-					</route:ToolFour>
+					</route:ToolFour> 
+				
 					
 					<route:RouteGroup id="rg" width="100%" height="100%">
 					</route:RouteGroup>

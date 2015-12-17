@@ -22,13 +22,11 @@
 				E2Provider.instance.positionTypeMap[positionType.id] = positionType;
 				EDConfig.instance.positionTypeGroup.addPositionType(positionType);
 				EDConfig.instance.selectedPositionType = positionType;
-				
 				EDConfig.instance.propertyPanel.setCurrentState("positionType",true);
 			}
 			
 			protected function button2_clickHandler(event:MouseEvent):void
 			{
-				
 				if(EDConfig.instance.selectedPositionType)
 				{
 				  delete	E2Provider.instance.positionTypeMap[EDConfig.instance.selectedPositionType.id];
@@ -45,7 +43,6 @@
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
-	
-	<s:Button x="92" y="5"  click="button1_clickHandler(event)" skinClass="editor.skin.AddButtonSkin"/>
+                   	<s:Button x="92" y="5"  click="button1_clickHandler(event)" skinClass="editor.skin.AddButtonSkin"/>
 	<s:Button x="182" y="5"  click="button2_clickHandler(event)" skinClass="editor.skin.DeleteButtonSkin"/>
 </s:BorderContainer>

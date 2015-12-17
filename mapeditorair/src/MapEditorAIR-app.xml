@@ -125,15 +125,7 @@
 
 	<!-- The icon the system uses for the application. For at least one resolution,
 	specify the path to a PNG file included in the AIR package. Optional. -->
-	<icon>
-		<image16x16>icon/16.png</image16x16>
-		<image32x32>icon/32.png</image32x32>
-		
-		<image48x48>icon/48.png</image48x48>
-		
 	
-		
-	</icon> 
 
 	<!-- Whether the application handles the update when a user double-clicks an update version
 	of the AIR file (true), or the default AIR application installer handles the update (false).
@@ -163,16 +155,14 @@
 			<!-- <contentType></contentType> -->
 			
 			<!-- The icon to display for the file type. Optional. -->
-			<!-- <icon>
-				<image16x16></image16x16>
-				<image32x32></image32x32>
-				<image48x48></image48x48>
-				<image128x128></image128x128>
-			</icon> -->
+			 <icon>
+				
+				<image128x128>icon/map.png</image128x128>
+			</icon> 
 			
 		<!-- </fileType> -->
 	<!-- </fileTypes> -->
-
+	
     <!-- iOS specific capabilities -->
 	<!-- <iPhone> -->
 		<!-- A list of plist key/value pairs to be added to the application Info.plist -->

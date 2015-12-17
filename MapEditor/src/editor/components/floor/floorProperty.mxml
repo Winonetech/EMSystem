@@ -180,7 +180,7 @@
 	<s:TextInput id="t" x="91" y="36" text="{_floor.label}"/>
 	<s:Button x="20" y="261"  label="编辑" click="editor_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
 	<s:Button id="setEmpty" x="81" y="261"  label="重绘" click="empty_clickHandler(event)" enabled="false" skinClass="editor.skin.PropertyButtonSkin"/>
-	<s:Button x="138" y="260"  label="保存" click="submit_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
+	<s:Button x="138" y="260"  label="完成" click="submit_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
 	<s:Label x="20" y="93" text="顺序："/>
 	<s:Label x="20" y="126" text="图片："/>
 	<s:TextInput x="90" y="93" text="{_floor.order}"/>

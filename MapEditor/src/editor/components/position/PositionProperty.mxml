@@ -13,6 +13,7 @@
 			import editor.core.EDConfig;
 			import editor.managers.ImageManager;
 			
+			import emap.consts.PositionCodeConsts;
 			import emap.consts.StepStyleConsts;
 			import emap.core.em;
 			import emap.map2d.Position;
@@ -78,12 +79,14 @@
 			
 			protected function submit_clickHandler(event:MouseEvent):void
 			{
-				if(EDConfig.instance.e2Config.positionViewMap[position.id]){
-					EDConfig.instance.e2Config.utilLayer.clear();
-					position.color = c.selectedColor;
-					EDConfig.instance.e2Config.positionViewMap[position.id].update(); 
-					EDConfig.instance.e2Config.positionViewMap[position.id].editStep = false;
-//					
+				if(position){
+					if(EDConfig.instance.e2Config.positionViewMap[position.id]){
+						EDConfig.instance.e2Config.utilLayer.clear();
+						position.color = c.selectedColor;
+						EDConfig.instance.e2Config.positionViewMap[position.id].update(); 
+						EDConfig.instance.e2Config.positionViewMap[position.id].editStep = false;
+	//					
+					}
 				}
 				
 			}
@@ -99,11 +102,41 @@
 			}
 			protected function changeType():void
 			{
-				if(position!=null)
+				
+				if(position!=null&& positionType.selectedItem )
 				{
+					
+					if(isRedraw(position.typeCode,positionType.selectedItem.code))
+					{
+						
+						position.positionTypeID = (positionType.selectedItem as E2VOPositionType).id;
+						position.positionType = positionType.selectedItem as E2VOPositionType;
+						EDConfig.instance.e2Config.positionViewMap[position.id].changePositionType()
+					}else
+					{
+						position.positionTypeID = (positionType.selectedItem as E2VOPositionType).id;
+						position.positionType = positionType.selectedItem as E2VOPositionType;
+					}
+					
 					position.positionTypeID = (positionType.selectedItem as E2VOPositionType).id;
-			
+					
 				}
+			}
+			//判断变换类型是不是要重新绘制  
+			private function isRedraw($value1:String,$value2:String):Boolean
+			{
+				if($value1==PositionCodeConsts.ENTITY || $value1==PositionCodeConsts.PATIO || $value1==PositionCodeConsts.TERRAIN || $value1==PositionCodeConsts.UNSEEN )
+				{
+					if($value2 == PositionCodeConsts.LIFT || $value2==PositionCodeConsts.STAIRS || $value1==PositionCodeConsts.ESCALATOR)
+						return true;
+				}
+				if($value1 == PositionCodeConsts.LIFT || $value1==PositionCodeConsts.STAIRS || $value1==PositionCodeConsts.ESCALATOR)
+				{
+					if($value2==PositionCodeConsts.ENTITY || $value2==PositionCodeConsts.PATIO || $value2==PositionCodeConsts.TERRAIN || $value2==PositionCodeConsts.UNSEEN)
+						return true;
+				}
+					
+				return false;
 			}
 			protected function editor_clickHandler(event:MouseEvent):void
 			{
@@ -154,9 +187,10 @@
 			
 			protected function icon_changeHandler(event:Event):void
 			{
+				_position.iconScale = iconScale.value; 
 				if(_position)
 				{
-					_position.iconScale = iconScale.value; 
+					
 					EDConfig.instance.e2Config.positionViewMap[position.id].iconScaleChange(iconScale.value); 
 				}
 				
@@ -190,80 +224,80 @@
 			
 		]]>
 	</fx:Script>
-	<s:Label x="13" y="10" text="图标"/>
+	<s:Label x="10" y="247" text="图标"/>
 	<mx:HRule x="0" y="28" width="100%" height="1"/>
-	<s:Label x="20" y="40" text="名称:"/>
+	<s:Label x="18" y="38" text="名称:"/>
 	
-	<s:TextInput x="97" id="lb" y="33" width="86" text="{position.label}" change="change('label',lb,'text')"/>
+	<s:TextInput x="97" id="lb" y="31" width="86" text="{position.label}" change="change('label',lb,'text')"/>
 	<mx:HRule x="0" y="59" width="100%" height="1"/>
-	<s:Label x="20" y="69" text="颜色："/>
-	<mx:ColorPicker id="c" x="98" y="61" width="25" height="22" selectedColor="{position.color}" change="c_changeHandler(event)"/>
+	<s:Label x="17" y="275" text="颜色："/>
+	<mx:ColorPicker id="c" x="101" y="267" width="25" height="22" selectedColor="{position.color}" change="c_changeHandler(event)"/>
 	<mx:HRule x="0" y="86" width="100%" height="1"/>
-	<s:Label x="20" y="93" text="图标:"/>
-	<s:TextInput id="i" x="98" y="89" width="84" text="{position.icon}" editable="false" change="change('icon',i,'text')"/>
+	<s:Label x="17" y="303" text="图标:"/>
+	<s:TextInput id="i" x="101" y="299" width="84" text="{position.icon}" editable="false" change="change('icon',i,'text')"/>
 		
-	<s:Button x="189" y="89" width="44" label="浏览" click="iconChange_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
+	<s:Button x="192" y="299" width="44" label="浏览" click="iconChange_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
 	<mx:HRule x="0" y="114" width="100%" height="1"/>
 
-	<s:Label x="20" y="125" text="图标X："/>
-	<s:TextInput id="ix" x="98" y="117" width="84" text="{position.iconOffsetX}" change="change('iconOffsetX',ix,'text')" restrict="0-9/."/>
+	<s:Label x="17" y="331" text="图标X："/>
+	<s:TextInput id="ix" x="101" y="326" width="84" text="{position.iconOffsetX}" change="change('iconOffsetX',ix,'text')" restrict="0-9/."/>
 	<mx:HRule x="0" y="144" width="100%" height="1"/>
 	
-	<s:Label x="20" y="153" text="图标Y："/>
-	<s:TextInput id="iy" x="98" y="147" width="84" text="{position.iconOffsetY}" change="change('iconOffsetY',iy,'text')" restrict="0-9/."/>
+	<s:Label x="17" y="359" text="图标Y："/>
+	<s:TextInput id="iy" x="101" y="355" width="84" text="{position.iconOffsetY}" change="change('iconOffsetY',iy,'text')" restrict="0-9/."/>
 	<mx:HRule x="0" y="172" width="100%" height="1"/>
-	<s:Label x="20" y="180" text="图标缩放："/>
+	<s:Label x="17" y="391" text="图标缩放："/>
 	<!--<s:TextInput id="s" x="99" y="175" width="84" text="{position.iconScale}" change="change('iconScale',s,'text')" restrict="0-9/."/> -->
-	<s:HSlider id ="iconScale"  x="99" y="181" width="102" maximum="2" stepSize="0.1" value="{position.iconScale}" change="icon_changeHandler(event)"/>
+	<s:HSlider id ="iconScale"  x="102" y="392" width="102" maximum="2" stepSize="0.1" value="{position.iconScale}" change="icon_changeHandler(event)"/>
 	<mx:HRule x="0" y="231" width="100%" height="1"/>
-	<s:Label x="20" y="214" text="图标旋转："/>
-	<s:HSlider id="rot" x="101" y="212" maximum="360" value="{position.iconRotation}" change="hslider1_changeHandler(event)"/>
+	<s:Label x="17" y="423" text="图标旋转："/>
+	<s:HSlider id="rot" x="104" y="425" maximum="360" value="{position.iconRotation}" change="hslider1_changeHandler(event)"/>
 	<mx:HRule x="0" y="201" width="240" height="1"/>
-	<s:Label x="20" y="239" text="可见："/>
-	<s:CheckBox x="99" y="234" selected="{position.iconVisible}" label="可见" change="iconChange(event)" />
+	<s:Label x="17" y="485" text="可见："/>
+	<s:CheckBox x="102" y="480" selected="{position.iconVisible}" label="可见" change="iconChange(event)" />
 	
-	<s:Label x="10" y="272" text="文本"/>
-	<mx:HRule x="0" y="290" width="100%" height="4"/>
+	<s:Label x="10" y="6" text="文本"/>
+	<mx:HRule x="0" y="264" width="100%" height="4"/>
 	
-	<mx:HRule x="0" y="256" width="100%" height="1"/>
+	<mx:HRule x="0" y="293" width="100%" height="1"/>
 	
 	
 	<mx:HRule x="233" y="288" width="100%" height="1"/>
-	<s:Label x="20" y="301" text="文本缩放："/>
-	<s:HSlider id="ls" x="100" y="297" maximum="4" stepSize="0.1" value="{position.labelScale}" change="labelScale_changeHandler(event)"/>
+	<s:Label x="20" y="68" text="文本缩放："/>
+	<s:HSlider id="ls" x="100" y="64" maximum="4" stepSize="0.1" value="{position.labelScale}" change="labelScale_changeHandler(event)"/>
 	<!--<s:TextInput id="ls" x="100" y="297" width="85" text ="{position.labelScale}" change="change('labelScale',ls,'text')" restrict="0-9/."/> -->
 	<mx:HRule x="0" y="322" width="100%" height="1"/>
-	<s:Label x="20" y="330" text="可见："/>
-	<s:CheckBox x="99" y="326" selected="{position.labelVisible}"  label="可见" change="labelChange(event)"/>
+	<s:Label x="20" y="97" text="可见："/>
+	<s:CheckBox x="99" y="93" selected="{position.labelVisible}"  label="可见" change="labelChange(event)"/>
 	
 	<mx:HRule x="0" y="351" width="100%" height="1"/>
-	<s:Label x="20" y="359" text="文本X："/>
-	<s:TextInput id="lx" x="100" y="355" width="92" text="{position.labelOffsetX}" change="change('labelOffsetX',lx,'text')" restrict="0-9/."/>
+	<s:Label x="20" y="126" text="文本X："/>
+	<s:TextInput id="lx" x="100" y="119" width="92" text="{position.labelOffsetX}" change="change('labelOffsetX',lx,'text')" restrict="0-9/."/>
 	<mx:HRule x="0" y="382" width="100%" height="1"/>
 	
-	<s:Label x="20" y="393" text="文本Y："/>
-	<s:TextInput id="ly" x="100" y="387" width="92" text="{position.labelOffsetY}" change="change('labelOffsetY',ly,'text')" restrict="0-9/."/>
+	<s:Label x="20" y="154" text="文本Y："/>
+	<s:TextInput id="ly" x="100" y="148" width="92" text="{position.labelOffsetY}" change="change('labelOffsetY',ly,'text')" restrict="0-9/."/>
 	<mx:HRule x="0" y="415" width="100%" height="1"/>
-	<s:Label x="20" y="425" text="颜色："/>
-	<mx:ColorPicker id="n" x="99" y="420" width="25" selectedColor="{position.labelColor}" change="change('labelColor',n,'selectedColor')"/>
+	<s:Label x="20" y="182" text="颜色："/>
+	<mx:ColorPicker id="n" x="99" y="177" width="25" selectedColor="{position.labelColor}" change="change('labelColor',n,'selectedColor')"/>
 	<mx:HRule x="0" y="446" width="100%" height="1" />
 	
-	<s:Label x="20" y="455" text="高度："/>
-	<s:TextInput id="t" x="99" y="450" width="92" text="{position.thick}" change="change('thick',t,'text')" restrict="0-9/."/>
+	<s:Label x="17" y="455" text="高度："/>
+	<s:TextInput id="t" x="102" y="450" width="92" text="{position.thick}" change="change('thick',t,'text')" restrict="0-9/."/>
 	<mx:HRule x="0" y="476" width="100%" height="1"/>
-	<s:Label x="20" y="488" text="楼层："/>
-	<s:TextInput id="f" x="98" y="481" width="92" text="{position.floorID}" editable="false" change="change('floorID',f,'text')"/>
+	<s:Label x="20" y="213" text="楼层："/>
+	<s:TextInput id="f" x="98" y="206" width="92" text="{position.floorID}" editable="false" change="change('floorID',f,'text')"/>
 	<mx:HRule x="0" y="507" width="100%" height="1"/>
 	
 
-	<s:Label x="20" y="518" text="位置类型："/>
-	<s:ComboBox id="positionType" x="99" y="512" width="91" dataProvider="{collection}" selectedItem="{positionTypeVO}" change="changeType()"/>
+	<s:Label x="18" y="517" text="位置类型："/>
+	<s:ComboBox id="positionType" x="101" y="513" width="91" dataProvider="{collection}" selectedItem="{position.positionType}" change="changeType()"/>
 	<mx:HRule x="0" y="539" width="100%" height="1"/>
-	<s:Button x="31" y="547" width="47" label="编辑" click="editor_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
+	<s:Button x="33" y="547" width="47" label="编辑" click="editor_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
 	
-	<s:Button id="setEmpty" x="88" y="547" width="46" label="重绘" enabled="false" click="empty_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
-	<s:Button x="141" y="547" width="46" label="保存" click="submit_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
-	<mx:VRule x="87" y="28" width="2" height="228"/>
-	<mx:VRule x="89" y="290" width="1" height="250"/>
+	<s:Button id="setEmpty" x="90" y="547" width="46" label="重绘" enabled="false" click="empty_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
+	<s:Button x="143" y="547" width="46" label="完成" click="submit_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
+	<mx:VRule x="87" y="28" width="2" height="204"/>
+	<mx:VRule x="89" y="264" width="2" height="276" />
 
 </s:Group>

@@ -32,10 +32,11 @@ package editor.command
 			{
 				EDConfig.instance.floorGroup.subFloor();
 				var voFloor:E2VOFloor = EDConfig.instance.selectedFloor;
-				if(E2Provider.instance.floorArr.indexOf(voFloor)){
+				if(E2Provider.instance.floorArr.indexOf(voFloor)>=0){
 					delete E2Provider.instance.floorMap[voFloor.id];
 					delete EDConfig.instance.e2Config.floorViewMap[voFloor.id];
 					E2Provider.instance.floorArr.splice(E2Provider.instance.floorArr.indexOf(voFloor),1);
+					E2Provider.instance.floorArrC.splice(E2Provider.instance.floorArr.indexOf(voFloor),1);
 					subPositionByFloor(voFloor);
 					
 				}

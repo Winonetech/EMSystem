@@ -20,6 +20,7 @@
 			
 			import emap.map2d.Floor;
 			import emap.map2d.core.E2Config;
+			import emap.map2d.core.E2Provider;
 			import emap.map2d.vos.E2VOFloor;
 			import emap.map2d.vos.E2VOPosition;
 			
@@ -54,6 +55,7 @@
 			{
 				// TODO Auto-generated method stub
 				E2Presenter.instance.execute(new AddPositionCommand);
+				EDConfig.instance.propertyPanel.position.dataProvider = E2Provider.instance.positionTypeArr
 			}
 			
 			protected function subPosition_clickHandler(event:MouseEvent):void

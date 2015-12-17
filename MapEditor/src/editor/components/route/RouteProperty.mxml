@@ -34,7 +34,7 @@
 				route.direction =ary.getItemIndex(cb.selectedItem)
 			}
 			
-		]]>
+		]]> 
 	</fx:Script>
 	<s:Label x="20" y="46" text="名称："/>
 	<s:Label x="9" y="14" text="路径："/>
@@ -47,7 +47,7 @@
 	<s:Label x="20" y="109" text="节点二："/>
 	<s:Label x="20" y="140" text="方向："/>
 	<s:TextInput x="106" y="103" text="{EDConfig.instance.e2Config.INodeNameMap[_route.serial2]}" editable="false"/>
-	<s:ComboBox id="cb" x="106" y="133" width="128"  selectedItem="{ary[_route.direction]}" dataProvider="{ary}" change="cb_changeHandler(event)"/>
+	<s:ComboBox id="cb" x="106" y="133" width="128"  selectedItem="{ary[_route.direction]}" dataProvider="{ary}" change="cb_changeHandler(event)" />
 	<mx:HRule x="0" y="99" width="100%"/>
 	<mx:HRule x="0" y="161" width="100%"/>
 	<mx:HRule x="0" y="128" width="100%"/>

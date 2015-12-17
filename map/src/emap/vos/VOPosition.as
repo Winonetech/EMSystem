@@ -134,7 +134,7 @@ package emap.vos
 		 * 
 		 * 图标缩放
 		 * 
-		 */
+		 **/
 		
 		public function get iconScale():Number
 		{

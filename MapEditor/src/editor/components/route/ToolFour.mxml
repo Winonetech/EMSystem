@@ -18,10 +18,14 @@
 			import mx.events.IndexChangedEvent;
 			public function set dataProvider($value:Object):void
 			{
-				var ary:Array = $value as Array;
-				var cAry:Array = ary.concat();
-				cAry.push("不同楼层");
-				collection = new ArrayCollection(cAry);
+				if($value)
+				{
+					var ary:Array = $value as Array;
+					//var cAry:Array = ary.concat();
+					//cAry.push("不同楼层");
+					collection = new ArrayCollection(ary);
+					collection.addItem("不同楼层");
+				}
 			}
 			protected function cb_changeHandler(event:Event):void
 			{

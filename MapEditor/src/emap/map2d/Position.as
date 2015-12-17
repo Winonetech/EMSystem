@@ -7,15 +7,9 @@ package emap.map2d
 	 * 
 	 */
 	
-	
-
-	
 	import caurina.transitions.Tweener;
-	
 	import cn.vision.utils.StringUtil;
-	
 	import editor.core.EDConfig;
-	
 	import emap.consts.PositionCodeConsts;
 	import emap.consts.StepStyleConsts;
 	import emap.core.EMConfig;
@@ -26,6 +20,7 @@ package emap.map2d
 	import emap.interfaces.IPosition;
 	import emap.map2d.controls.Logo;
 	import emap.map2d.core.E2Config;
+	import emap.map2d.core.E2Provider;
 	import emap.map2d.tools.Map2DTool;
 	import emap.map2d.vos.E2VOPosition;
 	import emap.utils.PositionUtil;
@@ -123,6 +118,30 @@ package emap.map2d
 				}
 			}
 		}
+		public function changePositionType():void
+		{
+			if(data.typeCode == PositionCodeConsts.LIFT || data.typeCode ==PositionCodeConsts.STAIRS || data.typeCode ==PositionCodeConsts.ESCALATOR )
+			{
+				if(cPosition && contains(cPosition))
+					removeChild(cPosition);
+				var step:Step = new Step;
+				step.style = StepStyleConsts.MOVE_TO;
+				step.aim.x = layout.cenX;
+				step.aim.y = layout.cenY;
+				steps.length=0;
+				steps.push(step);
+				update();
+				positionSelected();
+			}else
+			{
+				if(cPosition)
+					removeChild(cPosition);
+				editStep = true;
+				EDConfig.instance.e2Config.setEditor = true;
+				EDConfig.instance.e2Config.editorStyle = StepStyleConsts.MOVE_TO;
+			}
+			
+		}
 		
 		/**
 		 * @private
@@ -155,6 +174,7 @@ package emap.map2d
 				updateIconLayout();
 			}
 		}
+		
 		
 		/**
 		 * @private
@@ -326,12 +346,14 @@ package emap.map2d
 				{
 					
 					positionSelected();
-					//属性面板切换到楼层
+					//属性面板切换到位置
 					EDConfig.instance.propertyPanel.setCurrentState("position",true);
 					EDConfig.instance.tabBar.selectedItem = EDConfig.instance.positionNC;
 					EDConfig.instance.selectedPosition = data as E2VOPosition;
 					EDConfig.instance.propertyPanel.position.position = EDConfig.instance.selectedPosition;
 					EDConfig.instance.positionGroup.addPositionByFloor(EDConfig.instance.selectedFloor);
+					EDConfig.instance.propertyPanel.position.dataProvider = E2Provider.instance.positionTypeArr;
+
 				}
 			}else
 			{
@@ -346,20 +368,28 @@ package emap.map2d
 		//位置选中 效果
 		private function positionSelected():void
 		{
-			//防止上个楼层还在编辑
-			
+				//防止上个楼层还在编辑
 				cPosition = new Sprite;
-				cPosition.graphics.clear();
-				cPosition.graphics.lineStyle(10,0x000000);
-				//cPosition.graphics.beginFill(color);
-				StepUtil.drawSteps(cPosition.graphics, steps);
-				cPosition.graphics.lineStyle(5,0xFFFFFF);
-				//cPosition.graphics.beginFill(color);
-				StepUtil.drawSteps(cPosition.graphics, steps);
+				if(data.typeCode==PositionCodeConsts.ENTITY || data.typeCode==PositionCodeConsts.PATIO || data.typeCode==PositionCodeConsts.TERRAIN || data.typeCode==PositionCodeConsts.UNSEEN){
+					
+					cPosition.graphics.clear();
+					cPosition.graphics.lineStyle(10,0x000000);
+					//cPosition.graphics.beginFill(color);
+					StepUtil.drawSteps(cPosition.graphics, steps);
+					cPosition.graphics.lineStyle(5,0xFFFFFF);
+					//cPosition.graphics.beginFill(color);
+					StepUtil.drawSteps(cPosition.graphics, steps);
+				}else
+				{
+					cPosition.graphics.clear();
+					cPosition.graphics.beginFill(0xFFFFFF,1);
+					cPosition.graphics.drawCircle(layout.cenX, layout.cenY,50);
+					cPosition.graphics.lineStyle(5,0x000000);
+					cPosition.graphics.drawCircle(layout.cenX, layout.cenY,60);
+				}
 				addChildAt(cPosition,0);
 				config.utilLayer.oposition = this;
 				_selected = true;
-			
 		}
 		public function get selected():Boolean
 		{
@@ -374,7 +404,6 @@ package emap.map2d
 			//当重绘传入true 
 			if($value)
 			{
-				
 				steps.length = 0;
 				update();
 				editFloor= config.floorViewMap[em::data.floorID];

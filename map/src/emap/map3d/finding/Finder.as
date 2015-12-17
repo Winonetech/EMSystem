@@ -195,6 +195,8 @@ package emap.map3d.finding
 		{
 			positionsArr = $value;
 			
+			shower.positionArr = positionsArr;
+			
 			update();
 		}
 		
@@ -222,7 +224,7 @@ package emap.map3d.finding
 		/**
 		 * @private
 		 */
-		private var shower:Shower;
+		public var shower:Shower;
 		
 		/**
 		 * @private

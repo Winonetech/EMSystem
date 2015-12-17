@@ -34,15 +34,15 @@
 				EDConfig.instance.e2Config.nodeViewMap[_node.id].update();
 			}
 			
-			protected function editor_clickHandler(event:MouseEvent):void
-			{
-			
-				if(_node)
-				{
-					nodeView = EDConfig.instance.e2Config.nodeViewMap[_node.id];
-				}
-					
-			}
+//			protected function editor_clickHandler(event:MouseEvent):void
+//			{
+//			
+//				if(_node)
+//				{
+//					nodeView = EDConfig.instance.e2Config.nodeViewMap[_node.id];
+//				}
+//					
+//			}
 		
 			
 			protected function submit_clickHandler(event:MouseEvent):void
@@ -83,7 +83,7 @@
 	<s:Label x="20" y="158" text="序列号:"/>
 	<s:TextInput x="90" y="151" width="117" text="{EDConfig.instance.selectedNode.serial}" editable="false"/> 
 	<mx:HRule x="0" y="179" width="100%"/>
-	<s:Button x="44" y="196" label="编辑" click="editor_clickHandler(event)" color="#060606" skinClass="editor.skin.PropertyButtonSkin"/>
+	<!--<s:Button x="44" y="196" label="编辑" click="editor_clickHandler(event)" color="#060606" skinClass="editor.skin.PropertyButtonSkin"/> -->
 	<mx:VRule x="81" y="34" width="1" height="146"/>
 	
 </s:Group>

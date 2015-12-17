@@ -145,6 +145,7 @@ package emap.map3d
 		
 		em function viewFloors($data:*, $tween:Boolean = false):*
 		{
+			
 			var map:Map = new Map, arr:Array = [];
 			var add:Function = function(item:*):void
 			{
@@ -162,7 +163,9 @@ package emap.map3d
 				add($data);
 			
 			arr.sortOn("order", Array.NUMERIC);
-			
+			//切换楼层的时候 将上一次路径清空
+			if(finder)
+				finder.shower.clear();
 			//计算需要显示的楼层的目标Z值
 			var l:uint = arr.length;
 			if (l)
@@ -235,6 +238,8 @@ package emap.map3d
 			//记录最中间的一个楼层
 			middle = m;
 			return ends;
+			
+			
 		}
 		
 		

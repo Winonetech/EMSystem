@@ -71,7 +71,7 @@ package editor.command
 			//	trace(E2Provider.instance.floorArr);
 			mapEditor.positionTool.dataProvider = E2Provider.instance.floorArr;
 			mapEditor.nodeTool.dataProvider = E2Provider.instance.floorArr;	
-			mapEditor.routeTool.dataProvider = E2Provider.instance.floorArr;
+			mapEditor.routeTool.dataProvider = E2Provider.instance.floorArrC;
 			EDConfig.instance.nodeManager = new NodeManager(temp);
 			EDConfig.instance.routeManager = new RouteManager(temp);
 			//addFloorGroup();
@@ -79,14 +79,19 @@ package editor.command
 			EDConfig.instance.positionTypeGroup.addAllPositionType();
 			//addRouteGroup();
 			
+			
 		}
 		private function getXML(path:String):XML
 		{
 			var file:VSFile = new VSFile(FileUtil.resolvePathApplication(path));
-			var stream:FileStream = new FileStream;
-			stream.open(file, FileMode.READ);
-			var temp:String = stream.readUTFBytes(stream.bytesAvailable);
-			return XML(temp);
+			if(file.exists)
+			{
+				var stream:FileStream = new FileStream;
+				stream.open(file, FileMode.READ);
+				var temp:String = stream.readUTFBytes(stream.bytesAvailable);
+				return XML(temp);
+			}
+			return null;
 		}
 
 		public function addRouteGroup():void

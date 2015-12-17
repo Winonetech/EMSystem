@@ -2,6 +2,7 @@ package editor.command
 {
 	import emap.map2d.core.E2Provider;
 	import emap.map2d.vos.E2VOFloor;
+	import emap.map2d.vos.E2VOHall;
 	import emap.map2d.vos.E2VONode;
 	import emap.map2d.vos.E2VOPosition;
 	import emap.map2d.vos.E2VOPositionType;
@@ -10,6 +11,7 @@ package editor.command
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
+
 /**
  * 数据存储 数据生成XML
  * */
@@ -27,6 +29,7 @@ package editor.command
 			positionTypeDataStore();
 			nodeDataStore();
 			routeDataStore();
+			hallDataStore()
 			commandEnd();
 			
 		}
@@ -79,6 +82,16 @@ package editor.command
 			}
 			$xmlRoute = "<routes>"+$xmlRoute+"</routes>";
 			stringToXML("cache/data","routes.xml",$xmlRoute);
+		}
+		protected function hallDataStore():void
+		{
+			var $xmlHall:String = "";
+			for each(var hall:E2VOHall in E2Provider.instance.hallMap)
+			{
+				$xmlHall = $xmlHall +hall.toXML();
+			}
+			$xmlHall = "<halls>"+$xmlHall+"</halls>";
+			stringToXML("cache/data","halls.xml",$xmlHall);
 		}
 		private function stringToXML($folder:String,$name:String,$xml:String):void
 		{

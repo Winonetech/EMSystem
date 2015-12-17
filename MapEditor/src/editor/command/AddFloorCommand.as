@@ -32,6 +32,7 @@ package editor.command
 			voFloor.color = 0x996666; 
 			voFloor.label = "楼层"+voFloor.order;
 			E2Provider.instance.floorArr.push(voFloor);
+			E2Provider.instance.floorArrC.push(voFloor);
 			E2Provider.instance.floorMap[voFloor.id] = voFloor;
 			var floor:Floor = new Floor(voFloor,EDConfig.instance.e2Config);
 			EDConfig.instance.e2Config.eMap.addViewFloor(voFloor.id,floor);
@@ -43,6 +44,8 @@ package editor.command
 			EDConfig.instance.e2Config.setEditor = true;
 			EDConfig.instance.e2Config.groundViewMap[voFloor.id].editSteps = true;
 			EDConfig.instance.e2Config.editorStyle = StepStyleConsts.MOVE_TO;
+			//由于路径在复制楼层数组 加入不同楼层的 每次楼层变化都需要改变
+			//EDConfig.instance.editor.routeTool.dataProvider = E2Provider.instance.floorArr;
 			
 		}
 		

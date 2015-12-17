@@ -12,8 +12,11 @@ package emap.map3d.finding
 	import alternativa.engine3d.core.Object3D;
 	import alternativa.engine3d.objects.WireFrame;
 	import alternativa.engine3d.resources.WireGeometry;
+	import alternativa.types.Float;
+	import alternativa.types.Long;
 	
 	import cn.vision.utils.ArrayUtil;
+	import cn.vision.utils.FontUtil;
 	import cn.vision.utils.MathUtil;
 	import cn.vision.utils.TimerUtil;
 	import cn.vision.utils.Vector3DUtil;
@@ -26,11 +29,18 @@ package emap.map3d.finding
 	import emap.map3d.comman.Arrow;
 	import emap.map3d.interfaces.IE3Node;
 	import emap.map3d.tools.SourceEmap3D;
+	import emap.map3d.vos.E3VOPosition;
 	import emap.vos.VOPosition;
 	
+	import flash.display.Sprite;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
+	import flash.text.AntiAliasType;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
+	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 	
 	
@@ -132,7 +142,7 @@ package emap.map3d.finding
 		}
 		
 		/**
-		 * @private
+		 * @priva+te
 		 */
 		private function initialize($emap3d:EMap3D, $container:Object3D):void
 		{
@@ -184,6 +194,7 @@ package emap.map3d.finding
 		 */
 		private function resolvePointsByRoute($nodes:Vector.<IE3Node>, $flag:uint, $dis:Number = 0):uint
 		{
+			trace("xxxxxx",checkTipNode(0,$nodes));
 			var l:uint = $nodes.length;
 			var n1:IE3Node = ($flag < l) ? $nodes[$flag] : null;
 			var n2:IE3Node = ($flag < l - 1) ? $nodes[$flag + 1] : null;
@@ -259,12 +270,40 @@ package emap.map3d.finding
 			return $flag;
 		}
 		
+		
+		//
+		public static function getText($text:String, $font:String, $color:uint):Sprite
+		{  
+			//if($font == null) $font = "bold"
+			var sprite:Sprite = new Sprite;
+			var field:TextField = new TextField;
+			field.autoSize = TextFieldAutoSize.LEFT;
+			field.antiAliasType = AntiAliasType.ADVANCED;
+			field.textColor = $color;
+			field.text = $text;
+			var temp:TextFormat = getTextFormat($font); 
+			if (format!= temp) format = temp;
+			field.embedFonts = FontUtil.containsFont(format.font);
+			field.setTextFormat(format);
+			field.x = -.5 * field.width;
+			field.y = -.5 * field.height;
+			sprite.addChild(field);
+			return sprite;
+		}
+		private static var format:TextFormat;
+		private static const TEXT_FORMATS:Object = {};
+		public static function getTextFormat($font:String):TextFormat
+		{
+			return TEXT_FORMATS[$font] = TEXT_FORMATS[$font] || new TextFormat($font, 20, null, false, null, null, null, null, "left");;
+		}	
 		/**
 		 * @private
 		 */
 		private function checkTipNode($flag:uint, $nodes:Vector.<IE3Node>):String
 		{
+			
 			var l:uint = $nodes.length;
+			trace("xxxxxxxxxxxxx",l);
 			if (l)
 			{
 				var result:String;
@@ -273,6 +312,7 @@ package emap.map3d.finding
 					if ($flag + 1 < l)
 					{
 						result = "从当前位置出发，沿" + getDirection($nodes[$flag], $nodes[$flag + 1]) + "方向行走，至" + getNearestPositionName($nodes[$flag + 1]);
+						result;
 					}
 				}
 				else if ($flag == $nodes.length - 1)
@@ -296,7 +336,7 @@ package emap.map3d.finding
 			var v2:Point = new Point($node2.nodeX, -$node2.nodeY);
 			var v3:Point = v2.subtract(v1);
 			var ag:Number = MathUtil.moduloAngle(MathUtil.radianToAngle(Math.atan2(v3.y, v3.x)));
-			var it:uint = ag / 45;
+			var it:uint = (ag+22.5)%45==0?(ag+22.5)/45:(ag+67.5)/45;
 			return DIRECTIONS[it];
 		}
 		
@@ -305,7 +345,26 @@ package emap.map3d.finding
 		 */
 		private function getNearestPositionName($node:IE3Node):String
 		{
-			return null;
+			
+			
+			if(positionArr)
+			{
+				var label:String = positionArr[0].label;
+				
+				var min:int = ($node.nodeX-positionArr[0].layout.cenX)^2+($node.nodeY-positionArr[0].layout.cenY);
+				for each(var position:E3VOPosition in positionArr)
+				{
+					
+					//计算距离的平方
+					var i:int = ($node.nodeX-position.layout.cenX)^2+($node.nodeY-position.layout.cenY);
+					if(i<min)
+					{
+						min = i;
+						label = position.label
+					}
+				}
+			}
+			return label;
 		}
 		
 		/**
@@ -393,6 +452,8 @@ package emap.map3d.finding
 		}
 		
 		
+		internal var positionArr:Array;
+		
 		/**
 		 * 
 		 * 演示终点。
@@ -454,7 +515,7 @@ package emap.map3d.finding
 		private var arrow:Arrow;
 		
 		/**
-		 * @private
+		 * @private	
 		 */
 		private var path:Path;
 		
@@ -467,12 +528,15 @@ package emap.map3d.finding
 		 * @private
 		 */
 		private var zawp:Object;
-		
+
+		/**
+		 * @private
+		 */
+		private const DIRECTIONS:Object = {1:"北", 2:"东北", 3:"东", 4:"东南", 5:"南", 6:"西南", 7:"西", 8:"西北",9:"北"};
 		
 		/**
 		 * @private
 		 */
-		private const DIRECTIONS:Object = {1:"北", 2:"东北", 3:"东", 4:"东南", 5:"南", 6:"西南", 7:"西", 8:"西北"};
-		
+		private const TIPS:Dictionary = new Dictionary;
 	}
-}
+}23
