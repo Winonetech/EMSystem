@@ -8,12 +8,10 @@ package emap.map3d.comman
 	 */
 	
 	
-	import alternativa.engine3d.alternativa3d;
 	import alternativa.engine3d.core.Object3D;
 	import alternativa.engine3d.core.VertexAttributes;
 	import alternativa.engine3d.materials.FillMaterial;
 	import alternativa.engine3d.objects.Mesh;
-	import alternativa.engine3d.objects.WireFrame;
 	import alternativa.engine3d.resources.Geometry;
 	
 	import cn.vision.utils.ArrayUtil;

@@ -27,13 +27,13 @@
 	
 	<fx:Script>
 		<![CDATA[
-			
 			import cn.vision.collections.Map;
 			
 			import emap.core.em;
 			import emap.events.MapEvent;
 			import emap.map3d.EMap3D;
 			import emap.map3d.core.E3Config;
+			import emap.map3d.utils.Map3DUtil;
 			import emap.vos.VOEMap;
 			import emap.vos.VOFloor;
 			

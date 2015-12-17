@@ -113,12 +113,12 @@ package emap.map3d.comman.logo
 			{
 				var bmd:BitmapData = new BitmapData(w, h, true, color);
 				var mat:Matrix = new Matrix;
-				mat.scale($rect.scale, $rect.scale);
+				mat.scale($rect.scaleX, $rect.scaleY);
 				bmd.draw($data, mat);
 				var res:BitmapTextureResource = new BitmapTextureResource(bmd);
 				var tex:PixelTextureMaterial = new PixelTextureMaterial(res, null, 1, false);
 				tex.alphaThreshold = 1;
-				applyLogo(w, h, tex);
+				applyLogo($rect.width, $rect.height, tex);
 				SourceEmap3D.uploadSource(res);
 			}
 		}

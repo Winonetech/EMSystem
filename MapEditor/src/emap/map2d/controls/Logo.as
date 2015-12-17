@@ -105,7 +105,7 @@ package emap.map2d.controls
 			{
 				var bmd:BitmapData = new BitmapData($rect.width, $rect.height, true, color);
 				var mat:Matrix = new Matrix;
-				mat.scale($rect.scale, $rect.scale);
+				mat.scale($rect.scaleX, $rect.scaleX);
 				bmd.draw($data, mat);
 				/*var res:BitmapTextureResource = new BitmapTextureResource(bmd);
 				var tex:PixelTextureMaterial = new PixelTextureMaterial(res, null, 1, false);

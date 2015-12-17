@@ -1,6 +1,5 @@
 package emap.map2d
 {
-	import emap.interfaces.INode;
 	import emap.map2d.controls.ImageLayer;
 	import emap.map2d.core.E2Config;
 	import emap.map2d.core.E2Provider;
@@ -9,14 +8,9 @@ package emap.map2d
 	import emap.utils.NodeUtil;
 	import emap.vos.VOFloor;
 	
-	import flash.display.Loader;
 	import flash.display.Sprite;
-	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
 	import flash.filesystem.File;
-	import flash.net.URLRequest;
-	
-	import mx.controls.Alert;
 	
 	  
 	

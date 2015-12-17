@@ -8,13 +8,11 @@ package emap.map3d.comman.logo
 	 */
 	
 	
-	import alternativa.engine3d.materials.FillMaterial;
 	import alternativa.engine3d.objects.Sprite3D;
-	import alternativa.engine3d.primitives.Box;
 	
 	import emap.core.em;
-	import emap.map3d.utils.Map3DUtil;
 	import emap.map3d.comman.PixelTextureMaterial;
+	import emap.map3d.utils.Map3DUtil;
 	
 	
 	public final class LogoSprite extends Logo

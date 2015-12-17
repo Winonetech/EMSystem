@@ -11,11 +11,15 @@ package emap.map3d.utils
 	
 	import emap.core.em;
 	import emap.data.Layout;
+	import emap.data.Transform;
 	import emap.managers.TextFormatManager;
 	import emap.map3d.comman.PixelTextureMaterial;
 	
+	import flash.desktop.NativeApplication;
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Shape;
+	import flash.display.Stage;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
 	import flash.text.AntiAliasType;
@@ -50,22 +54,22 @@ package emap.map3d.utils
 		 * 
 		 */
 		
-		public static function getLimitedBitmapDataRect($w:Number, $h:Number):Rectangle
+		public static function getLimitedBitmapDataRect($w:Number, $h:Number):Transform
 		{
 			var w:Number = to2Square($w);
 			var h:Number = to2Square($h);
-			while (w * h > AREA_LIMIT)
+			while (w * h >= AREA_LIMIT)
 			{
 				w = to2Square(w >>> 1);
 				h = to2Square(h >>> 1);
 			}
-			return new Rectangle(0, 0, w, h);
+			return new Transform(0, 0, w, h, w / $w, h / $h);
 		}
 		
 		
 		/**
 		 * 
-		 * 根据形状和布局生成一个形状。
+		 * 根据形状和布局生成一个平面。
 		 * 
 		 */
 		
@@ -73,31 +77,36 @@ package emap.map3d.utils
 		{
 			if ($shape && $layout)
 			{
-				var rect:Rectangle = getLimitedBitmapDataRect($layout.width, $layout.height);
+				var rect:Transform = getLimitedBitmapDataRect($layout.width, $layout.height);
 				var w:uint = rect.width;
 				var h:uint = rect.height;
-				var segW:uint = Math.max(1, w * 0.015625);
-				var segH:uint = Math.max(1, h * 0.015625);
+				var segW:uint = Math.max(1, 0.015625 * $layout.width);
+				var segH:uint = Math.max(1, 0.015625 * $layout.height);
 				if (w && h)
 				{
 					//Y轴反向截取
 					var bmd:BitmapData = new BitmapData(w, h, true, 0);
 					var mat:Matrix = new Matrix;
-					mat.createBox(1, -1, 0, -$layout.minX, -$layout.minY);
+					mat.createBox(rect.scaleX, -rect.scaleY, 0, -$layout.minX * rect.scaleX, -$layout.minY * rect.scaleY);
 					bmd.draw($shape, mat);
-					
 					var tex:PixelTextureMaterial = new PixelTextureMaterial(new BitmapTextureResource(bmd));
-					tex.alphaThreshold = tex.alpha = 1;
-					var plane:Plane = new Plane(w, h, segW, segH, false);
+					tex.transparentPass = true;
+					tex.opaquePass = true;
+					tex.alphaThreshold = 1;
+					tex.alpha = 1;
+					
+					var plane:Plane = new Plane($layout.width, $layout.height, segW, segH, false);
 					plane.setMaterialToAllSurfaces(tex);
 					
 					plane.x = plane.boundBox.maxX;
 					plane.y =-plane.boundBox.maxY;
+					plane.mouseChildren = plane.mouseEnabled = false;
 					
 					var object:Object3D = new Object3D;
 					object.addChild(plane);
 					object.x = $layout.minX;
 					object.y =-$layout.minY;
+					object.mouseChildren = object.mouseEnabled = false;
 				}
 			}
 			return object;
