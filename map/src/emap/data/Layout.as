@@ -84,6 +84,19 @@ package emap.data
 				}
 			}
 			
+			//删除重复的点
+			if (repl.length >= 2)
+			{
+				var i:uint = 1;
+				while (i < repl.length)
+				{
+					var lst:Point = repl[i - 1];
+					var cur:Point = repl[i];
+					if(int(lst.x) == int(cur.x) && int(lst.y) == int(cur.y)) repl.splice(i, 1);
+					else i++;
+				}
+			}
+			
 			em::minX = Math.min.apply(null, xvec);
 			em::maxX = Math.max.apply(null, xvec);
 			em::minY = Math.min.apply(null, yvec);

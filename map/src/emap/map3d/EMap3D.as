@@ -175,7 +175,6 @@ package emap.map3d
 				var s:Number = -floorSpace * .5 * (l - 1);
 				var ends:Object = {};
 				for (var i:uint = 0; i < l; i++) ends[arr[i].id] = floorSpace * i + s;
-				
 			}
 			var t:uint = floorsViewArr.length;
 			//遍历所有楼层
@@ -283,6 +282,7 @@ package emap.map3d
 			container.addChild(floorContainer = new Object3D);
 			container.addChild(pathContainer  = new Object3D);
 			finder = new Finder(this, pathContainer);
+			maxCameraDistance = 10000;
 		}
 		
 		/**

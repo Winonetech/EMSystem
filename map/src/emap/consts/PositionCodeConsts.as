@@ -35,7 +35,7 @@ package emap.consts
 		/**
 		 * 
 		 * 地形
-		 * +--------------------------------------------
+		 * 
 		 */
 		
 		public static const TERRAIN:String = "terrain";

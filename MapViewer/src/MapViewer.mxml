@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ct:MainApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
-					xmlns:s="library://ns.adobe.com/flex/spark" 
+<ct:MainApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					xmlns:s="library://ns.adobe.com/flex/spark"
 					xmlns:mx="library://ns.adobe.com/flex/mx"
 					xmlns:ct="com.winonetech.controls.*"
-					backgroundAlpha="0" creationComplete="init()">
+					width="900" height="450" addedToStage="init()" backgroundAlpha="0">
 	<fx:Script>
 		<![CDATA[
 			

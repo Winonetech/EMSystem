@@ -61,7 +61,7 @@ package emap.map3d
 		 */
 		private function initialize($config:EMConfig, $data:VOPosition):void
 		{
-			mouseEnabled = mouseChildren = false;
+			mouseEnabled = false;
 			
 			config = $config;
 			data = $data;
@@ -76,8 +76,9 @@ package emap.map3d
 			
 			if (steps && steps.length > 2)
 			{
+				updateTop();
+				updateSide();
 				updateMesh();
-				updatePlane();
 			}
 			
 			updateIcon();
@@ -90,15 +91,31 @@ package emap.map3d
 		/**
 		 * @private
 		 */
-		private function updateMesh():void
+		private function updateTop():void
 		{
-			Map3DUtil.destroyObject3D(mesh);
+			//判断是否需要创建顶面
+			if (PositionUtil.displayTop(code))
+			{
+				var shape:Shape = new Shape;
+				shape.graphics.beginFill(color);
+				StepUtil.drawSteps(shape.graphics, steps, true);
+				shape.graphics.endFill();
+				
+				addChild(top = Map3DUtil.getPlaneByShape(shape, layout)).z = thick;
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		private function updateSide():void
+		{
 			//判断是否需要创建侧面。
-			if (PositionUtil.displayMesh(code))
+			if (PositionUtil.displaySide(code))
 			{
 				var bottom:Number = code == PositionCodeConsts.PATIO ? 0 : -selectH;
 				//获取所有面
-				var faces:Array = [], l:uint = steps.length - 1, num:uint = 0, step:Step, next:Step;
+				var faces:Array = [], l:uint = steps.length - 1, step:Step, next:Step;
 				var cret:Function = function($start:Point, $end:Point):void
 				{
 					faces[faces.length] = [
@@ -130,10 +147,6 @@ package emap.map3d
 					}
 				}
 				
-				var vxs:Vector.<Number> = new Vector.<Number>;
-				var uvs:Vector.<Number> = new Vector.<Number>;
-				var nms:Vector.<Number> = new Vector.<Number>;
-				var fci:Vector.<uint>   = new Vector.<uint>;
 				
 				//创建侧面
 				var crfe:Function = function($face:Array, $index:uint, $array:Array):void
@@ -157,38 +170,27 @@ package emap.map3d
 					num += 4;
 				};
 				faces.forEach(crfe);
-				
-				//创建Mesh
-				var gem:Geometry = new Geometry(num);
-				gem.addVertexStream(SourceEmap3D.ATTRIBUTES);
-				gem.setAttributeValues(VertexAttributes.POSITION, vxs);
-				gem.setAttributeValues(VertexAttributes.TEXCOORDS[0], uvs);
-				gem.setAttributeValues(VertexAttributes.NORMAL, nms);
-				gem.indices = fci;
-				
-				addChild(mesh = new Mesh);
-				mesh.geometry = gem;
-				mesh.addSurface(SourceEmap3D.getColorMaterial(color), 0, num);
-				mesh.calculateBoundBox();
 			}
 		}
 		
 		/**
 		 * @private
 		 */
-		private function updatePlane():void
+		private function updateMesh():void
 		{
-			Map3DUtil.destroyObject3D(plane);
-			//判断是否需要创建顶面
-			if (PositionUtil.displayPlane(code))
-			{
-				var shape:Shape = new Shape;
-				shape.graphics.beginFill(color);
-				StepUtil.drawSteps(shape.graphics, steps, true);
-				shape.graphics.endFill();
-				
-				addChild(plane = Map3DUtil.getPlaneByShape(shape, layout)).z = thick;
-			}
+			Map3DUtil.destroyObject3D(mesh);
+			//创建Mesh
+			var gem:Geometry = new Geometry(num);
+			gem.addVertexStream(SourceEmap3D.ATTRIBUTES);
+			gem.setAttributeValues(VertexAttributes.POSITION, vxs);
+			gem.setAttributeValues(VertexAttributes.TEXCOORDS[0], uvs);
+			gem.setAttributeValues(VertexAttributes.NORMAL, nms);
+			gem.indices = fci;
+			
+			addChild(mesh = new Mesh);
+			mesh.geometry = gem;
+			mesh.addSurface(SourceEmap3D.getColorMaterial(color), 0, num);
+			mesh.calculateBoundBox();
 		}
 		
 		/**
@@ -196,10 +198,6 @@ package emap.map3d
 		 */
 		private function updateIcon():void
 		{
-			if (data.label == "时尚生活百货")
-			{
-				trace("display");
-			}
 			Map3DUtil.destroyObject3D(iconLayer);
 			if (iconVisible && !StringUtil.isEmpty(icon) &&
 				PositionUtil.displayIcon(code))
@@ -628,7 +626,7 @@ package emap.map3d
 		/**
 		 * @private
 		 */
-		private var plane:Object3D;
+		private var top:Object3D;
 		
 		/**
 		 * @private
@@ -650,6 +648,30 @@ package emap.map3d
 		 */
 		private var selectH:Number = 15;
 		
+		/**
+		 * @private
+		 */
+		private var num:uint = 0;
+		
+		/**
+		 * @private
+		 */
+		private var vxs:Vector.<Number> = new Vector.<Number>;
+		
+		/**
+		 * @private
+		 */
+		private var uvs:Vector.<Number> = new Vector.<Number>;
+		
+		/**
+		 * @private
+		 */
+		private var nms:Vector.<Number> = new Vector.<Number>;
+		
+		/**
+		 * @private
+		 */
+		private var fci:Vector.<uint>   = new Vector.<uint>;
 		
 		/**
 		 * @private

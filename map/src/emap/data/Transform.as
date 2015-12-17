@@ -20,21 +20,31 @@ package emap.data
 		 * 
 		 */
 		
-		public function Transform($x:Number = 0, $y:Number = 0, $width:Number = 0, $height:Number = 0, $scale:Number = 1)
+		public function Transform($x:Number = 0, $y:Number = 0, $width:Number = 0, $height:Number = 0, $scaleX:Number = 1, $scaleY:Number = 1)
 		{
 			super($x, $y, $width, $height);
 			
-			scale = $scale;
+			scaleX = $scaleX;
+			scaleY = $scaleY;
 		}
 		
 		
 		/**
 		 * 
-		 * 缩放比
+		 * 缩放比X
 		 * 
 		 */
 		
-		public var scale:Number = 1;
+		public var scaleX:Number = 1;
+		
+		
+		/**
+		 * 
+		 * 缩放比X
+		 * 
+		 */
+		
+		public var scaleY:Number = 1;
 		
 	}
 }

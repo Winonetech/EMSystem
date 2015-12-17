@@ -10,8 +10,8 @@ package emap.map3d.comman.logo
 	
 	import alternativa.engine3d.primitives.Plane;
 	
-	import emap.map3d.utils.Map3DUtil;
 	import emap.map3d.comman.PixelTextureMaterial;
+	import emap.map3d.utils.Map3DUtil;
 	
 	
 	public final class LogoPlane extends Logo
@@ -40,8 +40,6 @@ package emap.map3d.comman.logo
 			var segH:uint = Math.max(1, $h * 0.015625);
 			addChild(plane = new Plane($w, $h, segW, segH, true));
 			plane.setMaterialToAllSurfaces($material);
-			plane.x = plane.boundBox.maxX - offsetX;
-			plane.y = plane.boundBox.minY + offsetY;
 		}
 		
 		

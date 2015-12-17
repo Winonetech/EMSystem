@@ -64,7 +64,7 @@ package emap.utils
 		 * 
 		 */
 		
-		public static function displayMesh($code:String):Boolean
+		public static function displaySide($code:String):Boolean
 		{
 			return $code == PositionCodeConsts.ENTITY || 
 					$code == PositionCodeConsts.PATIO;
@@ -81,7 +81,7 @@ package emap.utils
 		 * 
 		 */
 		
-		public static function displayPlane($code:String):Boolean
+		public static function displayTop($code:String):Boolean
 		{
 			return $code == PositionCodeConsts.ENTITY || 
 					$code == PositionCodeConsts.TERRAIN;
@@ -150,11 +150,11 @@ package emap.utils
 			
 			if (iw > lw || ih > lh)
 			{
-				s = (iw / ih > lw / lh) ? lh / ih : lw / iw;
+				s = (iw / ih < lw / lh) ? lh / ih : lw / iw;
 				iw *= s;
 				ih *= s;
 			}
-			return new Transform(0, 0, iw, ih, s);
+			return new Transform(0, 0, iw, ih, iw / $icon.width, ih / $icon.height);
 		}
 		
 		

@@ -72,7 +72,7 @@ package emap.map2d.controls
 		 */
 		private function resolveContent($content:IBitmapDrawable):void
 		{
-			resolveMaterial(new Transform(0, 0, w, h, 1), $content);
+			resolveMaterial(new Transform(0, 0, w, h, 1, 1), $content);
 		}
 		
 		/**
@@ -86,7 +86,7 @@ package emap.map2d.controls
 			{
 				var bmd:BitmapData = new BitmapData($rect.width, $rect.height, true, color);
 				var mat:Matrix = new Matrix;
-				mat.scale($rect.scale, $rect.scale);
+				mat.scale($rect.scaleX, $rect.scaleY);
 				bmd.draw($data, mat);
 				applyLogo($rect.width, $rect.height, bmd);
 			
