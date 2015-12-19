@@ -54,6 +54,18 @@ package emap.map3d.vos
 		
 		
 		/**
+		 * 
+		 * 标签
+		 * 
+		 */
+		
+		public function get label():String
+		{
+			return getProperty("label");
+		}
+		
+		
+		/**
 		 * @inheritDoc
 		 */
 		
