@@ -125,11 +125,11 @@ package emap.map3d.finding
 							findPath(neighbor, $path);
 						}
 					}
-					else
-					{
-						$path.pop();
-					}
 				}
+			}
+			if(!finded)
+			{
+				$path.pop();
 			}
 			return $path;
 		}
