@@ -60,7 +60,6 @@ package viewer.commands
 			map.positions     = config.positions;
 			map.nodes         = config.nodes;
 			map.routes        = config.routes;
-			
 			view.mapView = map;
 			
 			view.application.addElement(map);

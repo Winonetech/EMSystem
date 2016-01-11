@@ -99,6 +99,8 @@ package editor.command
 					E2Provider.instance.serialMap[position.serial] = position;
 					if(position.icon&&position.icon!="")
 						E2Provider.instance.imageMap[position.icon] = position.icon;
+					if(position.realImage&&position.realImage!="")
+						E2Provider.instance.imageMap[position.realImage] = position.realImage;
 					CountUtil.instance.positionCount = Number(position.id);
 				}
 			}

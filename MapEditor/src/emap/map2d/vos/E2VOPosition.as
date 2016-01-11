@@ -25,12 +25,26 @@ package emap.map2d.vos
 		 * 
 		 */
 		
-		public function set color($value:uint):void
+		public function set color($value:uint):void 
 		{
 			setProperty("color", $value);
 		}
-		
-		
+		/**
+		 * 位置详细描述
+		 * 
+		 **/
+		public function set description($value:String):void
+		{
+			setProperty("description",$value);
+		}
+		/**
+		 *位置实景图
+		 * 
+		 **/
+		public function set realImage($value:String):void
+		{
+			setProperty("realImage",$value);
+		}
 		/**
 		 * 
 		 * 图标路径

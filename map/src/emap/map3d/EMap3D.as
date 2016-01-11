@@ -133,6 +133,7 @@ package emap.map3d
 		override protected function uploadAllSource():void
 		{
 			if (mapCreated && contextCreated)
+				
 				SourceEmap3D.uploadAllSources(main);
 		}
 		

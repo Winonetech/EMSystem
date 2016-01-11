@@ -128,10 +128,8 @@
 			 * 
 			 */
 			
-			public function get initializePosition():String
-			{
-				return em::initializePosition;
-			}
+	
+
 			
 			/**
 			 * @private
@@ -217,6 +215,12 @@
 			{
 				em::routes = $data;
 				applyCallback(callbackRoutes, false);
+			}
+			
+			override public function set width(value:Number):void
+			{
+				super.width = value;
+				trace("set width:", value);
 			}
 			
 			

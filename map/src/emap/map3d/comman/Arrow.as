@@ -3,7 +3,7 @@ package emap.map3d.comman
 	
 	/**
 	 * 
-	 * 箭头。
+	 * 箭头。实际圆锥
 	 * 
 	 */
 	
@@ -53,9 +53,10 @@ package emap.map3d.comman
 			const tgs:Vector.<Number> = new Vector.<Number>;
 			const ids:Vector.<uint>   = new Vector.<uint>;
 			const ats:Array = SourceEmap3D.ATTRIBUTES;
-			const seg:uint = 16;
-			const h:Number = 20;
-			const r:Number = 5;
+			
+			const seg:uint = 48;//分段
+			const h:Number = 60;//高度
+			const r:Number = 20;//半径
 			const n:Number = 3;
 			const d:Number = 2 * Math.PI / seg;
 			const f:Number = Math.asin(r * Math.sin(d)) / Math.sqrt(r * r + h * h);

@@ -20,14 +20,18 @@
 	<s:HGroup left="10" top="10" gap="30">
 		<s:HGroup>
 			<s:RadioButton label="平移" value="move" group="{modeRadio}" color="0xFFFFFF" selected="true"/>
-			<s:RadioButton label="旋转" value="rotate" group="{modeRadio}" color="0xFFFFFF"/>
+		<s:RadioButton label="旋转" value="rotate" group="{modeRadio}" color="0xFFFFFF"/>
 		</s:HGroup>
 		<s:HGroup id="floorsMenu"/>
 	</s:HGroup>
+	<!--<s:Image x="{width-100}" y="0" width="100" height="100" source="ggg.png" fillMode="scale" scaleMode="stretch"/>-->
+		
+	<s:Image x="{width-100}" y="0" mouseChildren="false" mouseEnabled="false" width="100" height="100" source="image/compass.png" smooth="true" fillMode="scale" scaleMode="stretch"  rotation="{MathUtil.radianToAngle(map.cameraRotationZ)}"  transformX="50" transformY="50" />
 	
 	<fx:Script>
 		<![CDATA[
 			import cn.vision.collections.Map;
+			import cn.vision.utils.MathUtil;
 			
 			import emap.core.em;
 			import emap.events.MapEvent;
@@ -321,6 +325,7 @@
 			/**
 			 * @private
 			 */
+			[Bindable]
 			private var map:EMap3D;
 			
 			

@@ -5,22 +5,33 @@
 				  xmlns:vw="viewer.views.*"
 				  horizontalCenter="0" verticalCenter="0">
 	
-	<s:Panel width="300" height="100">
-		<s:HGroup verticalCenter="0" horizontalCenter="0">
-			<s:Button label="设为起点" click="setInitPos_clickHandler(event)"/>
-			<s:Button label="寻路" click="find_clickHandler(event)"/>
-		</s:HGroup>
+	<s:Panel width="300" id="panel" title="{label}">
+		<s:VGroup   width="100%" horizontalAlign="center">
+			<s:Image  source = "{image}" width="100%" height="200" fillMode="scale" scaleMode="letterbox">
+				
+			</s:Image>
+			<s:Label  width="100%" text="{description}">
+				
+			</s:Label>
+			<s:HGroup  horizontalCenter="0">
+				<s:Button label="设为起点" click="setInitPos_clickHandler(event)"/>
+				<s:Button label="寻路" click="find_clickHandler(event)"/>
+			</s:HGroup>
+			<s:Label  width="100%" height="15">
+				
+			</s:Label>
+		</s:VGroup>
 	</s:Panel>
 	<s:Button right="5" top="5" width="30" height="20" label="X" click="close_clickHandler(event)"/>
 	
 	<fx:Script>
 		<![CDATA[
+			import emap.map3d.vos.E3VOPosition;
 			
 			import viewer.commands.DisplayPositionClickCommand;
 			import viewer.commands.FindPathCommand;
 			import viewer.commands.SetInitializePositionCommand;
-			
-			
+			import viewer.core.MVConfig;
 			/**
 			 * @private
 			 */
@@ -29,7 +40,6 @@
 				presenter.execute(new DisplayPositionClickCommand);
 				presenter.execute(new SetInitializePositionCommand(serial));
 			}
-			
 			/**
 			 * @private
 			 */
@@ -53,8 +63,28 @@
 			 * 序列号。
 			 * 
 			 */
-			
-			public var serial:String;
+			public function set serial($value:String):void
+			{
+				_serial = $value;
+				var position:E3VOPosition = MVConfig.instance.serials[_serial];
+				label = position.label;
+				description = position.description;
+				if(!position.realImage||position.realImage != "")
+					image = position.realImage;
+			}
+			public function get serial():String
+			{
+				return _serial;
+			}
+			[Bindable] 
+			public var image:String;
+			[Bindable]
+			public var label:String;
+			[Bindable]
+			public var description:String;
+			[Bindable]
+			public var position:E3VOPosition;
+			public var _serial:String;
 			
 		]]>
 	</fx:Script>

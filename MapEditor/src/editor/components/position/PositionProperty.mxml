@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:vos="emap.map2d.vos.*" width="240" height="580">
+		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:vos="emap.map2d.vos.*" width="240" height="648">
 	<fx:Declarations>
 		
 	  
@@ -29,6 +29,7 @@
 			import mx.events.ColorPickerEvent;
 			
 			import spark.events.TextOperationEvent;
+			private var image:String;
 			[Bindable]
 			
 			private var collection:ArrayCollection;
@@ -162,18 +163,21 @@
 				// TODO Auto-generated method stub
 				if(_position)
 				{
+					image = event.target.id;
 					var file:File = new File;
 					var fileFilter:FileFilter = new FileFilter("png,jpg","*.jpg;*.png");
 					file.addEventListener(Event.SELECT,changeImage);
 					file.browseForOpen("请选择楼层图片",[fileFilter]);
-					
 				}
 			}
 			protected function changeImage(event:Event):void
 			{
+			
 				ImageManager.removeImage(_position.icon);
-				_position.icon = ImageManager.registImage(event.target.url,"cache/image");
-				EDConfig.instance.e2Config.positionViewMap[_position.id].changeIcon();
+				if(image)
+					_position[image] = ImageManager.registImage(event.target.url,"cache/image");
+				if(image == "icon")
+					EDConfig.instance.e2Config.positionViewMap[_position.id].changeIcon();
 			}
 			
 			protected function hslider1_changeHandler(event:Event):void
@@ -224,80 +228,91 @@
 			
 		]]>
 	</fx:Script>
-	<s:Label x="10" y="247" text="图标"/>
+	<s:Label x="10" y="271" text="图标"/>
 	<mx:HRule x="0" y="28" width="100%" height="1"/>
 	<s:Label x="18" y="38" text="名称:"/>
 	
 	<s:TextInput x="97" id="lb" y="31" width="86" text="{position.label}" change="change('label',lb,'text')"/>
 	<mx:HRule x="0" y="59" width="100%" height="1"/>
-	<s:Label x="17" y="275" text="颜色："/>
-	<mx:ColorPicker id="c" x="101" y="267" width="25" height="22" selectedColor="{position.color}" change="c_changeHandler(event)"/>
+	<s:Label x="17" y="299" text="颜色："/>
+	<mx:ColorPicker id="c" x="101" y="291" width="25" height="22" selectedColor="{position.color}" change="c_changeHandler(event)"/>
 	<mx:HRule x="0" y="86" width="100%" height="1"/>
-	<s:Label x="17" y="303" text="图标:"/>
-	<s:TextInput id="i" x="101" y="299" width="84" text="{position.icon}" editable="false" change="change('icon',i,'text')"/>
+	<s:Label x="17" y="327" text="图标:"/>
+	<s:TextInput id="i" x="101" y="323" width="84" text="{position.icon}" editable="false" />
 		
-	<s:Button x="192" y="299" width="44" label="浏览" click="iconChange_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
+	<s:Button id="icon" x="192" y="323" width="44" label="浏览" click="iconChange_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
+	<s:Label x="17" y="357" text="实景图:"/>
+	<s:TextInput id="i1" x="101" y="353" width="84" text="{position.realImage}" editable="false" change="change('icon',i,'text')"/>
+	<s:Button id="realImage" x="192" y="353" width="44" label="浏览" click="iconChange_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
+	<s:TextInput id="i0" x="101" y="567" width="84" text="{position.icon}" editable="false" change="change('icon',i,'text')"/>
+	<s:Button x="192" y="567" width="44" label="浏览" click="iconChange_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
 	<mx:HRule x="0" y="114" width="100%" height="1"/>
 
-	<s:Label x="17" y="331" text="图标X："/>
-	<s:TextInput id="ix" x="101" y="326" width="84" text="{position.iconOffsetX}" change="change('iconOffsetX',ix,'text')" restrict="0-9/."/>
+	<s:Label x="17" y="387" text="图标X："/>
+	<s:TextInput id="ix" x="101" y="382" width="84" text="{position.iconOffsetX}" change="change('iconOffsetX',ix,'text')" restrict="0-9/."/>
 	<mx:HRule x="0" y="144" width="100%" height="1"/>
 	
-	<s:Label x="17" y="359" text="图标Y："/>
-	<s:TextInput id="iy" x="101" y="355" width="84" text="{position.iconOffsetY}" change="change('iconOffsetY',iy,'text')" restrict="0-9/."/>
+	<s:Label x="17" y="415" text="图标Y："/>
+	<s:TextInput id="iy" x="101" y="411" width="84" text="{position.iconOffsetY}" change="change('iconOffsetY',iy,'text')" restrict="0-9/."/>
 	<mx:HRule x="0" y="172" width="100%" height="1"/>
-	<s:Label x="17" y="391" text="图标缩放："/>
+	<s:Label x="17" y="447" text="图标缩放："/>
 	<!--<s:TextInput id="s" x="99" y="175" width="84" text="{position.iconScale}" change="change('iconScale',s,'text')" restrict="0-9/."/> -->
-	<s:HSlider id ="iconScale"  x="102" y="392" width="102" maximum="2" stepSize="0.1" value="{position.iconScale}" change="icon_changeHandler(event)"/>
+	<s:HSlider id ="iconScale"  x="102" y="448" width="102" maximum="2" stepSize="0.1" value="{position.iconScale}" change="icon_changeHandler(event)"/>
 	<mx:HRule x="0" y="231" width="100%" height="1"/>
-	<s:Label x="17" y="423" text="图标旋转："/>
-	<s:HSlider id="rot" x="104" y="425" maximum="360" value="{position.iconRotation}" change="hslider1_changeHandler(event)"/>
+	<mx:HRule x="0" y="259" width="100%" height="1"/>
+	<s:Label x="17" y="479" text="图标旋转："/>
+	<s:HSlider id="rot" x="104" y="481" maximum="360" value="{position.iconRotation}" change="hslider1_changeHandler(event)"/>
 	<mx:HRule x="0" y="201" width="240" height="1"/>
-	<s:Label x="17" y="485" text="可见："/>
-	<s:CheckBox x="102" y="480" selected="{position.iconVisible}" label="可见" change="iconChange(event)" />
+	<s:Label x="17" y="541" text="可见："/>
+	<s:CheckBox x="102" y="536" selected="{position.iconVisible}" label="可见" change="iconChange(event)" />
 	
 	<s:Label x="10" y="6" text="文本"/>
-	<mx:HRule x="0" y="264" width="100%" height="4"/>
+	<mx:HRule x="0" y="288" width="100%" height="4"/>
 	
-	<mx:HRule x="0" y="293" width="100%" height="1"/>
+	<mx:HRule x="0" y="317" width="100%" height="1"/>
 	
 	
 	<mx:HRule x="233" y="288" width="100%" height="1"/>
 	<s:Label x="20" y="68" text="文本缩放："/>
 	<s:HSlider id="ls" x="100" y="64" maximum="4" stepSize="0.1" value="{position.labelScale}" change="labelScale_changeHandler(event)"/>
 	<!--<s:TextInput id="ls" x="100" y="297" width="85" text ="{position.labelScale}" change="change('labelScale',ls,'text')" restrict="0-9/."/> -->
-	<mx:HRule x="0" y="322" width="100%" height="1"/>
+	<mx:HRule x="0" y="347" width="100%" height="1"/>
+	<mx:HRule x="0" y="377" width="100%" height="1"/>
 	<s:Label x="20" y="97" text="可见："/>
 	<s:CheckBox x="99" y="93" selected="{position.labelVisible}"  label="可见" change="labelChange(event)"/>
 	
-	<mx:HRule x="0" y="351" width="100%" height="1"/>
+	<mx:HRule x="0" y="407" width="100%" height="1"/>
 	<s:Label x="20" y="126" text="文本X："/>
-	<s:TextInput id="lx" x="100" y="119" width="92" text="{position.labelOffsetX}" change="change('labelOffsetX',lx,'text')" restrict="0-9/."/>
-	<mx:HRule x="0" y="382" width="100%" height="1"/>
+	<s:TextInput id="lx" x="100" y="119" width="83" text="{position.labelOffsetX}" change="change('labelOffsetX',lx,'text')" restrict="0-9/."/>
+	<mx:HRule x="0" y="438" width="100%" height="1"/>
 	
 	<s:Label x="20" y="154" text="文本Y："/>
-	<s:TextInput id="ly" x="100" y="148" width="92" text="{position.labelOffsetY}" change="change('labelOffsetY',ly,'text')" restrict="0-9/."/>
-	<mx:HRule x="0" y="415" width="100%" height="1"/>
+	<s:TextInput id="ly" x="100" y="148" width="83" text="{position.labelOffsetY}" change="change('labelOffsetY',ly,'text')" restrict="0-9/."/>
+	<mx:HRule x="0" y="471" width="100%" height="1"/>
 	<s:Label x="20" y="182" text="颜色："/>
 	<mx:ColorPicker id="n" x="99" y="177" width="25" selectedColor="{position.labelColor}" change="change('labelColor',n,'selectedColor')"/>
-	<mx:HRule x="0" y="446" width="100%" height="1" />
+	<mx:HRule x="0" y="502" width="100%" height="1" />
 	
-	<s:Label x="17" y="455" text="高度："/>
-	<s:TextInput id="t" x="102" y="450" width="92" text="{position.thick}" change="change('thick',t,'text')" restrict="0-9/."/>
-	<mx:HRule x="0" y="476" width="100%" height="1"/>
+	<s:Label x="17" y="511" text="高度："/>
+	<s:TextInput id="t" x="102" y="506" width="92" text="{position.thick}" change="change('thick',t,'text')" restrict="0-9/."/>
+	<mx:HRule x="0" y="532" width="100%" height="1"/>
 	<s:Label x="20" y="213" text="楼层："/>
-	<s:TextInput id="f" x="98" y="206" width="92" text="{position.floorID}" editable="false" change="change('floorID',f,'text')"/>
-	<mx:HRule x="0" y="507" width="100%" height="1"/>
+	<s:TextInput id="f" x="98" y="206" width="85" text="{position.floorID}" editable="false" change="change('floorID',f,'text')"/>
+	<s:TextInput id="d" x="98" y="235" width="85" text="{position.description}"  change="change('description',d,'text')"/>
+	<mx:HRule x="0" y="563" width="100%" height="1"/>
+	<mx:HRule x="0" y="590" width="100%" height="1"/>
 	
 
-	<s:Label x="18" y="517" text="位置类型："/>
-	<s:ComboBox id="positionType" x="101" y="513" width="91" dataProvider="{collection}" selectedItem="{position.positionType}" change="changeType()"/>
-	<mx:HRule x="0" y="539" width="100%" height="1"/>
-	<s:Button x="33" y="547" width="47" label="编辑" click="editor_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
+	<s:Label x="18" y="598" text="位置类型："/>
+	<s:Label x="18" y="570" text="位置类型："/>
+	<s:ComboBox id="positionType" x="101" y="594" width="91" dataProvider="{collection}" selectedItem="{position.positionType}" change="changeType()"/>
+	<mx:HRule x="0" y="620" width="100%" height="1"/>
+	<s:Button x="33" y="625" width="47" label="编辑" click="editor_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
 	
-	<s:Button id="setEmpty" x="90" y="547" width="46" label="重绘" enabled="false" click="empty_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
-	<s:Button x="143" y="547" width="46" label="完成" click="submit_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
-	<mx:VRule x="87" y="28" width="2" height="204"/>
-	<mx:VRule x="89" y="264" width="2" height="276" />
+	<s:Button id="setEmpty" x="90" y="625" width="46" label="重绘" enabled="false" click="empty_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
+	<s:Button x="143" y="625" width="46" label="完成" click="submit_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
+	<mx:VRule x="87" y="28" width="2" height="232"/>
+	<mx:VRule x="87" y="288" width="2" height="301" />
+	<s:Label x="20" y="239" text="描述："/>
 
 </s:Group>

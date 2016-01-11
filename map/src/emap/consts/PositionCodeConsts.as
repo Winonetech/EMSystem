@@ -75,7 +75,15 @@ package emap.consts
 		 */
 		
 		public static const ESCALATOR:String = "escalator";
-
+		
+		
+		/**
+		 * 
+		 * 终端位置
+		 * 
+		 */
+		
+		public static const DEVICE:String = "device";
 		
 	}
 }

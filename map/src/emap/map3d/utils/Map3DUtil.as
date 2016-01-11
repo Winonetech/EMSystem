@@ -89,9 +89,9 @@ package emap.map3d.utils
 					var mat:Matrix = new Matrix;
 					mat.createBox(rect.scaleX, -rect.scaleY, 0, -$layout.minX * rect.scaleX, -$layout.minY * rect.scaleY);
 					bmd.draw($shape, mat);
-					var tex:PixelTextureMaterial = new PixelTextureMaterial(new BitmapTextureResource(bmd));
-					tex.transparentPass = true;
-					tex.opaquePass = true;
+					var tex:PixelTextureMaterial = new PixelTextureMaterial(new BitmapTextureResource(bmd), null, 1, true);
+					//tex.transparentPass = true;
+					//tex.opaquePass = true;
 					tex.alphaThreshold = 1;
 					tex.alpha = 1;
 					

@@ -81,7 +81,18 @@ package emap.vos
 			return getProperty("color", uint);
 		}
 		
-		
+		/**
+		 * 位置详细描述
+		 * 
+		 **/
+		public function get description():String
+		{
+			return getProperty("description");
+		}
+		public function get realImage():String
+		{
+			return getProperty("realImage");
+		}
 		/**
 		 * 
 		 * 图标路径
@@ -176,7 +187,6 @@ package emap.vos
 		{
 			return getProperty("label");
 		}
-		
 		
 		/**
 		 * 

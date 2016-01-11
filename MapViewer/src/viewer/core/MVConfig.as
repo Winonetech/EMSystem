@@ -41,7 +41,12 @@ package viewer.core
 		
 		public var floors:Map;
 		
-		
+		/**
+		 *serals 
+		 * 
+		 * 
+		 **/
+		public var serials:Map;
 		/**
 		 * 
 		 * 位置。

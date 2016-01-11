@@ -79,6 +79,10 @@ package emap.map3d.finding
 					{
 						var key:String = RouteUtil.getKey(node, next);
 						var route:E3VORoute = routes[key] = nodes[i].routes[key];
+						if(route==null)
+						{
+							trace("xxxxxxxxxxx");
+						}
 						em::distance += route.distance;
 					}
 					//如果是关键节点，需要验证接下一个节点是否同一类型，

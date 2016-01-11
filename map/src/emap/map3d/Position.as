@@ -72,8 +72,8 @@ package emap.map3d
 		 */
 		private function update():void
 		{
-			mouseEnabled = useHandCursor = PositionUtil.interactable(code);
 			
+			mouseEnabled = useHandCursor = PositionUtil.interactable(code);
 			if (steps && steps.length > 2)
 			{
 				updateTop();
@@ -170,6 +170,19 @@ package emap.map3d
 					num += 4;
 				};
 				faces.forEach(crfe);
+				Map3DUtil.destroyObject3D(mesh);
+				//创建Mesh
+				var gem:Geometry = new Geometry(num);
+				gem.addVertexStream(SourceEmap3D.ATTRIBUTES);
+				gem.setAttributeValues(VertexAttributes.POSITION, vxs);
+				gem.setAttributeValues(VertexAttributes.TEXCOORDS[0], uvs);
+				gem.setAttributeValues(VertexAttributes.NORMAL, nms);
+				gem.indices = fci;
+				
+				addChild(mesh = new Mesh);
+				mesh.geometry = gem;
+				mesh.addSurface(SourceEmap3D.getColorMaterial(color), 0, num);
+				mesh.calculateBoundBox();
 			}
 		}
 		
@@ -178,19 +191,7 @@ package emap.map3d
 		 */
 		private function updateMesh():void
 		{
-			Map3DUtil.destroyObject3D(mesh);
-			//创建Mesh
-			var gem:Geometry = new Geometry(num);
-			gem.addVertexStream(SourceEmap3D.ATTRIBUTES);
-			gem.setAttributeValues(VertexAttributes.POSITION, vxs);
-			gem.setAttributeValues(VertexAttributes.TEXCOORDS[0], uvs);
-			gem.setAttributeValues(VertexAttributes.NORMAL, nms);
-			gem.indices = fci;
 			
-			addChild(mesh = new Mesh);
-			mesh.geometry = gem;
-			mesh.addSurface(SourceEmap3D.getColorMaterial(color), 0, num);
-			mesh.calculateBoundBox();
 		}
 		
 		/**

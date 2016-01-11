@@ -47,7 +47,10 @@ package viewer.commands
 			view.mapView.initializePosition = serial;
 		}
 		
-		
+		public function set se($value:String):void
+		{
+			
+		}
 		/**
 		 * @private
 		 */

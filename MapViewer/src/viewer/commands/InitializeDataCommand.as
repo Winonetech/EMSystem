@@ -71,7 +71,6 @@ package viewer.commands
 				floorsMap[floor.id] = floor;
 			}
 			config.floors = floorsMap;
-			
 			xml = getXML("cache/data/positionTypes.xml");
 			list = xml.children();
 			var positionTypesMap:Map = new Map;
@@ -81,7 +80,6 @@ package viewer.commands
 				positionTypesMap[positionType.id] = positionType;
 			}
 			config.positionTypes = positionTypesMap;
-			
 			xml = getXML("cache/data/positions.xml");
 			list = xml.children();
 			var positionsArr:Array = [];
@@ -95,6 +93,7 @@ package viewer.commands
 				position.positionType = positionTypesMap[position.positionTypeID];
 				serialsMap[position.serial] = position;
 			}
+			
 			config.positions = positionsArr;
 			
 			xml = getXML("cache/data/nodes.xml");
@@ -120,9 +119,9 @@ package viewer.commands
 				route.node1 = serialsMap[route.serial1];
 				route.node2 = serialsMap[route.serial2];
 			}
+			config.serials = serialsMap;
 			config.routes = routesMap;
 		}
-		
 		/**
 		 * @private
 		 */

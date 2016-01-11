@@ -77,6 +77,8 @@ package emap.map3d.finding
 		
 		/**
 		 * 
+		 * 
+		 * 
 		 * 路径演示。
 		 * 
 		 */
@@ -96,7 +98,7 @@ package emap.map3d.finding
 				if ($tween)
 				{
 					count = 0;
-					wire = new WireFrame(0xFF0000, 1, 1);
+					wire = new WireFrame(0xFF0000, 1, 3);
 					TimerUtil.callLater(1 * 1000, timer.start);
 				}
 				else
@@ -191,7 +193,7 @@ package emap.map3d.finding
 		 * @param $fseg:Number (default = 0) 从某个距离开始。
 		 * 
 		 * @return uint 
-		 */
+		 **/
 		private function resolvePointsByRoute($nodes:Vector.<IE3Node>, $flag:uint, $dis:Number = 0):uint
 		{
 			trace("xxxxxx",checkTipNode(0,$nodes));
@@ -240,7 +242,7 @@ package emap.map3d.finding
 					while (tmp < l - 1)
 					{
 						var v1:IE3Node = $nodes[tmp];
-						var v2:IE3Node = $nodes[tmp + 1];
+						var v2:IE3Node = $nodes[tmp + 1]; 
 						var dn:Number  = distance(v1, v2);
 						if (dn < radius)
 						{
@@ -303,7 +305,6 @@ package emap.map3d.finding
 		{
 			
 			var l:uint = $nodes.length;
-			trace("xxxxxxxxxxxxx",l);
 			if (l)
 			{
 				var result:String;

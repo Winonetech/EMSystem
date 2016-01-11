@@ -65,7 +65,7 @@ package emap.map3d.finding
 					var network:Network = floorNetwork[node1.floorID];
 					if (network) var path:Path = network.find(node1, node2);
 				}
-				else
+				else	
 				{
 					path = keyNetwork.find(node1, node2);
 				}

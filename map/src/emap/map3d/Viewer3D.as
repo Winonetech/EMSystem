@@ -128,6 +128,7 @@ package emap.map3d
 			
 			camera.view = new View(width, height, false, 0, 0, 3);
 			camera.view.hideLogo();
+			camera.view.antiAlias = 16;
 			
 			camera.fov = Math.PI * .5;
 			camera.orthographic = true;
@@ -748,7 +749,7 @@ package emap.map3d
 		 * cameraRotationZ
 		 * 
 		 */
-		
+		[Bindable]
 		public function get cameraRotationZ():Number
 		{
 			return em::cameraRotationZ;
@@ -757,6 +758,7 @@ package emap.map3d
 		/**
 		 * @private
 		 */
+		
 		public function set cameraRotationZ($value:Number):void
 		{
 			if (Map3DUtil.numable(em::cameraRotationZ, $value))

@@ -14,7 +14,7 @@
 AppId={{F0A09664-0CE5-434B-8521-03C7AF7FF6B2}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
-AppVerName={#MyAppName} {#MyAppVersion}
+AppVerName={#MyAppName} {#MyAppVersion}   
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
@@ -23,7 +23,7 @@ DefaultDirName={pf}\Map Viewer
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 OutputBaseFilename=Map Viewer
-SetupIconFile=C:\Work\projects\winonetech\EMSystem\MapViewer\MapViewer.ico
+SetupIconFile=D:\work\EMSystem\MapViewer\MapViewer.ico
 Compression=lzma
 SolidCompression=yes
 VersionInfoVersion={#MyAppVersion}
@@ -40,11 +40,11 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 
 [Files]
-Source: "C:\Work\projects\winonetech\EMSystem\MapViewer\MapViewer\Adobe AIR\*"; DestDir: "{app}\Adobe AIR"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Work\projects\winonetech\EMSystem\MapViewer\MapViewer\META-INF\*"; DestDir: "{app}\META-INF"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Work\projects\winonetech\EMSystem\MapViewer\MapViewer\mimetype"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Work\projects\winonetech\EMSystem\MapViewer\MapViewer\MapViewer.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Work\projects\winonetech\EMSystem\MapViewer\MapViewer\MapViewer.swf"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\work\EMSystem\MapViewer\MapViewer\Adobe AIR\*"; DestDir: "{app}\Adobe AIR"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "D:\work\EMSystem\MapViewer\MapViewer\META-INF\*"; DestDir: "{app}\META-INF"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "D:\work\EMSystem\MapViewer\MapViewer\mimetype"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\work\EMSystem\MapViewer\MapViewer\MapViewer.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\work\EMSystem\MapViewer\MapViewer\MapViewer.swf"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 
@@ -70,5 +70,5 @@ begin
       //删除 {app} 文件夹及其中所有文件
       DelTree(ExpandConstant('{app}'), True, True, True);
 end;
-
+      
 [/code]
