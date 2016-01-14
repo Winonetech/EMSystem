@@ -17,7 +17,7 @@
 			{
 				MVPresenter.presenter.start(this);
 			}
-			
+			    
 		]]>
 	</fx:Script>
 </ct:MainApplication>

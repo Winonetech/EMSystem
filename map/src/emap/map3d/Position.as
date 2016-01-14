@@ -225,12 +225,12 @@ package emap.map3d
 				iconLayer.scale = iconScale;
 			}
 		}
-		
+		   
 		/**
 		 * @private
 		 */
 		private function updateLabel():void
-		{
+		{  
 			textLayer = Map3DUtil.destroyObject3D(textLayer);
 			if (labelVisible && !StringUtil.isEmpty(label) &&
 				PositionUtil.displayLabel(code))
