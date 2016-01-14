@@ -218,6 +218,7 @@ package emap.map3d
 						if (floor.visible)
 						{
 							//如果order在范围之内，则直接消失，否则移动至目标位置后消失
+							arr[0].order;
 							if (arr[0].order < floor.order && floor.order < arr[l - 1].order)
 							{
 								floor.visible = false;

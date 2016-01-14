@@ -19,7 +19,7 @@
 			{
 				MVPresenter.presenter.start(container);
 			}
-			
+			    
 		]]>
 	</fx:Script>
 </ct:MainApplication>

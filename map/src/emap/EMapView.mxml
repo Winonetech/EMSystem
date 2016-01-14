@@ -26,15 +26,14 @@
 	</s:HGroup>
 	<!--<s:Image x="{width-100}" y="0" width="100" height="100" source="ggg.png" fillMode="scale" scaleMode="stretch"/>-->
 		
-	<s:Image x="{width-100}" y="0" mouseChildren="false" mouseEnabled="false" width="100" height="100" source="image/compass.png"
-			 smooth="true" fillMode="scale" scaleMode="stretch"  rotation="{MathUtil.radianToAngle(map.cameraRotationZ)}"
-			 transformX="50" transformY="50" />
+	<s:Image x="{width-100}" y="0" mouseChildren="false" mouseEnabled="false" width="100" height="100"
+			 source="@Embed('image/compass.png')" smooth="true" fillMode="scale" scaleMode="stretch"
+			 rotation="{MathUtil.radianToAngle(map.cameraRotationZ)}"  transformX="50" transformY="50" />
 	
 	<fx:Script>
 		<![CDATA[
 			import cn.vision.collections.Map;
 			import cn.vision.utils.MathUtil;
-			
 			import emap.core.em;
 			import emap.events.MapEvent;
 			import emap.map3d.EMap3D;

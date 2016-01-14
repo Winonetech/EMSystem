@@ -39,7 +39,7 @@ package viewer.core
 		 * 
 		 */
 		
-		public var floors:Map;
+		public var floors:Map;  
 		
 		/**
 		 *serals 
