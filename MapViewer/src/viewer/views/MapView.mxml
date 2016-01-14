@@ -220,7 +220,6 @@
 			override public function set width(value:Number):void
 			{
 				super.width = value;
-				trace("set width:", value);
 			}
 			
 			

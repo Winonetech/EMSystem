@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ct:MainApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
-					xmlns:s="library://ns.adobe.com/flex/spark"
+					xmlns:s ="library://ns.adobe.com/flex/spark"
 					xmlns:mx="library://ns.adobe.com/flex/mx"
 					xmlns:ct="com.winonetech.controls.*"
-					width="900" height="450" addedToStage="init()" backgroundAlpha="0">
+					xmlns:wt="com.winonetech.core.*"
+					width="900" height="450" backgroundAlpha="0">
+	<wt:View id="container" width="100%" height="100%" addedToStage="init()"/>
 	<fx:Script>
 		<![CDATA[
 			
@@ -15,7 +17,7 @@
 			 */
 			private function init():void
 			{
-				MVPresenter.presenter.start(this);
+				MVPresenter.presenter.start(container);
 			}
 			
 		]]>

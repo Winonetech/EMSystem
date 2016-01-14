@@ -4,7 +4,7 @@ package viewer.core
 	import cn.vision.core.VSObject;
 	import cn.vision.errors.SingleTonError;
 	
-	import spark.components.WindowedApplication;
+	import com.winonetech.core.View;
 	
 	import viewer.views.MapView;
 	import viewer.views.PositionClickView;
@@ -32,7 +32,7 @@ package viewer.core
 		 * 
 		 */
 		
-		public function get application():WindowedApplication
+		public function get application():View
 		{
 			return MVPresenter.presenter.application;
 		}

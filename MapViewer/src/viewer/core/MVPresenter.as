@@ -6,7 +6,7 @@ package viewer.core
 	import cn.vision.pattern.core.Presenter;
 	import cn.vision.pattern.queue.SequenceQueue;
 	
-	import spark.components.WindowedApplication;
+	import com.winonetech.core.View;
 	
 	import viewer.commands.InitializeDataCommand;
 	import viewer.commands.InitializeViewCommand;
@@ -61,9 +61,9 @@ package viewer.core
 		 * 
 		 */
 		
-		public function get application():WindowedApplication
+		public function get application():View
 		{
-			return app as WindowedApplication;
+			return app as View;
 		}
 		
 		

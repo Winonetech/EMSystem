@@ -23,7 +23,7 @@ DefaultDirName={pf}\Map Viewer
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 OutputBaseFilename=Map Viewer
-SetupIconFile=D:\work\EMSystem\MapViewer\MapViewer.ico
+SetupIconFile=MapViewer.ico
 Compression=lzma
 SolidCompression=yes
 VersionInfoVersion={#MyAppVersion}
@@ -40,11 +40,11 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 
 [Files]
-Source: "D:\work\EMSystem\MapViewer\MapViewer\Adobe AIR\*"; DestDir: "{app}\Adobe AIR"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "D:\work\EMSystem\MapViewer\MapViewer\META-INF\*"; DestDir: "{app}\META-INF"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "D:\work\EMSystem\MapViewer\MapViewer\mimetype"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\work\EMSystem\MapViewer\MapViewer\MapViewer.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\work\EMSystem\MapViewer\MapViewer\MapViewer.swf"; DestDir: "{app}"; Flags: ignoreversion
+Source: "MapViewer\MapViewer\Adobe AIR\*"; DestDir: "{app}\Adobe AIR"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "MapViewer\MapViewer\META-INF\*"; DestDir: "{app}\META-INF"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "MapViewer\MapViewer\mimetype"; DestDir: "{app}"; Flags: ignoreversion
+Source: "MapViewer\MapViewer\MapViewer.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "MapViewer\MapViewer\MapViewer.swf"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 
