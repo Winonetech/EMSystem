@@ -32,6 +32,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			
 			import cn.vision.collections.Map;
 			import cn.vision.utils.MathUtil;
 			import emap.core.em;
