@@ -215,7 +215,7 @@ package emap.map3d
 					if ($tween)
 					{
 						//判断切换前是否显示
-						if (floor.visible)
+						if (floor.visible&&arr.length>0)
 						{
 							//如果order在范围之内，则直接消失，否则移动至目标位置后消失
 							arr[0].order;

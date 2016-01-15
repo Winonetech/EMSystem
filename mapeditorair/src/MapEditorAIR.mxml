@@ -10,7 +10,7 @@
 					xmlns:route="editor.components.route.*"
 					xmlns:local="*"
 					xmlns:ct="com.winonetech.controls.*"
-					width="1230" height="640" 
+					width="1230" height="730" 
 					preloaderChromeColor="#CCCCCC" >
 	
 	<fx:Script>
