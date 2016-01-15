@@ -40,11 +40,11 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 
 [Files]
-Source: "MapViewer\MapViewer\Adobe AIR\*"; DestDir: "{app}\Adobe AIR"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "MapViewer\MapViewer\META-INF\*"; DestDir: "{app}\META-INF"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "MapViewer\MapViewer\mimetype"; DestDir: "{app}"; Flags: ignoreversion
-Source: "MapViewer\MapViewer\MapViewer.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "MapViewer\MapViewer\MapViewer.swf"; DestDir: "{app}"; Flags: ignoreversion
+Source: "MapViewer\Adobe AIR\*"; DestDir: "{app}\Adobe AIR"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "MapViewer\META-INF\*"; DestDir: "{app}\META-INF"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "MapViewer\mimetype"; DestDir: "{app}"; Flags: ignoreversion
+Source: "MapViewer\MapViewer.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "MapViewer\MapViewer.swf"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 

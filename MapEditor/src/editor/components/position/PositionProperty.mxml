@@ -244,8 +244,6 @@
 	<s:Label x="17" y="357" text="实景图:"/>
 	<s:TextInput id="i1" x="101" y="353" width="84" text="{position.realImage}" editable="false" change="change('icon',i,'text')"/>
 	<s:Button id="realImage" x="192" y="353" width="44" label="浏览" click="iconChange_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
-	<s:TextInput id="i0" x="101" y="567" width="84" text="{position.icon}" editable="false" change="change('icon',i,'text')"/>
-	<s:Button x="192" y="567" width="44" label="浏览" click="iconChange_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
 	<mx:HRule x="0" y="114" width="100%" height="1"/>
 
 	<s:Label x="17" y="387" text="图标X："/>
@@ -303,14 +301,12 @@
 	<mx:HRule x="0" y="590" width="100%" height="1"/>
 	
 
-	<s:Label x="18" y="598" text="位置类型："/>
 	<s:Label x="18" y="570" text="位置类型："/>
-	<s:ComboBox id="positionType" x="101" y="594" width="91" dataProvider="{collection}" selectedItem="{position.positionType}" change="changeType()"/>
-	<mx:HRule x="0" y="620" width="100%" height="1"/>
-	<s:Button x="33" y="625" width="47" label="编辑" click="editor_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
+	<s:ComboBox id="positionType" x="101" y="566" width="91" dataProvider="{collection}" selectedItem="{position.positionType}" change="changeType()"/>
+	<s:Button x="33" y="595" width="47" label="编辑" click="editor_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
 	
-	<s:Button id="setEmpty" x="90" y="625" width="46" label="重绘" enabled="false" click="empty_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
-	<s:Button x="143" y="625" width="46" label="完成" click="submit_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
+	<s:Button id="setEmpty" x="90" y="595" width="46" label="重绘" enabled="false" click="empty_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
+	<s:Button x="143" y="595" width="46" label="完成" click="submit_clickHandler(event)" skinClass="editor.skin.PropertyButtonSkin"/>
 	<mx:VRule x="87" y="28" width="2" height="232"/>
 	<mx:VRule x="87" y="288" width="2" height="301" />
 	<s:Label x="20" y="239" text="描述："/>
