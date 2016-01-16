@@ -52,6 +52,7 @@ package viewer.commands
 				BindingUtils.bindProperty(map, "width" , view.application, "width");
 				BindingUtils.bindProperty(map, "height", view.application, "height");
 				
+				map.background    = new MapBg;
 				map.config        = config.config;
 				map.floors        = config.floors;
 				map.positionTypes = config.positionTypes;
@@ -62,6 +63,9 @@ package viewer.commands
 				
 				view.application.addElement(map);
 		}
+		
+		[Embed(source="images/mapBg.jpg")]
+		private var MapBg:Class;
 		
 	}
 }

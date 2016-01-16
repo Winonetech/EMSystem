@@ -20,7 +20,7 @@ package emap.map3d.core
 		 * 
 		 */
 		
-		public function E3Config($data:Object=null)
+		public function E3Config($data:Object = null)
 		{
 			super($data);
 		}
@@ -43,6 +43,18 @@ package emap.map3d.core
 		public function set floorSpace($value:Number):void
 		{
 			setProperty("floorSpace", Number);
+		}
+		
+		
+		/**
+		 * 
+		 * 初始化位置。
+		 * 
+		 */
+		
+		public function get initializePosition():String
+		{
+			return getProperty("initializePosition");
 		}
 		
 	}

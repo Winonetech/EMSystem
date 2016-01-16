@@ -18,7 +18,7 @@
 	
 	<mx:UIComponent id="container"/>
 	<s:Group left="10" top="10">
-		<s:Image width="{floorsMenu.width}" source="@Embed('image/floorBg.png')" fillMode="repeat"/>
+		<s:Image width="{floorsMenu.width}" source="@Embed('images/floorBg.png')" fillMode="repeat"/>
 		<s:HGroup id="floorsMenu" gap="2"/>
 	</s:Group>
 	
@@ -31,9 +31,8 @@
 	
 	<s:Group x="{width - 255}" y="85" rotation="{MathUtil.radianToAngle(map.cameraRotationZ)}">
 		<s:Image mouseChildren="false" mouseEnabled="false"
-				 width="150" height="150"
-				 x="-75" y="-75"
-				 source="@Embed('image/compass.png')"
+				 width="150" height="150" x="-75" y="-75"
+				 source="@Embed('images/compass.png')"
 				 smooth="true"/>
 	</s:Group>
 	
@@ -158,6 +157,16 @@
 			/**
 			 * @private
 			 */
+			private function callbackBackground():Boolean
+			{
+				var result:Boolean = Boolean(map);
+				if (result) map.background = background;
+				return result;
+			}
+			
+			/**
+			 * @private
+			 */
 			private function callbackInitializePosition():Boolean
 			{
 				var result:Boolean = Boolean(map);
@@ -223,6 +232,27 @@
 			private function map_positionClickHandler(event:MapEvent):void
 			{
 				dispatchEvent(event.clone());
+			}
+			
+			
+			/**
+			 * 
+			 * 背景。
+			 * 
+			 */
+			
+			public function get background():*
+			{
+				return em::background;
+			}
+			
+			/**
+			 * @private
+			 */
+			public function set background($value:*):void
+			{
+				em::background = $value;
+				applyCallback(callbackBackground, false);
 			}
 			
 			
@@ -361,6 +391,11 @@
 			[Bindable]
 			private var map:EMap3D;
 			
+			
+			/**
+			 * @private
+			 */
+			em var background:*;
 			
 			/**
 			 * @private

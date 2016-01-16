@@ -62,9 +62,9 @@
         <s:State name="disabledAndSelected" stateGroups="disabledStates, selectedStates" />
     </s:states>
     
-	<s:Image source="@Embed('image/floor3Up.png')"
+	<s:Image source="@Embed('images/floor3Up.png')"
 			 visible="true" visible.selectedStates="false"/>
-	<s:Image source="@Embed('image/floor3Down.png')"
+	<s:Image source="@Embed('images/floor3Down.png')"
 			 visible="false" visible.selectedStates="true"/>
 
     <!-- Label -->

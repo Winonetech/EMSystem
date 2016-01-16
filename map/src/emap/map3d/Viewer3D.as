@@ -147,12 +147,12 @@ package emap.map3d
 			var diagnal:Number = 20000 * Math.tan(camera.fov * .5);
 			var angle:Number = width ? Math.atan(height / width) : 0.7853981633974483;//Math.atan(1)
 			
-			background = new Background(diagnal * Math.cos(angle), diagnal * Math.sin(angle), 16, 10);
-			background.x = 0;
-			background.y = 0;
-			background.z = maxCameraDistance * 2;
-			background.source = 0xAAAAAA;
-			camera.addChild(background);
+			backgroundLayer = new Background(diagnal * Math.cos(angle), diagnal * Math.sin(angle), 16, 10);
+			backgroundLayer.x = 0;
+			backgroundLayer.y = 0;
+			backgroundLayer.z = maxCameraDistance * 2;
+			backgroundLayer.source = 0xAAAAAA;
+			camera.addChild(backgroundLayer);
 			
 			directLight = new DirectionalLight(0xFFFFFF);
 			directLight.x = 1700;
@@ -335,6 +335,28 @@ package emap.map3d
 		
 		/**
 		 * 
+		 * 背景，可以是图片地址或16进制uint类型颜色值。
+		 * 
+		 */
+		
+		public function get background():*
+		{
+			return em::background;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set background($value:*):void
+		{
+			em::background = $value;
+			backgroundLayer.source = background;
+			SourceEmap3D.uploadAllSources(backgroundLayer);
+		}
+		
+		
+		/**
+		 * 
 		 * 是否启用。
 		 * 
 		 */
@@ -470,7 +492,7 @@ package emap.map3d
 			{
 				em::maxCameraDistance = Math.max(minCameraDistance, $value);
 				cameraDistance = Math.min(cameraDistance, maxCameraDistance);
-				background.z = maxCameraDistance + 1000;
+				backgroundLayer.z = maxCameraDistance + 1000;
 			}
 		}
 		
@@ -867,7 +889,7 @@ package emap.map3d
 		/**
 		 * @private
 		 */
-		private var background:Background;
+		private var backgroundLayer:Background;
 		
 		/**
 		 * @private
@@ -879,6 +901,11 @@ package emap.map3d
 		 */
 		private var ambientLight:AmbientLight;
 		
+		
+		/**
+		 * @private
+		 */
+		em var background:*;
 		
 		/**
 		 * @private

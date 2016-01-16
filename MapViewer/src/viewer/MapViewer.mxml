@@ -19,11 +19,6 @@
 				MVPresenter.presenter.start(this);
 			}
 			
-			override protected function processReset():void
-			{
-				
-			}
-			
 		]]>
 	</fx:Script>
 </wt:View>

@@ -63,10 +63,10 @@
 	</s:states>
 	
 	<s:Image horizontalCenter="0" verticalCenter="0"
-			 source="@Embed('image/ratioUp.png')"
+			 source="@Embed('images/ratioUp.png')"
 			 visible="true" visible.selectedStates="false"/>
 	<s:Image horizontalCenter="0" verticalCenter="0"
-			 source="@Embed('image/ratioDown.png')"
+			 source="@Embed('images/ratioDown.png')"
 			 visible="false" visible.selectedStates="true"/>
 	
 	<!-- Label -->

@@ -35,6 +35,16 @@
 			/**
 			 * @private
 			 */
+			private function callbackBackground():Boolean
+			{
+				var result:Boolean = Boolean(emapView);
+				if (result) emapView.background = em::background;
+				return result;
+			}
+			
+			/**
+			 * @private
+			 */
 			private function callbackConfig():Boolean
 			{
 				var result:Boolean = Boolean(emapView);
@@ -144,6 +154,17 @@
 			 * @inheritDoc
 			 */
 			
+			public function set background($value:*):void
+			{
+				em::background = $value;
+				applyCallback(callbackBackground);
+			}
+			
+			
+			/**
+			 * @inheritDoc
+			 */
+			
 			public function set config($value:VOEMap):void
 			{
 				em::config = $value;
@@ -221,6 +242,11 @@
 				super.width = value;
 			}
 			
+			
+			/**
+			 * @private
+			 */
+			em var background:*;
 			
 			/**
 			 * @private
