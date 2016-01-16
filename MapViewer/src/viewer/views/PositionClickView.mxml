@@ -3,26 +3,24 @@
 				  xmlns:s ="library://ns.adobe.com/flex/spark" 
 				  xmlns:mx="library://ns.adobe.com/flex/mx"
 				  xmlns:vw="viewer.views.*"
-				  horizontalCenter="0" verticalCenter="0" fontFamily="微软雅黑">
+				  horizontalCenter="0" verticalCenter="0"
+				  clipAndEnableScrolling="false"
+				  fontFamily="微软雅黑" width="521" height="516">
 	
-	<s:Panel width="300" id="panel" title="{label}" backgroundColor="#cccccc">
-		<s:VGroup   width="100%" horizontalAlign="center">
-			<s:Image  source = "{image}" width="100%" height="200" fillMode="scale" scaleMode="stretch">
-				
-			</s:Image>
-			<s:Label  width="100%" text="{description}"  >
-				
-			</s:Label>
-			<s:HGroup  horizontalCenter="0">
-				<s:Button label="设为起点" click="setInitPos_clickHandler(event)"/>
-				<s:Button label="寻路" click="find_clickHandler(event)"/>
-			</s:HGroup>
-			<s:Label  width="100%" height="15">
-				
-			</s:Label>
-		</s:VGroup>
-	</s:Panel>
-	<s:Button right="5" top="5" width="30" height="20" label="X" click="close_clickHandler(event)"/>
+	<s:Image source="@Embed('images/viewBg.png')"/>
+	
+	<s:Image y="240" horizontalCenter="0" source="@Embed('images/textBg1.png')"/>
+	<s:Image y="240" horizontalCenter="0" source="@Embed('images/textBg2.png')"/>
+	
+	<s:Label left="25" top="25" color="0xFFFFFF" fontSize="30" text="{label}"/>
+	<s:VGroup left="50" right="50" top="60" bottom="80" horizontalAlign="center">
+		<s:Image x="90" width="100%" height="180" fillMode="scale" scaleMode="zoom" source="{image}"/>
+		<s:Label fontSize="16" color="0xFFFFFF" width="100%" text="{description}"/>
+		
+	</s:VGroup>
+	<s:Button skinClass="viewer.skins.ExitButton" right="-16" top="-16" click="close_clickHandler(event)"/>
+	<s:Button x="187" y="448" label="寻路" click="find_clickHandler(event)"
+			  skinClass="viewer.skins.FindButton"/>
 	
 	<fx:Script>
 		<![CDATA[
