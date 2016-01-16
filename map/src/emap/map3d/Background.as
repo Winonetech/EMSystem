@@ -23,6 +23,7 @@ package emap.map3d
 	import emap.map3d.tools.SourceEmap3D;
 	import emap.map3d.utils.Map3DUtil;
 	
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Loader;
 	import flash.display.Stage3D;
@@ -274,6 +275,18 @@ package emap.map3d
 			loader.load(new URLRequest($url));
 		}
 		
+		/**
+		 * @private
+		 */
+		private function displayBmd($bmd:BitmapData):void
+		{
+			var source:BitmapTextureResource = new BitmapTextureResource($bmd);
+			
+			setMaterialToAllSurfaces(new TextureMaterial(source));
+			
+			SourceEmap3D.uploadSource(source)
+		}
+		
 		
 		/**
 		 * @private
@@ -287,11 +300,7 @@ package emap.map3d
 				var bmd:BitmapData = new BitmapData(w, h, true, 0);
 				bmd.draw(loader.content);
 				
-				var source:BitmapTextureResource = new BitmapTextureResource(bmd);
-				
-				setMaterialToAllSurfaces(new TextureMaterial(source));
-				
-				SourceEmap3D.uploadSource(source);
+				displayBmd(bmd);
 			}
 		}
 		
@@ -327,6 +336,14 @@ package emap.map3d
 						setMaterialToAllSurfaces(new FillMaterial(color));
 					else
 						loadImage(temp);
+				}
+				else if (source is Bitmap)
+				{
+					displayBmd((source as Bitmap).bitmapData);
+				}
+				else if (source is BitmapData)
+				{
+					displayBmd(source as BitmapData);
 				}
 			}
 		}
