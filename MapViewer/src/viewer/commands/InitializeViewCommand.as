@@ -8,8 +8,6 @@ package viewer.commands
 	 */
 	
 	
-	import emap.EMapView;
-	
 	import mx.binding.utils.BindingUtils;
 	
 	import viewer.views.MapView;
@@ -49,20 +47,20 @@ package viewer.commands
 		 */
 		private function initializeView():void
 		{
-			var map:MapView = new MapView;
-			
-			BindingUtils.bindProperty(map, "width" , view.application, "width");
-			BindingUtils.bindProperty(map, "height", view.application, "height");
-			
-			map.config        = config.config;
-			map.floors        = config.floors;
-			map.positionTypes = config.positionTypes;
-			map.positions     = config.positions;
-			map.nodes         = config.nodes;
-			map.routes        = config.routes;
-			view.mapView = map;
-			
-			view.application.addElement(map);
+				var map:MapView = new MapView;
+				
+				BindingUtils.bindProperty(map, "width" , view.application, "width");
+				BindingUtils.bindProperty(map, "height", view.application, "height");
+				
+				map.config        = config.config;
+				map.floors        = config.floors;
+				map.positionTypes = config.positionTypes;
+				map.positions     = config.positions;
+				map.nodes         = config.nodes;
+				map.routes        = config.routes;
+				view.mapView = map;
+				
+				view.application.addElement(map);
 		}
 		
 	}

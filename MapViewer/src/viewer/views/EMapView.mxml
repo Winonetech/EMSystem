@@ -17,33 +17,43 @@
 	</fx:Metadata>
 	
 	<mx:UIComponent id="container"/>
-	<s:HGroup left="10" top="10" gap="30">
-		<s:HGroup>
-			<s:RadioButton label="平移" value="move" group="{modeRadio}" color="0xFFFFFF" selected="true"/>
-		<s:RadioButton label="旋转" value="rotate" group="{modeRadio}" color="0xFFFFFF"/>
-		</s:HGroup>
-		<s:HGroup id="floorsMenu"/>
-	</s:HGroup>
-	<!--<s:Image x="{width-100}" y="0" width="100" height="100" source="ggg.png" fillMode="scale" scaleMode="stretch"/>-->
-		
-	<s:Image x="{width-100}" y="0" mouseChildren="false" mouseEnabled="false" width="100" height="100"
-			 source="@Embed('image/compass.png')" smooth="true" fillMode="scale" scaleMode="stretch"
-			 rotation="{MathUtil.radianToAngle(map.cameraRotationZ)}"  transformX="50" transformY="50" />
+	<s:Group left="10" top="10">
+		<s:Image width="{floorsMenu.width}" source="@Embed('image/floorBg.png')" fillMode="repeat"/>
+		<s:HGroup id="floorsMenu" gap="2"/>
+	</s:Group>
+	
+	<s:VGroup right="10" top="180">
+		<s:RadioButton skinClass="viewer.skins.NavRatioButton"
+					   group="{modeRadio}" label="平移" value="move" selected="true"/>
+		<s:RadioButton skinClass="viewer.skins.NavRatioButton"
+					   group="{modeRadio}" label="旋转" value="rotate"/>
+	</s:VGroup>
+	
+	<s:Group x="{width - 255}" y="85" rotation="{MathUtil.radianToAngle(map.cameraRotationZ)}">
+		<s:Image mouseChildren="false" mouseEnabled="false"
+				 width="150" height="150"
+				 x="-75" y="-75"
+				 source="@Embed('image/compass.png')"
+				 smooth="true"/>
+	</s:Group>
+	
 	
 	<fx:Script>
 		<![CDATA[
 			
 			import cn.vision.collections.Map;
 			import cn.vision.utils.MathUtil;
+			
 			import emap.core.em;
 			import emap.events.MapEvent;
 			import emap.map3d.EMap3D;
 			import emap.map3d.core.E3Config;
-			import emap.map3d.utils.Map3DUtil;
 			import emap.vos.VOEMap;
 			import emap.vos.VOFloor;
 			
 			import mx.events.ResizeEvent;
+			
+			import viewer.skins.*;
 			
 			
 			/**
@@ -89,6 +99,26 @@
 			/**
 			 * @private
 			 */
+			private function getFloorButtonClass(count:uint):Class
+			{
+				switch (count)
+				{
+					case 0:
+						return viewer.skins.Floor1RadioButton;
+					case 1:
+						return viewer.skins.Floor2RadioButton;
+					case 2:
+						return viewer.skins.Floor3RadioButton;
+					case 3:
+					default:
+						return viewer.skins.Floor4RadioButton;
+				}
+			}
+			
+			
+			/**
+			 * @private
+			 */
 			private function callbackData():Boolean
 			{
 				var result:Boolean = checkUpdatable();
@@ -111,12 +141,13 @@
 					map.addEventListener(MapEvent.POSITION_CLICK, map_positionClickHandler);
 					container.addChild(map);
 					
+					var count:uint = 0;
 					for each (var voFloor:VOFloor in em::floors)
 					{
 						var radio:RadioButton = new RadioButton;
+						radio.setStyle("skinClass", getFloorButtonClass(count++));
 						radio.label = voFloor.label;
 						radio.value = voFloor.id;
-						radio.setStyle("color", 0xFFFFFF);
 						radio.group = floorRadio;
 						floorsMenu.addElement(radio);
 					}

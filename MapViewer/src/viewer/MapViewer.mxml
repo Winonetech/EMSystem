@@ -4,7 +4,7 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:wt="com.winonetech.core.*"
 		 clipAndEnableScrolling="false"
-		 addedToStage="initializeEnvironment()">
+		 creationComplete="initializeEnvironment()">
 	<fx:Script>
 		<![CDATA[
 			
@@ -17,6 +17,11 @@
 			private function initializeEnvironment():void
 			{
 				MVPresenter.presenter.start(this);
+			}
+			
+			override protected function processReset():void
+			{
+				
 			}
 			
 		]]>
