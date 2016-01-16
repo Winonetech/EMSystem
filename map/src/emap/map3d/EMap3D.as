@@ -445,7 +445,10 @@ package emap.map3d
 			if ($value)
 			{
 				if ($value is E3Config)
+				{
 					emConfig = $value as E3Config;
+					initializePosition = emConfig.initializePosition;
+				}
 				else
 					throw new ArgumentError("参数必须为EMConfig类型", 3001);
 			}

@@ -8,8 +8,6 @@ package viewer.commands
 	 */
 	
 	
-	import emap.EMapView;
-	
 	import mx.binding.utils.BindingUtils;
 	
 	import viewer.views.MapView;

@@ -27,7 +27,7 @@
 	<!--<s:Image x="{width-100}" y="0" width="100" height="100" source="ggg.png" fillMode="scale" scaleMode="stretch"/>-->
 		
 	<s:Image x="{width-100}" y="0" mouseChildren="false" mouseEnabled="false" width="100" height="100"
-			 source="@Embed('image/compass.png')" smooth="true" fillMode="scale" scaleMode="stretch"
+			 source="@Embed('images/compass.png')" smooth="true" fillMode="scale" scaleMode="stretch"
 			 rotation="{MathUtil.radianToAngle(map.cameraRotationZ)}"  transformX="50" transformY="50" />
 	
 	<fx:Script>
@@ -127,6 +127,16 @@
 			/**
 			 * @private
 			 */
+			private function callbackBackground():Boolean
+			{
+				var result:Boolean = Boolean(map);
+				if (result) map.background = background;
+				return result;
+			}
+			
+			/**
+			 * @private
+			 */
 			private function callbackInitializePosition():Boolean
 			{
 				var result:Boolean = Boolean(map);
@@ -192,6 +202,27 @@
 			private function map_positionClickHandler(event:MapEvent):void
 			{
 				dispatchEvent(event.clone());
+			}
+			
+			
+			/**
+			 * 
+			 * 背景。
+			 * 
+			 */
+			
+			public function get background():*
+			{
+				return em::background;
+			}
+			
+			/**
+			 * @private
+			 */
+			public function set background($value:*):void
+			{
+				em::background = $value;
+				applyCallback(callbackBackground, false);
 			}
 			
 			
@@ -330,6 +361,11 @@
 			[Bindable]
 			private var map:EMap3D;
 			
+			
+			/**
+			 * @private
+			 */
+			em var background:*;
 			
 			/**
 			 * @private
