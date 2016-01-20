@@ -5,21 +5,34 @@
 				  xmlns:vw="viewer.views.*"
 				  horizontalCenter="0" verticalCenter="0"
 				  clipAndEnableScrolling="false"
-				  fontFamily="微软雅黑" width="521" height="516">
+				  fontFamily="微软雅黑" width="521" height="576">
 	
-	<s:Image source="@Embed('images/viewBg.png')"/>
+	<s:Image width="521" height="576" source="@Embed('images/viewBg.png')" fillMode="scale" scaleMode="stretch">
+		<s:filters>
+			<s:DropShadowFilter distance="2"/>
+		</s:filters>
+	</s:Image>
 	
-	<s:Image y="240" horizontalCenter="0" source="@Embed('images/textBg1.png')"/>
-	<s:Image y="240" horizontalCenter="0" source="@Embed('images/textBg2.png')"/>
+	
+	
 	
 	<s:Label left="25" top="25" color="0xFFFFFF" fontSize="30" text="{label}"/>
-	<s:VGroup left="50" right="50" top="60" bottom="80" horizontalAlign="center">
-		<s:Image x="90" width="100%" height="180" fillMode="scale" scaleMode="zoom" source="{image}"/>
-		<s:Label fontSize="16" color="0xFFFFFF" width="100%" text="{description}"/>
+	<s:VGroup width="425" height="422" top="70" horizontalCenter="0" horizontalAlign="center" gap="10">
+		<s:Group width="425" height="206">
+			<s:Image source="@Embed('images/textBg1.png')"/>
+			<s:Image width="420" height="197" x="1" y="1"
+					 fillMode="scale" scaleMode="zoom" source="{image}"/>
+		</s:Group>
+		<s:Group width="425" height="206">
+			<s:Image source="@Embed('images/textBg2.png')"/>
+			<s:Label x="10" y="10" width="404" height="186" color="#FFFFFF" fontSize="16"
+					 text="{description}"/>
+		</s:Group>
+		
 		
 	</s:VGroup>
 	<s:Button skinClass="viewer.skins.ExitButton" right="-16" top="-16" click="close_clickHandler(event)"/>
-	<s:Button x="187" y="448" label="寻路" click="find_clickHandler(event)"
+	<s:Button x="187" y="502" label="寻路" click="find_clickHandler(event)"
 			  skinClass="viewer.skins.FindButton"/>
 	
 	<fx:Script>

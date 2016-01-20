@@ -4,7 +4,6 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:wt="com.winonetech.core.*"
 		 implements="emap.interfaces.IEMap"
-		 width="800" height="450"
 		 resize="view_resizeHandler(event)">
 	
 	<fx:Declarations>
@@ -29,7 +28,10 @@
 					   group="{modeRadio}" label="旋转" value="rotate"/>
 	</s:VGroup>
 	
-	<s:Group x="{width - 255}" y="85" rotation="{MathUtil.radianToAngle(map.cameraRotationZ)}">
+	<s:Group mouseChildren="false" mouseEnabled="false"
+			 x="{width - 255}" y="85" width="0" height="0"
+			 clipAndEnableScrolling="false"
+			 rotation="{MathUtil.radianToAngle(map.cameraRotationZ)}">
 		<s:Image mouseChildren="false" mouseEnabled="false"
 				 width="150" height="150" x="-75" y="-75"
 				 source="@Embed('images/compass.png')"
@@ -130,6 +132,7 @@
 						map.removeEventListener(MapEvent.POSITION_CLICK, map_positionClickHandler);
 						map = null;
 					}
+					em::initializePosition = em::config.initializePosition;
 					map = new EMap3D(em::config);
 					map.width  = width;
 					map.height = height;
@@ -382,6 +385,19 @@
 			{
 				em::routes = $data;
 				applyCallback(callbackRoutes, false);
+			}
+			
+			
+			override public function set width(value:Number):void
+			{
+				super.width = value;
+				trace("set width:", value);
+			}
+			
+			override public function set height(value:Number):void
+			{
+				super.height = value;
+				trace("set height:", value);
 			}
 			
 			

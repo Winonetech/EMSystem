@@ -4,7 +4,7 @@
 				  xmlns:mx="library://ns.adobe.com/flex/mx"
 				  xmlns:vw="viewer.views.*">
 	
-	<vw:EMapView id="emapView" width="100%" height="100%"
+	<vw:EMapView id="emapView" width="{width}" height="{height}"
 				 positionClick="emapView_positionClickHandler(event)"/>
 	
 	<fx:Script>

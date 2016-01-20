@@ -52,6 +52,10 @@ package emap.map3d.finding
 					em::block =!(end == nodes[l]);
 					if(!block) resolve();
 				}
+				else
+				{
+					em::block = true;
+				}
 			}
 		}
 		

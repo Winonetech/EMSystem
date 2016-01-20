@@ -76,10 +76,12 @@ limitations under the License.
 			 textAlign="start"
 			 verticalAlign="middle"
 			 fontFamily="黑体"
-			 fontSize="30"
+			 fontSize="20"
 			 color="0xFFFFFF"
 			 maxDisplayedLines="1"
 			 horizontalCenter="0"
-			 verticalCenter="2"/>
+			 verticalCenter="0"
+			 scaleX.down="1.1" 
+			 scaleY.down="1.1"/>
 	
 </s:SparkButtonSkin>

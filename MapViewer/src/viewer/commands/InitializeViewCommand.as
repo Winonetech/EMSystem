@@ -64,6 +64,10 @@ package viewer.commands
 				view.application.addElement(map);
 		}
 		
+		
+		/**
+		 * @private
+		 */
 		[Embed(source="images/mapBg.jpg")]
 		private var MapBg:Class;
 		
