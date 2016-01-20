@@ -29,6 +29,7 @@ package emap.map3d
 	import flash.display.Stage3D;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
+	import flash.geom.Matrix;
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
@@ -280,7 +281,15 @@ package emap.map3d
 		 */
 		private function displayBmd($bmd:BitmapData):void
 		{
-			var source:BitmapTextureResource = new BitmapTextureResource($bmd);
+			var w:int = Map3DUtil.to2Square($bmd.width);
+			var h:int = Map3DUtil.to2Square($bmd.height);
+			var bmd:BitmapData = new BitmapData(w, h, true, 0);
+			var sx:Number = w / $bmd.width;
+			var sy:Number = h / $bmd.height;
+			var mat:Matrix = new Matrix;
+			mat.scale(sx, sy);
+			bmd.draw($bmd, mat);
+			var source:BitmapTextureResource = new BitmapTextureResource(bmd);
 			
 			setMaterialToAllSurfaces(new TextureMaterial(source));
 			
@@ -295,11 +304,8 @@ package emap.map3d
 		{
 			if ($e.type == Event.COMPLETE)
 			{
-				var w:int = Map3DUtil.to2Square(loader.content.width);
-				var h:int = Map3DUtil.to2Square(loader.content.height);
-				var bmd:BitmapData = new BitmapData(w, h, true, 0);
+				var bmd:BitmapData = new BitmapData(loader.content.width, loader.content.height, true, 0);
 				bmd.draw(loader.content);
-				
 				displayBmd(bmd);
 			}
 		}

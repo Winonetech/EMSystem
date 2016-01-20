@@ -106,7 +106,12 @@ package emap.map3d
 			if ($data is Position)
 				var position:Position = $data;
 			else if ($data is String)
-				if (positionsViewMap) position = positionsViewMap[$data];
+			{
+				if (isNaN(Number($data)) && positionSerialMap) 
+					position = positionSerialMap[$data];
+				else if (positionsViewMap) 
+					position = positionsViewMap[$data];
+			}
 			
 			if (position)
 			{
@@ -253,6 +258,7 @@ package emap.map3d
 			floorsViewArr.length = 0;
 			floorsViewMap = new Map;
 			positionsViewMap = new Map;
+			positionSerialMap = new Map;
 			while (floorContainer.numChildren) floorContainer.removeChildAt(0);
 			//finder clear
 		}
@@ -345,6 +351,7 @@ package emap.map3d
 					{
 						position = new Position(emConfig, positionVO);
 						position.addEventListener(Event3D.ADDED, startRender);
+						positionSerialMap[positionVO.serial] = position;
 						positionsViewMap[position.id] = position;
 						floor.addPosition(position);
 					}
@@ -626,6 +633,11 @@ package emap.map3d
 		 * @private
 		 */
 		private var positionTypesMap:Map;
+		
+		/**
+		 * @private
+		 */
+		private var positionSerialMap:Map;
 		
 		/**
 		 * @private
