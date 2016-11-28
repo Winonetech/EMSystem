@@ -32,6 +32,7 @@ package emap.vos
 		 * 
 		 * code
 		 * 
+		 * 
 		 */
 		
 		public function get code():String

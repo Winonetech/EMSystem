@@ -170,9 +170,12 @@ package emap.map2d
 				var node:Node = new Node(voNode,_config);
 				
 				var floor:Floor = floorsViewMap[voNode.floorID]
-				floor.addNode(node);
-				_config.nodeViewMap[voNode.id] = node;
-				_config.serialViewMap[voNode.serial] = node;
+				if(floor)
+				{
+					floor.addNode(node);
+					_config.nodeViewMap[voNode.id] = node;
+					_config.serialViewMap[voNode.serial] = node;
+				}
 				//content.addChild(node);
 			}
 		}

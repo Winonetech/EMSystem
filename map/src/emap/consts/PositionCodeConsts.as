@@ -84,6 +84,12 @@ package emap.consts
 		 */
 		
 		public static const DEVICE:String = "device";
+		/**
+		 * 
+		 * 区域
+		 */
+		public static const Area:String = "area";
+		 
 		
 	}
 }

@@ -33,6 +33,6 @@ package emap.map2d.core
 		public  var routeMap:Map = new Map;
 		public var imageMap:Map = new Map;
 		[Bindable]
-		public var positionCode:ArrayCollection =new ArrayCollection(["entity","hollow","terrain","unseen","lift","stairs","escalator"]);
+		public var positionCode:ArrayCollection =new ArrayCollection(["entity","hollow","terrain","unseen","lift","stairs","escalator","area"]);
 	}
 }

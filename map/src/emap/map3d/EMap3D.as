@@ -17,6 +17,7 @@ package emap.map3d
 	import cn.vision.collections.Map;
 	import cn.vision.utils.MathUtil;
 	
+	import emap.consts.PositionCodeConsts;
 	import emap.core.EMConfig;
 	import emap.core.em;
 	import emap.events.MapEvent;
@@ -29,11 +30,27 @@ package emap.map3d
 	import emap.vos.VOPosition;
 	
 	import flash.events.Event;
+	import flash.text.Font;
 	
 	
 	public final class EMap3D extends Viewer3D implements IEMap
 	{
-		
+		[Embed(systemFont="微软雅黑", 
+		fontName="微软雅黑", 
+		embedAsCFF="false", 
+		fontStyle="italic", 
+		fontWeight="bold", 
+		unicodeRange="U+61,U+62,U+7b80,U+4f53,U+45,U+ff1b,U+3002,U+2e,", 
+		mimeType="application/x-font")]
+		static public var YaHei:Class;
+		[Embed(systemFont="宋体", 
+		fontName="宋体", 
+		embedAsCFF="false", 
+		fontStyle="italic", 
+		fontWeight="bold", 
+		unicodeRange="U+61,U+62,U+7b80,U+4f53,U+45,U+ff1b,U+3002,U+2e,", 
+		mimeType="application/x-font")]
+		static public var SongTi:Class;
 		/**
 		 * 
 		 * 构造函数。
@@ -284,6 +301,8 @@ package emap.map3d
 		 */
 		private function initialize($config:EMConfig):void
 		{
+			Font.registerFont(SongTi);
+			Font.registerFont(YaHei);
 			config = $config;
 			main.addChild(container = new Object3D);
 			main.addEventListener(MouseEvent3D.CLICK, handlerClick);
@@ -353,6 +372,11 @@ package emap.map3d
 						position.addEventListener(Event3D.ADDED, startRender);
 						positionSerialMap[positionVO.serial] = position;
 						positionsViewMap[position.id] = position;
+						if(positionVO.typeCode == PositionCodeConsts.Area )
+						{
+							position.mouseEnabled =false;
+							position.mouseChildren = false;
+						}
 						floor.addPosition(position);
 					}
 					else
@@ -408,6 +432,7 @@ package emap.map3d
 			{
 				var position:Position = $e.target as Position;
 				position.selected = !position.selected;
+				
 				dispatchEvent(new MapEvent(MapEvent.POSITION_CLICK, position.data.serial));
 			}
 		}
@@ -429,7 +454,7 @@ package emap.map3d
 		 */
 		public function set font($value:String):void
 		{
-			if (emConfig) emConfig.font = $value;
+			if (emConfig) emConfig.font = "微软雅黑";
 		}
 		
 		

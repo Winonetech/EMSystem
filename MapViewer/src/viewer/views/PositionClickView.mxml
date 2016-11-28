@@ -12,10 +12,7 @@
 			<s:DropShadowFilter distance="2"/>
 		</s:filters>
 	</s:Image>
-	
-	
-	
-	
+
 	<s:Label left="25" top="25" color="0xFFFFFF" fontSize="30" text="{label}"/>
 	<s:VGroup width="425" height="422" top="70" horizontalCenter="0" horizontalAlign="center" gap="10">
 		<s:Group width="425" height="206">

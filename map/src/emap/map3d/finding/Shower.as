@@ -2,7 +2,6 @@ package emap.map3d.finding
 {
 	
 	/**
-	 * 
 	 * 路径演示
 	 * 
 	 */
@@ -105,6 +104,9 @@ package emap.map3d.finding
 				{
 					wire = WireFrame.createLineStrip(points, 0xFF0000, 1, 1);
 				}
+				
+	
+				
 				container.addChild(wire);
 				container.addChild(arrow);
 				SourceEmap3D.uploadAllSources(container);
@@ -127,6 +129,9 @@ package emap.map3d.finding
 				wire.calculateBoundBox();
 				var v:Vector3D = p1.subtract(p0);
 				v.normalize();
+				
+				
+				
 				arrow.x = p1.x;
 				arrow.y = p1.y;
 				arrow.z = p1.z;
@@ -156,13 +161,16 @@ package emap.map3d.finding
 			
 			points = new Vector.<Vector3D>;
 			
-			timer = new Timer(33);
+			timer = new Timer(0.1);
 			timer.addEventListener(TimerEvent.TIMER, handlerTimer);
 		}
 		
 		/**
-		 * @private
-		 */
+		 * @private*/
+
+
+
+		
 		private function resolvePointsByPath():void
 		{
 			if (path)

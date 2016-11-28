@@ -6,7 +6,6 @@
 	<fx:Script>
 		<![CDATA[
 			import editor.core.EDConfig;
-			
 			import emap.map2d.core.E2Config;
 			import emap.map2d.core.E2Provider;
 			import emap.map2d.util.CountUtil;
@@ -43,6 +42,6 @@
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
-                   	<s:Button x="92" y="5"  click="button1_clickHandler(event)" skinClass="editor.skin.AddButtonSkin"/>
-	<s:Button x="182" y="5"  click="button2_clickHandler(event)" skinClass="editor.skin.DeleteButtonSkin"/>
+     <s:Button x="92" y="5"  click="button1_clickHandler(event)" skinClass="editor.skin.AddButtonSkin"/>
+	 <s:Button x="182" y="5"  click="button2_clickHandler(event)" skinClass="editor.skin.DeleteButtonSkin"/>
 </s:BorderContainer>

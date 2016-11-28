@@ -83,7 +83,7 @@ package emap.utils
 		
 		public static function displayTop($code:String):Boolean
 		{
-			return $code == PositionCodeConsts.ENTITY || 
+			return $code == PositionCodeConsts.ENTITY || $code == PositionCodeConsts.Area ||
 					$code == PositionCodeConsts.TERRAIN;
 		}
 		

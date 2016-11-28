@@ -68,7 +68,7 @@ package viewer.commands
 		/**
 		 * @private
 		 */
-		[Embed(source="images/mapBg.jpg")]
+		[Embed(source="images/mapBg.png")]
 		private var MapBg:Class;
 		
 	}

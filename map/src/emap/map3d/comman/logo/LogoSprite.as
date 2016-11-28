@@ -38,7 +38,7 @@ package emap.map3d.comman.logo
 		{
 			sprite = Map3DUtil.destroyObject3D(sprite);
 			addChild(sprite = new Sprite3D($w, $h, $material));
-			sprite.alwaysOnTop = true;
+			//sprite.alwaysOnTop = true;
 		}
 		
 		

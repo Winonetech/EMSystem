@@ -86,6 +86,9 @@ package emap.map3d
 			
 			updateLabel();
 			updateLabelLayout();
+			
+			
+			
 		}
 		
 		/**
@@ -146,8 +149,7 @@ package emap.map3d
 							break;
 					}
 				}
-				
-				
+
 				//创建侧面
 				var crfe:Function = function($face:Array, $index:uint, $array:Array):void
 				{
@@ -178,7 +180,6 @@ package emap.map3d
 				gem.setAttributeValues(VertexAttributes.TEXCOORDS[0], uvs);
 				gem.setAttributeValues(VertexAttributes.NORMAL, nms);
 				gem.indices = fci;
-				
 				addChild(mesh = new Mesh);
 				mesh.geometry = gem;
 				mesh.addSurface(SourceEmap3D.getColorMaterial(color), 0, num);
@@ -207,13 +208,26 @@ package emap.map3d
 				iconLayer =!PositionUtil.suspendIcon(code, iconSuspend)
 					? new LogoPlane (config.iconWidth, config.iconHeight) 
 					: new LogoSprite(config.iconWidth, config.iconHeight, color);
-				addChild(iconLayer).z = thick + 2;
+				addChild(iconLayer).z = thick + 20;
 				iconLayer.source = icon;
+				iconLayer.visible = true;
+				
+			}
+			if(data.positionType.code == PositionCodeConsts.LIFT || data.positionType.code == PositionCodeConsts.STAIRS || data.positionType.code == PositionCodeConsts.ESCALATOR)
+			{
+				//判断是否需要图标悬浮，而生成不同的图标组件。
+				iconLayer =!PositionUtil.suspendIcon(code, iconSuspend)
+					? new LogoPlane (config.iconWidth, config.iconHeight) 
+					: new LogoSprite(config.iconWidth, config.iconHeight, color);
+				addChild(iconLayer).z = thick + 20;
+				iconLayer.source = icon;
+				iconLayer.visible = true;
+				
 			}
 		}
 		
 		/**
-		 * @private
+		 * @private`
 		 */
 		private function updateIconLayout():void
 		{
@@ -400,6 +414,10 @@ package emap.map3d
 		
 		internal function get icon():String
 		{
+			if(data.positionType.code == PositionCodeConsts.LIFT || data.positionType.code == PositionCodeConsts.STAIRS || data.positionType.code == PositionCodeConsts.ESCALATOR)
+			{
+				return data.positionType.icon;
+			}
 			return data ? data.icon : null;
 		}
 		

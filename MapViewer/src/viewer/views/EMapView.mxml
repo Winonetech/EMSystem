@@ -15,21 +15,30 @@
 		[Event(name="positionClick", type="emap.events.MapEvent")]
 	</fx:Metadata>
 	
-	<mx:UIComponent id="container"/>
-	<s:Group left="10" top="10">
-		<s:Image width="{floorsMenu.width}" source="@Embed('images/floorBg.png')" fillMode="repeat"/>
-		<s:HGroup id="floorsMenu" gap="2"/>
-	</s:Group>
+	<mx:UIComponent id="container" />
+	<s:VGroup top="40" horizontalCenter="0" gap="30" horizontalAlign="center">
+		
 	
-	<s:VGroup right="10" top="180">
-		<s:RadioButton skinClass="viewer.skins.NavRatioButton"
-					   group="{modeRadio}" label="平移" value="move" selected="true"/>
-		<s:RadioButton skinClass="viewer.skins.NavRatioButton"
-					   group="{modeRadio}" label="旋转" value="rotate"/>
+		<s:Image  source="@Embed('images/sign.png')"  smooth="true"/>
+		<s:Group id="fm" horizontalCenter="0" >
+			<!--<s:Image width="{floorsMenu.width}" source="@Embed('images/floorBg.png')" fillMode="repeat"/> -->
+			<mx:HRule width="{floorsMenu.width-40}" height="2" verticalCenter="0" horizontalCenter="0"/>
+			<s:HGroup id="floorsMenu" gap="15" />
+		</s:Group>
 	</s:VGroup>
 	
+	<s:HGroup horizontalCenter="-30" bottom="50" gap="35">
+		<s:RadioButton  skinClass="viewer.skins.MoveRatioButton"
+					   group="{modeRadio}" label="平移" value="move" selected="true"/>
+		<s:RadioButton  skinClass="viewer.skins.RotateRatioButton"
+					   group="{modeRadio}" label="旋转" value="rotate"/>
+		<s:Button label="放大" skinClass="viewer.skins.EnlargeButton" click="enlarge_clickHandler(event)"/>
+		<s:Button label="缩小" skinClass="viewer.skins.NarrowButton" click="narrow_clickHandler(event)"/>	
+		<s:Button label="复位" skinClass="viewer.skins.ResetButton" click="reset_clickHandler(event)"/>
+	</s:HGroup>
+	
 	<s:Group mouseChildren="false" mouseEnabled="false"
-			 x="{width - 255}" y="85" width="0" height="0"
+			 right="150" y="200" width="0" height="0"
 			 clipAndEnableScrolling="false"
 			 rotation="{MathUtil.radianToAngle(map.cameraRotationZ)}">
 		<s:Image mouseChildren="false" mouseEnabled="false"
@@ -105,7 +114,7 @@
 				switch (count)
 				{
 					case 0:
-						return viewer.skins.Floor1RadioButton;
+						return viewer.skins.FloorRadioButton;
 					case 1:
 						return viewer.skins.Floor2RadioButton;
 					case 2:
@@ -147,7 +156,7 @@
 					for each (var voFloor:VOFloor in em::floors)
 					{
 						var radio:RadioButton = new RadioButton;
-						radio.setStyle("skinClass", getFloorButtonClass(count++));
+						radio.setStyle("skinClass", viewer.skins.FloorRadioButton);//getFloorButtonClass(count++))
 						radio.label = voFloor.label;
 						radio.value = voFloor.id;
 						radio.group = floorRadio;
@@ -457,6 +466,35 @@
 			 * @private
 			 */
 			em var routes:Map;
+			
+			protected function enlarge_clickHandler(event:MouseEvent):void
+			{
+				if(map)
+				{
+					map.cameraDistance -= 50;
+					
+				}
+				
+			}
+			
+			protected function narrow_clickHandler(event:MouseEvent):void
+			{
+				
+				if(map)
+				{
+					map.cameraDistance += 50;
+				}
+				
+			}
+			
+			protected function reset_clickHandler(event:MouseEvent):void
+			{
+				if(map)
+				{
+					map.reset(true);
+				}
+				
+			}
 			
 		]]>
 	</fx:Script>

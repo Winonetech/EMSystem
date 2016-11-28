@@ -935,7 +935,7 @@ package emap.map3d
 		/**
 		 * @private
 		 */
-		em var initializeRotationX:Number = Math.PI / 2;
+		em var initializeRotationX:Number = Math.PI / 3;
 		
 		/**
 		 * @private
@@ -990,12 +990,12 @@ package emap.map3d
 		/**
 		 * @private
 		 */
-		em var maxCameraRotationX:Number = Math.PI / 3;
+		em var maxCameraRotationX:Number = Math.PI / 2.5;
 		
 		/**
 		 * @private
 		 */
-		em var minCameraRotationX:Number = Math.PI / 6;
+		em var minCameraRotationX:Number = 0;
 		
 		/**
 		 * @private
