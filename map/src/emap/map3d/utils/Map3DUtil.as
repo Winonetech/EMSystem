@@ -137,6 +137,7 @@ package emap.map3d.utils
 			var segH:uint = Math.max(1, h * 0.015625);
 			var opacBmd:BitmapData = new BitmapData(w, h, true, 0xFFFFFF);
 			opacBmd.draw(field);
+			
 			var diffBmd:BitmapData = new BitmapData(32, 32, false, $color);
 			var tex:PixelTextureMaterial = new PixelTextureMaterial(
 				new BitmapTextureResource(diffBmd), 
@@ -149,6 +150,11 @@ package emap.map3d.utils
 			var object:Object3D = new Object3D;
 			object.addChild(plane);
 			return object;
+		}
+		
+		private function addTest($field:TextField):void
+		{
+			
 		}
 		
 		
@@ -209,6 +215,8 @@ package emap.map3d.utils
 		 * @private
 		 */
 		em static var field:TextField;
+		
+		public static var father:*;
 		
 	}
 }

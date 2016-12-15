@@ -3,6 +3,27 @@
 					   xmlns:s ="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   xmlns:vw="viewer.*"
-					   width="1080" height="1920" backgroundAlpha="0">
+					   width="1080" height="1080" backgroundAlpha="0">
 	<vw:MapViewer width="1920" height="1080" horizontalCenter="0" verticalCenter="0"/>
+	<fx:Script>
+		<![CDATA[
+			import emap.map3d.utils.Map3DUtil;
+			[Embed(systemFont="微软雅黑", 
+					fontName="微软雅黑", 
+					embedAsCFF="false", 
+					fontStyle="italic", 
+					fontWeight="bold", 
+					unicodeRange="U+61,U+62,U+7b80,U+4f53,U+45,U+ff1b,U+3002,U+2e,", 
+					mimeType="application/x-font")]
+			static public var YaHei:Class;
+			private function init():void
+			{
+				/* Font.registerFont(SongTi);
+				Font.registerFont(YaHei); */
+				Map3DUtil.father = this;
+			}
+			
+			
+		]]>
+	</fx:Script>
 </s:WindowedApplication>
