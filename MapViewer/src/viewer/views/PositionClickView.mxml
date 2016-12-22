@@ -22,8 +22,14 @@
 		</s:Group>
 		<s:Group width="425" height="206">
 			<s:Image source="@Embed('images/textBg2.png')"/>
-			<s:Label x="10" y="10" width="404" height="186" color="#FFFFFF" fontSize="16"
-					 text="{description}"/>
+			<s:Scroller  width="425" height="200">
+				<s:VGroup  width="425">
+					<s:Label x="10" y="10" width="400"  color="#FFFFFF" fontSize="16"
+							 text="{description}"/>
+				</s:VGroup>
+				
+			</s:Scroller>
+			
 		</s:Group>
 		
 		

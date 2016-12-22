@@ -62,7 +62,6 @@ package emap.map3d
 		private function initialize($config:EMConfig, $data:VOPosition):void
 		{
 			mouseEnabled = false;
-			
 			config = $config;
 			data = $data;
 		}
@@ -86,9 +85,6 @@ package emap.map3d
 			
 			updateLabel();
 			updateLabelLayout();
-			
-			
-			
 		}
 		
 		/**

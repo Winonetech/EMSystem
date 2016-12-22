@@ -28,7 +28,6 @@ package emap.map3d
 	import emap.vos.VOEMap;
 	import emap.vos.VOFloor;
 	import emap.vos.VOPosition;
-	
 	import flash.events.Event;
 	import flash.text.Font;
 	
@@ -301,8 +300,8 @@ package emap.map3d
 		 */
 		private function initialize($config:EMConfig):void
 		{
-			Font.registerFont(SongTi);
-			Font.registerFont(YaHei);
+//			Font.registerFont(SongTi);
+//			Font.registerFont(YaHei);
 			config = $config;
 			main.addChild(container = new Object3D);
 			main.addEventListener(MouseEvent3D.CLICK, handlerClick);
