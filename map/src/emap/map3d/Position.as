@@ -33,10 +33,8 @@ package emap.map3d
 	import emap.vos.VOPosition;
 	
 	import flash.display.Shape;
-	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.geom.Vector3D;
-	import flash.utils.Timer;
 	
 	
 	public final class Position extends Object3D implements IPosition
@@ -62,6 +60,7 @@ package emap.map3d
 		private function initialize($config:EMConfig, $data:VOPosition):void
 		{
 			mouseEnabled = false;
+			mouseChildren = false;
 			
 			config = $config;
 			data = $data;
@@ -72,13 +71,11 @@ package emap.map3d
 		 */
 		private function update():void
 		{
-			
 			mouseEnabled = useHandCursor = PositionUtil.interactable(code);
 			if (steps && steps.length > 2)
 			{
 				updateTop();
 				updateSide();
-				updateMesh();
 			}
 			
 			updateIcon();
@@ -86,9 +83,6 @@ package emap.map3d
 			
 			updateLabel();
 			updateLabelLayout();
-			
-			
-			
 		}
 		
 		/**
@@ -105,6 +99,27 @@ package emap.map3d
 				shape.graphics.endFill();
 				
 				addChild(top = Map3DUtil.getPlaneByShape(shape, layout)).z = thick;
+				
+				/*var gem:Geometry = new Geometry;
+				var l:uint = steps.length - 1;
+				var step:Step, next:Step;
+				//将所有顶点加入gem
+				for (var i:uint = 0; i < l; i++)
+				{
+					step = steps[i];
+					next = steps[i + 1];
+					switch (next.style)
+					{
+						//如果是直线，就加入当前点
+						case StepStyleConsts.LINE_TO:
+							
+							break;
+						//如果是曲线，需要加入所有弧线上的点
+						case StepStyleConsts.CURVE_TO:
+							
+							break;
+					}
+				}*/
 			}
 		}
 		
@@ -149,7 +164,13 @@ package emap.map3d
 							break;
 					}
 				}
-
+				
+				var fci:Vector.<uint> = new Vector.<uint>;
+				var num:uint = 0;
+				var vxs:Vector.<Number> = new Vector.<Number>;
+				var uvs:Vector.<Number> = new Vector.<Number>;
+				var nms:Vector.<Number> = new Vector.<Number>;
+				
 				//创建侧面
 				var crfe:Function = function($face:Array, $index:uint, $array:Array):void
 				{
@@ -172,7 +193,7 @@ package emap.map3d
 					num += 4;
 				};
 				faces.forEach(crfe);
-				Map3DUtil.destroyObject3D(mesh);
+				Map3DUtil.destroyObject3D(meshSide);
 				//创建Mesh
 				var gem:Geometry = new Geometry(num);
 				gem.addVertexStream(SourceEmap3D.ATTRIBUTES);
@@ -180,20 +201,13 @@ package emap.map3d
 				gem.setAttributeValues(VertexAttributes.TEXCOORDS[0], uvs);
 				gem.setAttributeValues(VertexAttributes.NORMAL, nms);
 				gem.indices = fci;
-				addChild(mesh = new Mesh);
-				mesh.geometry = gem;
-				mesh.addSurface(SourceEmap3D.getColorMaterial(color), 0, num);
-				mesh.calculateBoundBox();
+				addChild(meshSide = new Mesh);
+				meshSide.geometry = gem;
+				meshSide.addSurface(SourceEmap3D.getColorMaterial(color), 0, num);
+				meshSide.calculateBoundBox();
 			}
 		}
 		
-		/**
-		 * @private
-		 */
-		private function updateMesh():void
-		{
-			
-		}
 		
 		/**
 		 * @private
@@ -213,7 +227,9 @@ package emap.map3d
 				iconLayer.visible = true;
 				
 			}
-			if(data.positionType.code == PositionCodeConsts.LIFT || data.positionType.code == PositionCodeConsts.STAIRS || data.positionType.code == PositionCodeConsts.ESCALATOR)
+			/*if (data.positionType.code == PositionCodeConsts.LIFT || 
+				data.positionType.code == PositionCodeConsts.STAIRS || 
+				data.positionType.code == PositionCodeConsts.ESCALATOR)
 			{
 				//判断是否需要图标悬浮，而生成不同的图标组件。
 				iconLayer =!PositionUtil.suspendIcon(code, iconSuspend)
@@ -222,8 +238,7 @@ package emap.map3d
 				addChild(iconLayer).z = thick + 20;
 				iconLayer.source = icon;
 				iconLayer.visible = true;
-				
-			}
+			}*/
 		}
 		
 		/**
@@ -265,35 +280,6 @@ package emap.map3d
 				textLayer.y =-cenY - labelOffsetY;
 				textLayer.rotationZ = labelRotation;
 				textLayer.scaleX = textLayer.scaleY = labelScale;
-			}
-		}
-		
-		
-		/**
-		 * @private
-		 */
-		private function createTimer($handler:Function, $delay:uint):void
-		{
-			if(!timer)
-			{
-				timerHandler = $handler;
-				timer = new Timer($delay);
-				timer.addEventListener(TimerEvent.TIMER, timerHandler);
-				timer.start();
-			}
-		}
-		
-		/**
-		 * @private
-		 */
-		private function removeTimer():void
-		{
-			if (timer)
-			{
-				timer.stop();
-				timer.removeEventListener(TimerEvent.TIMER, timerHandler);
-				timer = null;
-				timerHandler = null;
 			}
 		}
 		
@@ -650,47 +636,18 @@ package emap.map3d
 		/**
 		 * @private
 		 */
-		private var mesh:Mesh;
+		private var meshSide:Mesh;
 		
 		/**
 		 * @private
 		 */
-		private var timer:Timer;
-		
-		/**
-		 * @private
-		 */
-		private var timerHandler:Function;
+		private var meshTop:Mesh;
 		
 		/**
 		 * @private
 		 */
 		private var selectH:Number = 15;
 		
-		/**
-		 * @private
-		 */
-		private var num:uint = 0;
-		
-		/**
-		 * @private
-		 */
-		private var vxs:Vector.<Number> = new Vector.<Number>;
-		
-		/**
-		 * @private
-		 */
-		private var uvs:Vector.<Number> = new Vector.<Number>;
-		
-		/**
-		 * @private
-		 */
-		private var nms:Vector.<Number> = new Vector.<Number>;
-		
-		/**
-		 * @private
-		 */
-		private var fci:Vector.<uint>   = new Vector.<uint>;
 		
 		/**
 		 * @private

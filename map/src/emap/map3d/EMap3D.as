@@ -82,7 +82,7 @@ package emap.map3d
 		 * @inheritDoc
 		 */
 		
-		override public function moveTo($x:Number, $y:Number, $tween:Boolean = false):void
+		override public function moveTo($x:Number, $y:Number, $tween:Boolean = true):void
 		{
 			aimCameraMoveX = $x + offsetX;
 			aimCameraMoveY =-$y + offsetY;

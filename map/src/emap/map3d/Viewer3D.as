@@ -51,24 +51,55 @@ package emap.map3d
 		
 		/**
 		 * 
-		 * 地图某点平移到摄像机中心视野位置。
+		 * 移动到地图上某个点。
 		 * 
 		 */
 		
-		public function moveTo($x:Number, $y:Number, $tween:Boolean = false):void
+		public function moveTo($x:Number, $y:Number, $tween:Boolean = true):void
 		{
-			cameraMoveX = $x;
-			cameraMoveY = $y;
+			aimCameraMoveX = $x;
+			aimCameraMoveY =-$y;
+			
+			if ($tween)
+			{
+				updateTween();
+			}
+			else
+			{
+				cameraMoveX = aimCameraMoveX;
+				cameraMoveY = aimCameraMoveY;
+			}
 		}
 		
 		
 		/**
 		 * 
-		 * 重置地图。
+		 * 摄像机移动至某个距离。
 		 * 
 		 */
 		
-		public function reset($tween:Boolean = false):void
+		public function zoomTo($distance:Number, $tween:Boolean = true):void
+		{
+			aimCameraDistance = $distance;
+			
+			if ($tween)
+			{
+				updateTween();
+			}
+			else
+			{
+				cameraDistance  = aimCameraDistance;
+			}
+		}
+		
+		
+		/**
+		 * 
+		 * 重置地图位置。
+		 * 
+		 */
+		
+		public function reset($tween:Boolean = true):void
 		{
 			aimCameraMoveX = 0;
 			aimCameraMoveY = 0;
@@ -118,6 +149,48 @@ package emap.map3d
 			});
 		}
 		
+		
+		/**
+		 * @private
+		 */
+		private function move($x:Number, $y:Number, $tween:Boolean = true):void
+		{
+			var fac:Number = Math.cos(cameraRotationX);
+			$y = -$y / (fac == 0 ? 1 : fac);
+			var cos:Number = Math.cos(em::cameraRotationZ);
+			var sin:Number = Math.sin(em::cameraRotationZ);
+			aimCameraMoveX = start.x - factor * ($x * cos - $y * sin);
+			aimCameraMoveY = start.y - factor * ($x * sin + $y * cos);
+			
+			if ($tween)
+			{
+				updateTween();
+			}
+			else
+			{
+				cameraMoveX = aimCameraMoveX;
+				cameraMoveY = aimCameraMoveY;
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		private function rotate($x:Number, $y:Number, $tween:Boolean = true):void
+		{
+			aimCameraRotationZ = start.x - $x * .005;
+			aimCameraRotationX = start.y - $y * .005;
+			
+			if ($tween)
+			{
+				updateTween();
+			}
+			else
+			{
+				cameraRotationZ = MathUtil.moduloAngle(aimCameraRotationZ);
+				cameraRotationX = aimCameraRotationX;
+			}
+		}
 		
 		/**
 		 * @private
@@ -195,31 +268,6 @@ package emap.map3d
 			StageUtil.init(this, handlerAddedToStage);
 		}
 		
-		/**
-		 * @private
-		 */
-		private function move($x:Number, $y:Number):void
-		{
-			var fac:Number = Math.cos(cameraRotationX);
-			$y = -$y / (fac == 0 ? 1 : fac);
-			var cos:Number = Math.cos(em::cameraRotationZ);
-			var sin:Number = Math.sin(em::cameraRotationZ);
-			aimCameraMoveX = start.x - factor * ($x * cos - $y * sin);
-			aimCameraMoveY = start.y - factor * ($x * sin + $y * cos);
-			
-			updateTween();
-		}
-		
-		/**
-		 * @private
-		 */
-		private function rotate($x:Number, $y:Number):void
-		{
-			aimCameraRotationZ = start.x - $x * .005;
-			aimCameraRotationX = start.y - $y * .005;
-			
-			updateTween();
-		}
 		
 		
 		/**

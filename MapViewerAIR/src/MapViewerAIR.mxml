@@ -8,14 +8,6 @@
 	<fx:Script>
 		<![CDATA[
 			import emap.map3d.utils.Map3DUtil;
-			[Embed(systemFont="微软雅黑", 
-					fontName="微软雅黑", 
-					embedAsCFF="false", 
-					fontStyle="italic", 
-					fontWeight="bold", 
-					unicodeRange="U+61,U+62,U+7b80,U+4f53,U+45,U+ff1b,U+3002,U+2e,", 
-					mimeType="application/x-font")]
-			static public var YaHei:Class;
 			private function init():void
 			{
 				/* Font.registerFont(SongTi);

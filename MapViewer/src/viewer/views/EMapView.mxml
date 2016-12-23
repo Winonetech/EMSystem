@@ -469,22 +469,13 @@
 			
 			protected function enlarge_clickHandler(event:MouseEvent):void
 			{
-				if(map)
-				{
-					map.cameraDistance -= 50;
-					
-				}
-				
+				if (map) map.zoomTo(map.cameraDistance - 300);
 			}
 			
 			protected function narrow_clickHandler(event:MouseEvent):void
 			{
 				
-				if(map)
-				{
-					map.cameraDistance += 50;
-				}
-				
+				if (map) map.zoomTo(map.cameraDistance + 300);
 			}
 			
 			protected function reset_clickHandler(event:MouseEvent):void
