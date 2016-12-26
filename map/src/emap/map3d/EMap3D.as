@@ -34,22 +34,7 @@ package emap.map3d
 	
 	public final class EMap3D extends Viewer3D implements IEMap
 	{
-		[Embed(systemFont="微软雅黑", 
-		fontName="微软雅黑", 
-		embedAsCFF="false", 
-		fontStyle="italic", 
-		fontWeight="bold", 
-		unicodeRange="U+61,U+62,U+7b80,U+4f53,U+45,U+ff1b,U+3002,U+2e,", 
-		mimeType="application/x-font")]
-		static public var YaHei:Class;
-		[Embed(systemFont="宋体", 
-		fontName="宋体", 
-		embedAsCFF="false", 
-		fontStyle="italic", 
-		fontWeight="bold", 
-		unicodeRange="U+61,U+62,U+7b80,U+4f53,U+45,U+ff1b,U+3002,U+2e,", 
-		mimeType="application/x-font")]
-		static public var SongTi:Class;
+		
 		/**
 		 * 
 		 * 构造函数。

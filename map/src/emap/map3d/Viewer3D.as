@@ -7,7 +7,7 @@ package emap.map3d
 	 * 
 	 */
 	
-	
+	import org.gestouch.core.gestouch_internal;
 	import alternativa.engine3d.core.Camera3D;
 	import alternativa.engine3d.core.Object3D;
 	import alternativa.engine3d.core.View;
@@ -30,6 +30,9 @@ package emap.map3d
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.utils.Timer;
+	
+	import org.gestouch.events.GestureEvent;
+	import org.gestouch.gestures.TransformGesture;
 	
 	
 	public class Viewer3D extends UI
@@ -170,7 +173,9 @@ package emap.map3d
 			
 			addEventListener(MouseEvent.MOUSE_DOWN, handlerMouseDown);
 			addEventListener(MouseEvent.MOUSE_WHEEL, handlerMouseWheel);
-			
+			//增加缩放事件
+			gesture = new TransformGesture(this);
+			gesture.addEventListener(GestureEvent.GESTURE_BEGAN, gestureBegin);
 			var handlerContext3DCreate:Function = function($e:Event):void
 			{
 				scene.removeEventListener(Event.CONTEXT3D_CREATE, handlerContext3DCreate);
@@ -195,6 +200,7 @@ package emap.map3d
 			StageUtil.init(this, handlerAddedToStage);
 		}
 		
+		
 		/**
 		 * @private
 		 */
@@ -208,6 +214,59 @@ package emap.map3d
 			aimCameraMoveY = start.y - factor * ($x * sin + $y * cos);
 			
 			updateTween();
+		}
+		/**
+		 * @private
+		 */
+		private function gestureBegin(e:GestureEvent):void
+		{
+			gesture.addEventListener(GestureEvent.GESTURE_CHANGED, gestureChanged);
+			gesture.addEventListener(GestureEvent.GESTURE_POSSIBLE, gesturePossible);
+		}
+		
+		/**
+		 * @private
+		 */
+		private function gesturePossible(e:GestureEvent):void
+		{
+			gesture.removeEventListener(GestureEvent.GESTURE_CHANGED, gestureChanged);
+			gesture.removeEventListener(GestureEvent.GESTURE_POSSIBLE, gesturePossible);
+			gesturing = false;
+		}
+		
+		/**
+		 * @private
+		 */
+		private function gestureChanged(e:GestureEvent):void
+		{
+			if (e.newState.gestouch_internal::isEndState)
+			{
+				gesture.removeEventListener(GestureEvent.GESTURE_CHANGED, gestureChanged);
+				gesture.removeEventListener(GestureEvent.GESTURE_POSSIBLE, gesturePossible);
+				gesturing = false;
+			}
+			else
+			{
+				if (gesture.touchesCount == 2)
+				{
+					if(!gesturing)
+					{
+
+
+					
+					}
+					else
+					{
+						aimCameraDistance *=1/gesture.scale;
+
+						updateTween();
+					}
+				}
+				else
+				{
+					if (gesturing) gesturing = false;
+				}
+			}
 		}
 		
 		/**
@@ -900,7 +959,19 @@ package emap.map3d
 		 * @private
 		 */
 		private var ambientLight:AmbientLight;
+		/**
+		 * @private
+		 */
+		private var gesture:TransformGesture;
 		
+		//------------------------------------------------------------
+		//手势控制临时变量
+		//------------------------------------------------------------
+		
+		/**
+		 * @private
+		 */
+		private var gesturing:Boolean;
 		
 		/**
 		 * @private
