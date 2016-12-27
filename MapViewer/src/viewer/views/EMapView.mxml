@@ -16,10 +16,10 @@
 	</fx:Metadata>
 	
 	<mx:UIComponent id="container" />
-	<s:VGroup top="40" horizontalCenter="0" gap="30" horizontalAlign="center">
+	<s:VGroup top="50" horizontalCenter="0" gap="30" horizontalAlign="center">
 		
 	
-		<s:Image  source="@Embed('images/sign.png')"  smooth="true"/>
+		<!--<s:Image  source="@Embed('images/sign.png')"  smooth="true"/>-->
 		<s:Group id="fm" horizontalCenter="0" >
 			<!--<s:Image width="{floorsMenu.width}" source="@Embed('images/floorBg.png')" fillMode="repeat"/> -->
 			<mx:HRule width="{floorsMenu.width-40}" height="2" verticalCenter="0" horizontalCenter="0"/>
@@ -44,7 +44,7 @@
 		<s:Image mouseChildren="false" mouseEnabled="false"
 				 width="150" height="150" x="-75" y="-75"
 				 source="@Embed('images/compass.png')"
-				 smooth="true"/>
+				 smooth="true" visible="false"/>
 	</s:Group>
 	
 	

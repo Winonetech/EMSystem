@@ -3,6 +3,6 @@
 					   xmlns:s ="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   xmlns:vw="viewer.*"
-					   width="1080" height="1920" backgroundAlpha="0">
+					   width="1920" height="1080" backgroundAlpha="0">
 	<vw:MapViewer width="1920" height="1080" horizontalCenter="0" verticalCenter="0"/>
 </s:WindowedApplication>
