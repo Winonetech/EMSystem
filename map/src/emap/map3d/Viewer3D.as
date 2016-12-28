@@ -1001,12 +1001,12 @@ package emap.map3d
 		/**
 		 * @private
 		 */
-		em var initializeCameraDistance:Number = 2000;
+		em var initializeCameraDistance:Number = 2500;
 		
 		/**
 		 * @private
 		 */
-		em var initializeRotationX:Number = Math.PI / 3;
+		em var initializeRotationX:Number = Math.PI / 5;
 		
 		/**
 		 * @private
