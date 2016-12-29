@@ -37,7 +37,7 @@
 		<s:Button label="复位" skinClass="viewer.skins.ResetButton" click="reset_clickHandler(event)"/>
 	</s:HGroup>
 	
-	<s:Group mouseChildren="false" mouseEnabled="false"
+	<!--<s:Group mouseChildren="false" mouseEnabled="false"
 			 right="150" y="200" width="0" height="0"
 			 clipAndEnableScrolling="false"
 			 rotation="{MathUtil.radianToAngle(map.cameraRotationZ)}">
@@ -45,7 +45,7 @@
 				 width="150" height="150" x="-75" y="-75"
 				 source="@Embed('images/compass.png')"
 				 smooth="true" visible="false"/>
-	</s:Group>
+	</s:Group>-->
 	
 	
 	<fx:Script>
