@@ -7,7 +7,6 @@ package emap.map3d
 	 * 
 	 */
 	
-	import org.gestouch.core.gestouch_internal;
 	import alternativa.engine3d.core.Camera3D;
 	import alternativa.engine3d.core.Object3D;
 	import alternativa.engine3d.core.View;
@@ -31,6 +30,7 @@ package emap.map3d
 	import flash.geom.Point;
 	import flash.utils.Timer;
 	
+	import org.gestouch.core.gestouch_internal;
 	import org.gestouch.events.GestureEvent;
 	import org.gestouch.gestures.TransformGesture;
 	
@@ -251,9 +251,7 @@ package emap.map3d
 				{
 					if(!gesturing)
 					{
-
-
-					
+						gesturing = true;
 					}
 					else
 					{

@@ -113,7 +113,7 @@ package emap.vos
 		
 		public function get iconOffsetX():Number
 		{
-			return getProperty("iconOffsetX", Number);
+			return getProperty("iconOffsetX", Number, 0);
 		}
 		
 		
@@ -125,7 +125,7 @@ package emap.vos
 		
 		public function get iconOffsetY():Number
 		{
-			return getProperty("iconOffsetY", Number);
+			return getProperty("iconOffsetY", Number, 0);
 		}
 		
 		
@@ -137,7 +137,7 @@ package emap.vos
 		
 		public function get iconRotation():Number
 		{
-			return getProperty("iconRotation", Number);
+			return getProperty("iconRotation", Number, 0);
 		}
 		
 		
@@ -149,7 +149,7 @@ package emap.vos
 		
 		public function get iconScale():Number
 		{
-			return getProperty("iconScale", Number);
+			return getProperty("iconScale", Number, 1);
 		}
 		
 		
@@ -208,7 +208,7 @@ package emap.vos
 		
 		public function get labelOffsetX():Number
 		{
-			return getProperty("labelOffsetX", Number);
+			return getProperty("labelOffsetX", Number, 0);
 		}
 		
 		
@@ -220,7 +220,7 @@ package emap.vos
 		
 		public function get labelOffsetY():Number
 		{
-			return getProperty("labelOffsetY", Number);
+			return getProperty("labelOffsetY", Number, 0);
 		}
 		
 		
@@ -232,7 +232,7 @@ package emap.vos
 		
 		public function get labelRotation():Number
 		{
-			return getProperty("labelRotation", Number);
+			return getProperty("labelRotation", Number, 0);
 		}
 		
 		
@@ -244,7 +244,7 @@ package emap.vos
 		
 		public function get labelScale():Number
 		{
-			return getProperty("labelScale", Number);
+			return getProperty("labelScale", Number, 1);
 		}
 		
 		
@@ -256,7 +256,7 @@ package emap.vos
 		
 		public function get labelVisible():Boolean
 		{
-			return getProperty("labelVisible", Boolean);
+			return getProperty("labelVisible", Boolean, true);
 		}
 		
 		
@@ -280,7 +280,7 @@ package emap.vos
 		
 		public function get offsetX():Number
 		{
-			var r:Number = getProperty("offsetX", Number);
+			var r:Number = getProperty("offsetX", Number, 0);
 			return isNaN(r) ? 0 : r;
 		}
 		
@@ -293,7 +293,7 @@ package emap.vos
 		
 		public function get offsetY():Number
 		{
-			var r:Number = getProperty("offsetY", Number);
+			var r:Number = getProperty("offsetY", Number, 0);
 			return isNaN(r) ? 0 : r;
 		}
 		
@@ -318,7 +318,7 @@ package emap.vos
 		
 		public function get thick():Number
 		{
-			return getProperty("thick", Number);
+			return getProperty("thick", Number, 50);
 		}
 		
 		
